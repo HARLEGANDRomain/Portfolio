@@ -1,0 +1,69 @@
+Voici la documentation de gwido, se document servira a alimenter la base de données du portfolio
+pour réaliser la page [Case Study] du projet [Echoes Of Memories]
+
+Première éléments a voir lorsque l'on click sur "explore study case" : 
+
+Présentation du jeu avec : 
+- Nom : Echoes Of Memories 
+- Type de jeu : Sandbox Musical à la première personne
+
+- Pitch : Vivez une expérience musicale éphémère en vous plongeant dans vos souvenirs.
+
+- Game Concept : Echoes Of Memories est une expérience en vue à la première personne, où le joueur explore un univers 
+abstrait et minimaliste. 
+Sa seule mécanique : invoquer un trou noir personnel capable d’attirer puis de repousser des fragments flottants. 
+Chaque interaction génère des sons uniques, transformant l’environnement en une partition musicale vivante. 
+Le jeu est autant une exploration sensorielle qu’une expérimentation musicale interactive.
+
+- Plateforme : PC
+- Moteur : Unity
+- Année de developpement : 2023-2024
+
+Accompagné de l'image [Menu.png]
+
+-----------------------------
+
+Deux petite carte résumer des éléments important que j'ai réaliser : 
+
+- La Mecanique musicale : 
+    - Caracteristique : 
+        - Composition musical dynamique
+        - Instrument virtuel
+        
+    Accompagné de l'image [MecaniqueSonore.png]
+
+_____
+
+- Trou noir :
+    - Caracteristique : 
+        - Attraction & Répulsion
+        - 2 State 
+
+    Accompagné de l'image [Mecanique_explosion.png]
+
+-----------------------------------------------
+
+La composition du jouet et le challenge de ne pas crée un jeu mais un jouet libre pour le joueur nous a ammener à 
+crée un bac a sable musical ou chaque amas produit un son dynamique en fonction de la manière dont il est projetter. 
+
+Pour donnée un meilleur controle au joueur, j'ai mis en place un systeme time stop ou de rewind permettant de 
+ corriger des position d'amas et de recréer la musique avec le ton parfaitement voulus 
+
+Accompagné de l'image [Screen_cube_Time_Stop.png]
+
+ -----------------------------------------------
+
+Carouselle d'image : 
+
+[Screen_Repultion_des_amas.png]
+[Screen_Start.png]
+[Screen_cube_Time_Stop.png]
+[Menu.png]
+
+Ensuite vidéo de gameplay : 
+
+[Gameplay_Echoes_of_memories.mp4]
+
+
+
+

@@ -1,0 +1,159 @@
+Voici la documentation de gwido, se document servira a alimenter la base de données du portfolio
+pour réaliser la page [Case Study] du projet [Gwido]
+
+Première éléments a voir lorsque l'on click sur "explore study case" : 
+
+Présentation du jeu avec : 
+- Nom : Gwido 
+- Type de jeu : Exploration à la 3ème personne en vue en perspective.
+
+- Pitch : Parcourez Athara 3 à l’aide de Gwido et de son véhicule. Apprenez les règles de ce monde afin d’explorer cette planète, 
+en éviter les dangers et découvrir tous ses secrets !
+
+- Game Concept : Dans Gwido, le joueur incarne un avatar et son véhicule qui doivent arpenter des structures jonchées d’ennemis. 
+Le joueur peut récupérer des ressources qui sont nécessaires au bon fonctionnement du van et des différentes mécaniques 
+associées à ce dernier. L’avatar peut se déplacer et tirer sur les ennemis.
+Il peut changer de controller à distance et utiliser le véhicule. C’est alors au joueur d’explorer à intelligemment et de 
+récolter les ressources pour continuer à s’aventurer dans cet univers. 
+
+- Plateforme : PC
+- Moteur : Unity
+- Durée de vie : ~1h10
+- Année de developpement : 2024-2025
+- Genre : Exploration/Adventure
+- Public cible : 12 ans et plus
+
+Accompagné de l'image [Image_Menu_Sans_Logo.png]
+
+-----------------------------
+
+Deux petite carte résumer des éléments important que j'ai réaliser : 
+
+- La camera : 
+    - Caracteristique : 
+        - Vu perspective 3/4
+        - Angle/Vision et distance dynamique
+
+    - Problématique rencontré : 
+        - Angle de vision pas égaux
+        - Distance de vision trop courte en direction du bas de l'écran
+
+    - Solution mise en place : 
+        - Compensation de distance en fonction de l'angle de vue
+        - Anticipation de la camera par rapport au mouvement du joueur
+        
+    Accompagné de l'image [Cam Center.png] & [CamMoving.png]
+
+_____
+
+- L'ennemis :
+    - Caracteristique : 
+        - State machine complete
+        - Vision dynamique adapter au gameplay d'infiltration
+
+    - Problématique rencontré : 
+        - Objectif 2 attaque mais problème de temps
+        - Patrol différentes & interessante pour chaque ennemis
+
+    - Solution mise en place : 
+        - Attaque similaire mais avec métrics différentes
+        - Patrol avec un tool pour moduler completement celle-ci
+
+    Accompagné de l'image [Ragesystem.png] & [Patrol Enemis.png]
+
+-----------------------------------------------
+
+Après ces deux carte on passe au concret detailler des deux cartes camera et ennemis a commencer avec la camera : 
+
+- Camera : 
+Dans notre projet, un des problèmes majeurs est la visibilité réduite due à notre caméra car nous voulions une camera smooth. 
+J'ai dû trouver des moyens de redonner de la visibilité au joueur, afin qu’il puisse correctement voir lors de ses déplacements.
+
+Pour cela, J'ai avons combiné deux systèmes :
+- Un léger avancement de la caméra dans la direction du joueur 
+- Un effet de compensation en fonction de l'orientation du joueur
+
+Image :[Cam Center.png] & [CamMoving.png] & [Compensation Behaviour.png]
+Vidéo : [CameraDistanceBehaviour.mp4] & [Compensation.mp4]
+
+_____
+
+
+Pour le système de caméra, j’ai conçus un contrôleur centralisé chargé de gérer les paramètres clés et les fonctions principales.
+Afin de faciliter l’expérimentation et la modularité, j’ai mis en place un système de states machine, 
+permettant de changer dynamiquement le comportement de la caméra. 
+
+
+Cependant, nous avons des partis de jeu baser sur l’infiltration. 
+Nous voulions donc redonner le contrôle de la caméra au joueur lorsqu’il est en situation de "combat". 
+Lorsqu’il vise avec son arme, il peut alors diriger la caméra dans la direction de son choix.
+Cette méthode permet au joueur de voir plus loin sans avoir à se déplacer, et dans la direction qu’il souhaite.
+
+Image : [CameraAimRotation.png] & [CameraBhaviourStick.png]
+Vidéo : [AimBehaviour.mp4]
+
+_____
+
+Cependant on manquais d'éléments pour mettre en scène des situations intéressantes. J'ai donc desidé de designer des camera scriptées
+pour créer d'autres situations intéressantes lorsque le joueur entre dans des structures ou se déplace dans l'environnement, 
+Il y en a un total de trois, chacune nous permettant de mettre en scène des situations spécifiques et variées.
+
+- Camera qui va fixé un point 
+- Camera qui va regarder ENTRE le joueur et un point 
+- Camera qui va tourner sur un autre angle
+
+On se retrouve avec des caméras scripter qui sont facilement plaçable avec des métriques facilement paramétrable dans l'inspecteur.
+Ces camera on la particularité que l'on peu fusionnée les triggers pour avoir un behaviour plus complexe.
+
+Image : [CameraTriggerBetween.png] & [CameraBehaviourTarget.png] & [CameraRotationTrigger.png] & [CameraState.png]
+Vidéo : [FocusBetweenTriggered.mp4] & [FocusTargetTriggered.mp4] & [CameraRotationTriggered.mp4] & [CameraDistanceTriggered.mp4] 
+_____
+
+--------------------------------- 
+
+Voici toute la parti sur la camera maintenant voici la parti ennemis : 
+
+- Ennemis : 
+
+Pour notre ennemis nous voulions un ennemis qui puisse être à la fois agressif mais aussi intelligent.
+Nous voulions également un système de patrouille qui soit intéressant et varié permissif pour de l'infiltration.
+
+J'ai donc réaliser une FSM pour gérer les différents états de l'ennemis : 
+- Idle
+- Wander
+- Search
+- Chase (avec 2 attaques différentes)
+
+Image [State Machine lezard.png]
+
+_____ 
+
+Ensuite les states ne suffisait pour réaliser correctement un comportement permettant l'infiltration, 
+j'ai donc crée un system de vision dynamique adapter au gameplay d'infiltration.
+Celui-ci utilise un system commun de "rage" ou plus le joueur et proche plus il va être réactif.
+
+Image : [Ragesystem.png]
+Vidéo : [VisionFonctionnementDaucr.mp4]
+
+_____ 
+
+Pour l'attaque de notre ennemis nous devions réaliser un ennemis en essayer de se répété le moin possible avec le temps disponible
+J'ai donc pris l'initiative de créer un système d'attaque modulaire et paramétrable dans l'inspecteur.
+
+- Attaque de base : Range court, Enchainement rapide
+- Attaque spéciale : Range long, Enchainement long, Longue distance parcourue
+
+Image : [DaucrGrandDash.png] & [DaucrMiniDash.png]
+Vidéo : [AttaqueMeleeDaucr.mp4] & [AttaqueDash.mp4]
+
+_____ 
+
+Ensuite pour avoir un ennemis qui se fonde dans le level design j'ai mis en place un tool pour réaliser un system modulaire,
+se system permet de créer des patrouilles complexes et variées.
+
+Image : [Patrol Enemis.png]
+Vidéo : [PatrolDaucr.mp4]
+
+
+
+

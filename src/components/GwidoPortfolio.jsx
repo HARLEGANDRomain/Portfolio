@@ -1,0 +1,473 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+import { ArrowUpRight, ArrowRight, Camera, Target, Calendar, User, Code2, Layout, Smartphone, Mail, Linkedin, Github } from 'lucide-react';
+import CaseStudy from './CaseStudy';
+import gwidoImage from '../../Image/Gwido/Image_Menu_Sans_Logo.png';
+import { getGwidoContentBlocks } from '../data/gwidoData';
+import { getEomContentBlocks } from '../data/eomData';
+
+const GwidoPortfolio = () => {
+  const { t, i18n } = useTranslation();
+  const [activeSection, setActiveSection] = useState('intro');
+  const [activeProject, setActiveProject] = useState(0);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [activeCaseStudy, setActiveCaseStudy] = useState(null);
+  
+  const wavePathRightRef = useRef(null);
+
+  const currentLang = i18n.language?.startsWith('fr') ? 'fr' : 'en';
+  const toggleLanguage = () => {
+    i18n.changeLanguage(currentLang === 'fr' ? 'en' : 'fr');
+  };
+
+  // Mouse parallax tracking
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePos({
+        x: (e.clientX / window.innerWidth - 0.5) * 20,
+        y: (e.clientY / window.innerHeight - 0.5) * 20,
+      });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  // Wave rendering
+  useEffect(() => {
+    let animationFrameId;
+    const renderWave = (time) => {
+      const segments = 60;
+      let dRight = '';
+      for (let i = 0; i <= segments; i++) {
+        const y = i / segments;
+        const screenX_vw = 60 - (20 * y); 
+        const amplitude_vw = 2;
+        const frequence = Math.PI * 4;
+        const waveOffset_vw = amplitude_vw * Math.sin(y * frequence - time * 0.001);
+        const finalScreenX_vw = screenX_vw + waveOffset_vw;
+        const xRight = (finalScreenX_vw - 25) / 75;
+        
+        if (i === 0) { dRight += "M " + xRight + "," + y + " "; } 
+        else { dRight += "L " + xRight + "," + y + " "; }
+      }
+      dRight += "L 1,1 L 1,0 Z";
+      
+      if (wavePathRightRef.current) {
+        wavePathRightRef.current.setAttribute('d', dRight);
+      }
+      animationFrameId = requestAnimationFrame(renderWave);
+    };
+    animationFrameId = requestAnimationFrame(renderWave);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, []);
+
+  // Scroll logic for Top Nav & Active Sections
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 80);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // init
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Intersection Observer for Sections
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+               setActiveSection(entry.target.getAttribute('data-section'));
+            }
+        });
+    }, { rootMargin: "-30% 0px -50% 0px" });
+
+    document.querySelectorAll('.section-observer').forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
+  const projects = [
+    {
+      id: 0,
+      title: 'Gwido',
+      category: t('gwido.category'),
+      role: 'Game designer | Lead Game Programmer | UX/UI Designer',
+      color: 'bg-indigo-950',
+      description: t('gwido.description'),
+      sceneType: 'gaming',
+      date: '2024 - 2025',
+      context: t('gwido.context'),
+      contributions: [],
+      image: gwidoImage,
+      platform: t('gwido.platform'),
+      duration: t('gwido.duration'),
+      genre: t('gwido.genre'),
+      timeline: t('gwido.timeline'),
+      teamSize: t('gwido.teamSize'),
+      rolesList: ['Game Designer', 'Lead Game Programmer', 'UX/UI Designer'],
+
+      contentBlocks: getGwidoContentBlocks(t),
+    },
+    {
+      id: 1,
+      title: 'Echoes Of Memories',
+      category: t('eom.category'),
+      role: 'Lead Game Designer | Game Programmer',
+      color: 'bg-slate-900',
+      description: t('eom.description'),
+      sceneType: 'gaming',
+      date: '2023 - 2024',
+      context: t('eom.context'),
+      contributions: [],
+      image: '/eom/images/Menu.png',
+      platform: t('eom.platform'),
+      genre: t('eom.genre'),
+      timeline: t('eom.timeline'),
+      teamSize: t('eom.teamSize'),
+      rolesList: ['Lead Game Designer', 'Game Programmer'],
+
+      contentBlocks: getEomContentBlocks(t),
+    },
+    {
+      id: 2,
+      title: t('projects.nextProject'),
+      category: t('projects.nextProjectCategory'),
+      role: '',
+      color: 'bg-slate-800',
+      description: t('projects.nextProjectDescription'),
+      sceneType: 'incoming',
+      date: '\u2014',
+      context: '',
+      contributions: [],
+      image: '',
+      rolesList: [],
+      contentBlocks: [],
+      incoming: true,
+    },
+  ];
+
+  const customStyles = [
+    ".bg-dots { background-image: radial-gradient(#e2e8f0 1.5px, transparent 1.5px); background-size: 24px 24px; }",
+    ".bg-dots-dark { background-image: radial-gradient(rgba(255,255,255,0.1) 1.5px, transparent 1.5px); background-size: 24px 24px; }",
+    ".vertical-text { writing-mode: vertical-rl; transform: rotate(180deg); }",
+    "@keyframes pulse-glow { 0%, 100% { opacity: 0.4; transform: scale(1); } 50% { opacity: 0.7; transform: scale(1.05); } }",
+    "@keyframes subtle-zoom { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }",
+    ".animate-pulse-glow { animation: pulse-glow 4s ease-in-out infinite; }",
+    ".animate-subtle-zoom { animation: subtle-zoom 20s ease-in-out alternate infinite; }"
+  ].join("\n");
+
+  const scrollTo = (id) => {
+    const el = document.getElementById(id);
+    if(el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  if (activeCaseStudy !== null) {
+    return <CaseStudy project={projects[activeCaseStudy]} onBack={() => setActiveCaseStudy(null)} />;
+  }
+
+  return (
+    <div className="min-h-screen text-slate-900 font-sans relative flex">
+      <style dangerouslySetInnerHTML={{ __html: customStyles }} />
+
+      {/* --- FLOATING PILL NAV (root level, outside main, above wave) --- */}
+      <div className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 flex justify-center transition-all duration-500 ${isScrolled ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-8 pointer-events-none'}`}>
+          <nav className="flex items-center gap-6 text-[10px] font-bold uppercase tracking-widest bg-white/90 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.1)] px-8 py-4 rounded-full border border-slate-200">
+              <button onClick={() => scrollTo('intro')} className={`hover:text-indigo-600 transition-colors ${activeSection === 'intro' ? 'text-indigo-600' : 'text-slate-500'}`}>{t('nav.identity')}</button>
+              <button onClick={() => scrollTo('projects')} className={`hover:text-indigo-600 transition-colors ${activeSection === 'projects' ? 'text-indigo-600' : 'text-slate-500'}`}>{t('nav.works')}</button>
+              <button onClick={() => scrollTo('contact')} className={`hover:text-indigo-600 transition-colors ${activeSection === 'contact' ? 'text-indigo-600' : 'text-slate-500'}`}>{t('nav.contact')}</button>
+              <span className="text-slate-200">|</span>
+              <button
+                onClick={toggleLanguage}
+                className="flex items-center gap-1.5 text-slate-500 hover:text-indigo-600 transition-colors"
+                aria-label="Toggle language"
+              >
+                <span className={currentLang === 'fr' ? 'text-indigo-600' : ''}>FR</span>
+                <span className="text-slate-300">/</span>
+                <span className={currentLang === 'en' ? 'text-indigo-600' : ''}>EN</span>
+              </button>
+          </nav>
+      </div>
+
+      {/* --- RIGHT SIDE FIXED VISUALS (The "Wave") --- */}
+      <div className="hidden md:block fixed top-0 right-0 h-screen w-[75%] pointer-events-none z-20 transition-all duration-700" style={{ filter: "drop-shadow(-20px 0px 40px rgba(0,0,0,0.3))" }}>
+        <svg style={{ position: 'absolute', width: 0, height: 0 }}>
+          <defs>
+            <clipPath id="wave-right" clipPathUnits="objectBoundingBox">
+              <path ref={wavePathRightRef} d="" fill="black" />
+            </clipPath>
+          </defs>
+        </svg>
+
+        <div className="w-full h-full overflow-hidden relative pointer-events-auto" style={{ clipPath: "url(#wave-right)" }}>
+            
+            {/* 1. Intro Visual (Atmospheric) */}
+            <div className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${activeSection === 'intro' ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}>
+                <div className="absolute inset-0 bg-slate-900 overflow-hidden">
+                   {/* Blur Blobs */}
+                   <div className="absolute w-[800px] h-[800px] bg-indigo-600/30 rounded-full blur-[120px] animate-pulse-glow -top-20 -right-20"></div>
+                   <div className="absolute w-[600px] h-[600px] bg-slate-500/20 rounded-full blur-[100px] bottom-0 left-0"></div>
+                   
+                   {/* Ghost Image overlay */}
+                   <img 
+                      src={gwidoImage} 
+                      alt="Atmospheric background" 
+                      className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-40 animate-subtle-zoom" 
+                      style={{ filter: 'grayscale(50%) contrast(1.2)' }}
+                   />
+                   
+                   <div className="absolute inset-0 bg-gradient-to-l from-transparent via-slate-900/50 to-slate-900 pointer-events-none"></div>
+                </div>
+            </div>
+
+            {/* 2. Project Visuals */}
+            {projects.map((project, index) => (
+              <div 
+                key={project.id}
+                className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${activeSection === 'projects' && activeProject === index ? 'opacity-100 z-20' : 'opacity-0 z-0'}`}
+              >
+                <div className={`absolute inset-0 transition-colors duration-1000 ${project.color}`}></div>
+
+                {project.sceneType === 'gaming' && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-transparent overflow-hidden">
+                    <div 
+                      className="absolute inset-0 bg-dots pointer-events-none opacity-20 z-0 mix-blend-overlay"
+                      style={{ transform: `translate(${mousePos.x * 0.5}px, ${mousePos.y * 0.5}px)` }}
+                    ></div>
+                    <div 
+                      className="relative w-full h-full z-10 transition-transform duration-700 ease-out"
+                      style={{ transform: `translate(${mousePos.x * -1}px, ${mousePos.y * -1}px) scale(1.05)` }}
+                    >
+                      <img 
+                        src={project.image} 
+                        alt={project.title} 
+                        className="w-full h-full object-cover object-center mix-blend-lighten"
+                        style={{ maskImage: "linear-gradient(to left, black 60%, transparent 100%)", WebkitMaskImage: "linear-gradient(to left, black 60%, transparent 100%)" }}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {project.sceneType === 'data' && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-slate-950">
+                    <div 
+                      className="absolute inset-0 opacity-20" 
+                      style={{ 
+                        backgroundImage: "linear-gradient(#0891b2 1px, transparent 1px), linear-gradient(90deg, #0891b2 1px, transparent 1px)", 
+                        backgroundSize: "40px 40px", 
+                        transform: `translate(${mousePos.x * -0.5}px, ${mousePos.y * -0.5}px)`
+                      }}
+                    ></div>
+                    
+                    <div 
+                      className="relative z-10 w-[700px] h-[450px] bg-slate-900/40 backdrop-blur-xl border border-cyan-500/30 rounded-2xl overflow-hidden shadow-[0_0_100px_rgba(6,182,212,0.15)] ml-40 transition-all duration-1000" 
+                      style={{ 
+                        transform: `translate(${mousePos.x}px, ${mousePos.y}px) ${activeSection === 'projects' && activeProject === index ? 'scale(1)' : 'scale(0.95)'}`,
+                        perspective: '1000px'
+                      }}
+                    >
+                        <img 
+                          src={project.image} 
+                          alt={project.title}
+                          className="w-full h-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-105"
+                        />
+                        
+                        {/* Overlay tech effect */}
+                        <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/10 to-transparent pointer-events-none"></div>
+                        <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] bg-[length:100%_4px,3px_100%] pointer-events-none"></div>
+                        
+                        {/* Technical Corners */}
+                        <div className="absolute top-4 left-4 w-10 h-10 border-t-2 border-l-2 border-cyan-400/50 rounded-tl-lg"></div>
+                        <div className="absolute top-4 right-4 w-10 h-10 border-t-2 border-r-2 border-cyan-400/50 rounded-tr-lg"></div>
+                        <div className="absolute bottom-4 left-4 w-10 h-10 border-b-2 border-l-2 border-cyan-400/50 rounded-bl-lg"></div>
+                        <div className="absolute bottom-4 right-4 w-10 h-10 border-b-2 border-r-2 border-cyan-400/50 rounded-br-lg"></div>
+                    </div>
+                  </div>
+                )}
+
+                {project.sceneType === 'mobile' && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-emerald-950">
+                    <div className="absolute w-[600px] h-[600px] bg-emerald-600/20 rounded-full blur-[120px] animate-pulse-glow top-10 left-10"></div>
+                    <div className="absolute w-[400px] h-[400px] bg-teal-600/20 rounded-full blur-[100px] animate-pulse-glow bottom-10 right-10" style={{ animationDelay: "-2s" }}></div>
+
+                    <div 
+                      className="relative z-10 w-[280px] h-[580px] bg-slate-900 border-[8px] border-slate-800 rounded-[3rem] shadow-2xl overflow-hidden ml-40 transition-transform duration-1000" 
+                      style={{ transform: `translate(${mousePos.x * 1.5}px, ${mousePos.y * 1.5}px) ${activeSection === 'projects' && activeProject === index ? 'translateY(0)' : 'translateY(100px)'}` }}
+                    >
+                        <div className="w-full h-full bg-emerald-900/20 p-6 flex flex-col">
+                          <div className="w-full h-40 bg-emerald-500/20 rounded-2xl mb-6 animate-pulse-glow"></div>
+                          <div className="space-y-4">
+                            <div className="w-3/4 h-6 bg-emerald-500/20 rounded-md"></div>
+                            <div className="w-1/2 h-4 bg-emerald-500/10 rounded-md"></div>
+                          </div>
+                          
+                          <div className="mt-auto self-center mb-8 w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center shadow-[0_10px_30px_rgba(16,185,129,0.3)] animate-pulse-glow" style={{ animationDuration: "3s" }}>
+                            <ArrowUpRight className="text-white w-6 h-6" />
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+
+            {/* 3. Contact Visual */}
+            <div className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${activeSection === 'contact' ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}>
+                <div className="absolute inset-0 bg-slate-950 flex flex-col items-center justify-center overflow-hidden">
+                    <div className="absolute w-[800px] h-[800px] bg-blue-600/10 rounded-full blur-[150px] animate-pulse-glow"></div>
+                    <div className="absolute right-0 top-0 w-full h-full bg-dots-dark opacity-30"></div>
+                </div>
+            </div>
+
+        </div>
+      </div>
+
+      {/* --- SCROLLING CONTENT (Left Side) --- */}
+      <main className="relative z-10 w-full md:w-[70%] bg-white/95 backdrop-blur-2xl pb-32 mix-blend-normal isolate">
+        
+        {/* Fixed background dots within the left wrapper */}
+        <div className="absolute inset-0 pointer-events-none z-[-1]">
+             <div className="sticky top-0 w-full h-screen bg-dots opacity-60"></div>
+        </div>
+
+        {/* --- STATIC HEADER (Name + Initial Nav) --- */}
+        <header className="absolute top-0 left-0 w-full md:w-[70%] px-8 md:px-16 py-12 md:py-24 flex flex-col sm:flex-row items-start sm:items-center justify-between z-40">
+            <div>
+                <h1 
+                    className="text-3xl md:text-4xl font-black text-[#0f172a] uppercase tracking-tighter cursor-pointer whitespace-nowrap leading-none mb-1" 
+                    onClick={() => window.scrollTo({top: 0, behavior:'smooth'})}
+                >
+                    HARLEGAND Romain
+                </h1>
+                <p className="font-semibold text-slate-500 uppercase tracking-[0.2em] text-[10px]">
+                    {t('intro.subtitle')}
+                </p>
+            </div>
+            
+            {/* Initial Nav links visible at top */}
+            <nav className="mt-8 sm:mt-0 flex items-center gap-6 text-[10px] font-bold uppercase tracking-widest opacity-100">
+                <button onClick={() => scrollTo('intro')} className={`hover:text-indigo-600 transition-colors ${activeSection === 'intro' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-slate-600'}`}>{t('nav.identity')}</button>
+                <button onClick={() => scrollTo('projects')} className={`hover:text-indigo-600 transition-colors ${activeSection === 'projects' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-slate-600'}`}>{t('nav.works')}</button>
+                <button onClick={() => scrollTo('contact')} className={`hover:text-indigo-600 transition-colors ${activeSection === 'contact' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-slate-600'}`}>{t('nav.contact')}</button>
+                <span className="text-slate-300">|</span>
+                <button
+                  onClick={toggleLanguage}
+                  className="flex items-center gap-1.5 text-slate-500 hover:text-indigo-600 transition-colors"
+                  aria-label="Toggle language"
+                >
+                  <span className={currentLang === 'fr' ? 'text-indigo-600' : ''}>FR</span>
+                  <span className="text-slate-300">/</span>
+                  <span className={currentLang === 'en' ? 'text-indigo-600' : ''}>EN</span>
+                </button>
+            </nav>
+        </header>
+
+        {/* Floating pill nav has been moved to root level (above this main) */}
+
+        {/* Content sections below */}
+        <div className="relative z-10 pt-16">
+            
+            {/* INTRO SECTION */}
+            <section id="intro" data-section="intro" className="section-observer min-h-screen flex flex-col justify-center px-8 md:px-16 pb-24">
+                <div className="max-w-xl">
+                    <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-[#0f172a] mb-8 leading-tight">
+                        {t('intro.headline')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-emerald-500">{t('intro.headlineAccent')}</span>
+                    </h2>
+                    <p className="text-lg text-slate-600 mb-6 leading-relaxed font-medium">
+                        {t('intro.description')}
+                    </p>
+                    <p className="text-slate-500 mb-12 leading-relaxed">
+                        {t('intro.description2')}
+                    </p>
+                    <button onClick={() => scrollTo('projects')} className="inline-flex items-center gap-3 text-xs font-bold uppercase tracking-widest border-b-2 border-slate-900 pb-1 hover:text-indigo-600 hover:border-indigo-600 transition-colors group">
+                        {t('intro.cta')} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </button>
+                </div>
+            </section>
+
+            {/* PROJECTS SECTION */}
+            <section id="projects" data-section="projects" className="section-observer min-h-screen flex flex-col justify-center px-8 md:px-16 py-24 border-t border-slate-100">
+                <div className="absolute left-6 top-1/2 -translate-y-1/2 hidden lg:block sticky-label">
+                    <span className="vertical-text uppercase tracking-[0.2em] text-[10px] font-bold text-slate-400 whitespace-nowrap">
+                        {t('projects.sidebar')}
+                    </span>
+                </div>
+                
+                <div className="flex-1 flex flex-col justify-center relative z-10 max-w-xl">
+                  <div className="space-y-12 pl-4 lg:pl-16">
+                    {projects.map((project, index) => (
+                      <div 
+                        key={project.id}
+                        onMouseEnter={() => !project.incoming && setActiveProject(index)}
+                        className={"group transition-all duration-500 relative " + 
+                          (project.incoming 
+                            ? "opacity-40 cursor-default select-none" 
+                            : "cursor-pointer " + (activeProject === index ? "opacity-100 scale-100" : "opacity-30 scale-95 hover:opacity-70"))}
+                      >
+                        <div className={"absolute -left-8 top-1 w-1 bg-slate-900 transition-all duration-700 ease-out origin-top " + (!project.incoming && activeProject === index ? "h-full opacity-100" : "h-0 opacity-0")}></div>
+                        
+                        <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-3">
+                          0{index + 1} <span>—</span> {project.category.split('|')[0].trim()}
+                          {project.incoming && (
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-full border border-slate-300 text-[9px] font-bold uppercase tracking-widest text-slate-400 bg-slate-50">
+                              {t('projects.comingSoon')}
+                            </span>
+                          )}
+                        </p>
+                        <h2 className={"text-4xl md:text-5xl font-black uppercase tracking-tighter mb-4 transition-transform duration-500 " + 
+                          (project.incoming ? "text-slate-300" : "text-[#0f172a] group-hover:translate-x-3")}>
+                          {project.incoming ? '???' : project.title}
+                        </h2>
+                        
+                        {!project.incoming && (
+                        <div className={"overflow-hidden transition-all duration-700 ease-in-out " + (activeProject === index ? "max-h-40 opacity-100 translate-y-0" : "max-h-0 opacity-0 translate-y-4")}>
+                          <p className="text-slate-600 mb-5 text-sm leading-relaxed border-l-2 border-slate-200 pl-4">
+                            {project.description}
+                          </p>
+                          <button onClick={() => setActiveCaseStudy(index)} className="flex items-center text-xs font-bold uppercase tracking-widest text-[#0f172a] hover:text-blue-600 transition-colors">
+                            {t('projects.exploreCaseStudy')} <ArrowRight className="w-4 h-4 ml-2" />
+                          </button>
+                        </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+            </section>
+
+            {/* CONTACT SECTION */}
+            <section id="contact" data-section="contact" className="section-observer min-h-[80vh] flex flex-col justify-center px-8 md:px-16 py-24 border-t border-slate-100 bg-slate-100/50">
+                <div className="max-w-xl">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-indigo-500 mb-4">
+                        {t('contact.label')}
+                    </p>
+
+                    <p className="text-slate-600 text-lg mb-12">
+                        {t('contact.text')}
+                    </p>
+
+                    <div className="flex flex-col sm:flex-row gap-6">
+                        <a href="mailto:contact@example.com" className="flex justify-center items-center gap-3 bg-indigo-600 text-white px-8 py-4 text-xs font-bold uppercase tracking-widest hover:bg-indigo-700 transition-colors w-full sm:w-auto">
+                            <Mail className="w-4 h-4" /> {t('contact.cta')}
+                        </a>
+                        <div className="flex gap-4 w-full sm:w-auto justify-center">
+                            <a href="#" className="flex justify-center items-center bg-white border border-slate-200 text-slate-600 hover:text-[#0f172a] hover:border-slate-400 px-6 py-4 transition-colors">
+                                <Linkedin className="w-5 h-5" />
+                            </a>
+                            <a href="#" className="flex justify-center items-center bg-white border border-slate-200 text-slate-600 hover:text-[#0f172a] hover:border-slate-400 px-6 py-4 transition-colors">
+                                <Github className="w-5 h-5" />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+      </main>
+
+    </div>
+  );
+};
+
+export default GwidoPortfolio;
