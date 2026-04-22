@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowUpRight, ArrowRight, Camera, Target, Calendar, User, Code2, Layout, Smartphone, Mail, Linkedin, Github } from 'lucide-react';
 import CaseStudy from './CaseStudy';
@@ -221,10 +221,10 @@ const GwidoPortfolio = () => {
                 <div className="absolute inset-0 bg-slate-950 overflow-hidden flex flex-col justify-center gap-3 py-4">
                   <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-transparent to-transparent pointer-events-none z-10" />
                   {[
-                    { cls: 'marquee-ltr',      images: ['/gwido/images/Image_Menu_Sans_Logo.png','/gwido/images/Gwido001.png','/gwido/images/Gwido002.png','/gwido/images/Gwido003.png','/eom/images/Menu.png','/gwido/images/CameraBehaviourStick.png','/gwido/images/Gwido004.png','/eom/images/Screen_Start.png'] },
-                    { cls: 'marquee-rtl',      images: ['/gwido/images/Cam_Center.png','/gwido/images/CamMoving.png','/eom/images/MecaniqueSonore.png','/gwido/images/CameraAimRotation.png','/gwido/images/DaucrMiniDash.png','/eom/images/Screen_cube_Time_Stop.png','/gwido/images/DaucrGrandDash.png','/eom/images/Screen_Repulsion_des_amas.png'] },
-                    { cls: 'marquee-ltr-fast', images: ['/gwido/images/Gwido005.png','/gwido/images/CameraTriggerBetween.png','/eom/images/Mecanique_explosion.png','/gwido/images/Image_Menu.png','/gwido/images/Gwido001.png','/eom/images/Menu.png','/gwido/images/Patrol_Enemis.png'] },
-                    { cls: 'marquee-rtl',      images: ['/gwido/images/Gwido003.png','/gwido/images/Gwido004.png','/eom/images/Screen_Start.png','/gwido/images/CameraBehaviour_Target.png','/eom/images/Screen_cube_Time_Stop.png','/gwido/images/CameraRotation_Trigger.png','/eom/images/Screen_Repulsion_des_amas.png','/gwido/images/Gwido005.png'] },
+                    { cls: 'marquee-rtl',      images: ['/gwido/images/Image_Menu_Sans_Logo.png','/gwido/images/Gwido001.png','/gwido/images/Gwido002.png','/gwido/images/Gwido003.png','/eom/images/Menu.png','/gwido/images/Gwido004.png','/eom/images/Screen_Start.png'] },
+                    { cls: 'marquee-ltr',      images: ['/gwido/images/Gwido001.png','/eom/images/Screen_Repulsion_des_amas.png', '/gwido/images/Gwido004.png','/gwido/images/Gwido002.png', '/gwido/images/Image_Menu_Sans_Logo.png', '/gwido/images/Gwido003.png'] },
+                    { cls: 'marquee-rtl',      images: ['/gwido/images/Gwido005.png','/gwido/images/Image_Menu_Sans_Logo.png','/gwido/images/Gwido001.png','/eom/images/Menu.png', '/gwido/images/Gwido002.png', '/gwido/images/Gwido003.png'] },
+                    { cls: 'marquee-ltr-fast', images: ['/gwido/images/Gwido003.png','/gwido/images/Gwido004.png','/eom/images/Screen_Start.png','/eom/images/Screen_cube_Time_Stop.png','/eom/images/Screen_Repulsion_des_amas.png','/gwido/images/Gwido001.png'] },
                   ].map((row, ri) => (
                     <div key={ri} className="overflow-hidden flex-shrink-0">
                       <div className={row.cls}>
@@ -335,10 +335,10 @@ const GwidoPortfolio = () => {
                 <div className="absolute inset-0 bg-slate-950 overflow-hidden flex flex-col justify-center gap-3 py-4">
                   <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-transparent to-transparent pointer-events-none z-10" />
                   {[
-                    { cls: 'marquee-rtl',      images: ['/gwido/images/Image_Menu_Sans_Logo.png','/gwido/images/Gwido001.png','/gwido/images/Gwido002.png','/gwido/images/Gwido003.png','/eom/images/Menu.png','/gwido/images/CameraBehaviourStick.png','/gwido/images/Gwido004.png','/eom/images/Screen_Start.png'] },
-                    { cls: 'marquee-ltr',      images: ['/gwido/images/CamMoving.png','/gwido/images/Cam_Center.png','/eom/images/MecaniqueSonore.png','/gwido/images/CameraAimRotation.png','/gwido/images/DaucrMiniDash.png','/eom/images/Screen_cube_Time_Stop.png','/gwido/images/DaucrGrandDash.png','/eom/images/Screen_Repulsion_des_amas.png'] },
-                    { cls: 'marquee-rtl',      images: ['/gwido/images/Gwido005.png','/gwido/images/CameraTriggerBetween.png','/eom/images/Mecanique_explosion.png','/gwido/images/Image_Menu.png','/gwido/images/Gwido001.png','/eom/images/Menu.png','/gwido/images/Patrol_Enemis.png'] },
-                    { cls: 'marquee-ltr-fast', images: ['/gwido/images/Gwido003.png','/gwido/images/Gwido004.png','/eom/images/Screen_Start.png','/gwido/images/CameraBehaviour_Target.png','/eom/images/Screen_cube_Time_Stop.png','/gwido/images/CameraRotation_Trigger.png','/eom/images/Screen_Repulsion_des_amas.png','/gwido/images/Gwido005.png'] },
+                    { cls: 'marquee-rtl',      images: ['/gwido/images/Image_Menu_Sans_Logo.png','/gwido/images/Gwido001.png','/gwido/images/Gwido002.png','/gwido/images/Gwido003.png','/eom/images/Menu.png','/gwido/images/Gwido004.png','/eom/images/Screen_Start.png'] },
+                    { cls: 'marquee-ltr',      images: ['/gwido/images/Gwido001.png','/eom/images/Screen_Repulsion_des_amas.png', '/gwido/images/Gwido004.png','/gwido/images/Gwido002.png', '/gwido/images/Image_Menu_Sans_Logo.png', '/gwido/images/Gwido003.png'] },
+                    { cls: 'marquee-rtl',      images: ['/gwido/images/Gwido005.png','/gwido/images/Image_Menu_Sans_Logo.png','/gwido/images/Gwido001.png','/eom/images/Menu.png', '/gwido/images/Gwido002.png', '/gwido/images/Gwido003.png'] },
+                    { cls: 'marquee-ltr-fast', images: ['/gwido/images/Gwido003.png','/gwido/images/Gwido004.png','/eom/images/Screen_Start.png','/eom/images/Screen_cube_Time_Stop.png','/eom/images/Screen_Repulsion_des_amas.png','/gwido/images/Gwido001.png'] },
                   ].map((row, ri) => (
                     <div key={ri} className="overflow-hidden flex-shrink-0">
                       <div className={row.cls}>
