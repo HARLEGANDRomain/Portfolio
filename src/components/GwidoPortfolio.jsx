@@ -16,6 +16,14 @@ const GwidoPortfolio = () => {
   
   const wavePathRightRef = useRef(null);
 
+  const fixPath = (path) => {
+    if (!path) return path;
+    if (path.startsWith('/') && !path.startsWith('http')) {
+      return (import.meta.env.BASE_URL + path.slice(1)).replace(/\/+/g, '/');
+    }
+    return path;
+  };
+
   const currentLang = i18n.language?.startsWith('fr') ? 'fr' : 'en';
   const toggleLanguage = () => {
     i18n.changeLanguage(currentLang === 'fr' ? 'en' : 'fr');
@@ -211,7 +219,7 @@ const GwidoPortfolio = () => {
                    
                    {/* Ghost Image overlay */}
                    <img 
-                      src={gwidoImage} 
+                      src={fixPath(gwidoImage)} 
                       alt="Atmospheric background" 
                       className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-40 animate-subtle-zoom" 
                       style={{ filter: 'grayscale(50%) contrast(1.2)' }}
@@ -240,7 +248,7 @@ const GwidoPortfolio = () => {
                       style={{ transform: `translate(${mousePos.x * -1}px, ${mousePos.y * -1}px) scale(1.05)` }}
                     >
                       <img 
-                        src={project.image} 
+                        src={fixPath(project.image)} 
                         alt={project.title} 
                         className="w-full h-full object-cover object-center mix-blend-lighten"
                         style={{ maskImage: "linear-gradient(to left, black 60%, transparent 100%)", WebkitMaskImage: "linear-gradient(to left, black 60%, transparent 100%)" }}
@@ -268,7 +276,7 @@ const GwidoPortfolio = () => {
                       }}
                     >
                         <img 
-                          src={project.image} 
+                          src={fixPath(project.image)} 
                           alt={project.title}
                           className="w-full h-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-105"
                         />

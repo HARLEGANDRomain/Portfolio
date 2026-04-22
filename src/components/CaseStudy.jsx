@@ -156,6 +156,15 @@ const caseStudyStyles = `
   .lb-close:hover { background: rgba(255,255,255,0.22); transform: scale(1.08); }
 `;
 
+// ─── HELPER ───
+const fixPath = (path) => {
+  if (!path) return path;
+  if (path.startsWith('/') && !path.startsWith('http')) {
+    return (import.meta.env.BASE_URL + path.slice(1)).replace(/\/+/g, '/');
+  }
+  return path;
+};
+
 // ─────────────────────────────────────────────────────────────────────────────
 // LIGHTBOX
 // ─────────────────────────────────────────────────────────────────────────────
@@ -167,14 +176,16 @@ const Lightbox = ({ item, onClose }) => {
     return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = ''; };
   }, [onClose]);
 
+  const src = fixPath(item.src);
+
   return (
     <div className="lightbox-backdrop" onClick={onClose}>
       <button className="lb-close" onClick={onClose} aria-label="Close"><X className="w-5 h-5" /></button>
       <div className="lightbox-inner" onClick={(e) => e.stopPropagation()}>
         {item.type === 'video' ? (
-          <video src={item.src} autoPlay controls loop playsInline />
+          <video src={src} autoPlay controls loop playsInline />
         ) : (
-          <img src={item.src} alt={item.caption ?? 'Media'} />
+          <img src={src} alt={item.caption ?? 'Media'} />
         )}
         {item.caption && <div className="exp-caption">{item.caption}</div>}
       </div>
@@ -185,22 +196,25 @@ const Lightbox = ({ item, onClose }) => {
 // ─────────────────────────────────────────────────────────────────────────────
 // EXPANDABLE MEDIA — base component for any clickable/zoomable media
 // ─────────────────────────────────────────────────────────────────────────────
-const ExpandableMedia = ({ item, onExpand, aspectClass = 'aspect-video' }) => (
-  <div
-    className={`exp-media ${aspectClass}`}
-    onClick={() => onExpand({ type: item.type, src: item.src, caption: item.caption })}
-  >
-    {item.type === 'video' ? (
-      <video src={item.src} autoPlay muted loop playsInline className="w-full h-full" />
-    ) : (
-      <img src={item.src} alt={item.caption ?? ''} className="w-full h-full" />
-    )}
-    {item.caption && <div className="exp-caption">{item.caption}</div>}
-    <div className="exp-overlay">
-      <div className="exp-btn"><Maximize2 className="w-3.5 h-3.5" /></div>
+const ExpandableMedia = ({ item, onExpand, aspectClass = 'aspect-video' }) => {
+  const src = fixPath(item.src);
+  return (
+    <div
+      className={`exp-media ${aspectClass}`}
+      onClick={() => onExpand({ type: item.type, src: item.src, caption: item.caption })}
+    >
+      {item.type === 'video' ? (
+        <video src={src} autoPlay muted loop playsInline className="w-full h-full" />
+      ) : (
+        <img src={src} alt={item.caption ?? ''} className="w-full h-full" />
+      )}
+      {item.caption && <div className="exp-caption">{item.caption}</div>}
+      <div className="exp-overlay">
+        <div className="exp-btn"><Maximize2 className="w-3.5 h-3.5" /></div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SPLIT BLOCK — text + single media, alternating left/right
@@ -637,7 +651,7 @@ const CaseStudy = ({ project, onBack }) => {
         {/* Right — morphing bubble */}
         <div className="hidden lg:flex items-center justify-center px-12 py-20">
           <div className="bubble-container w-[520px] h-[520px]">
-            <img src={project.image ?? `https://picsum.photos/seed/${project.id ?? project.title}/800/800`} alt={project.title} />
+            <img src={fixPath(project.image) ?? `https://picsum.photos/seed/${project.id ?? project.title}/800/800`} alt={project.title} />
           </div>
         </div>
       </section>
