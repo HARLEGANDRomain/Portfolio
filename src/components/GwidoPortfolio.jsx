@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowUpRight, ArrowRight, Camera, Target, Calendar, User, Code2, Layout, Smartphone, Mail, Linkedin, Github } from 'lucide-react';
 import CaseStudy from './CaseStudy';
@@ -156,13 +156,18 @@ const GwidoPortfolio = () => {
   ];
 
   const customStyles = [
-    ".bg-dots { background-image: radial-gradient(#e2e8f0 1.5px, transparent 1.5px); background-size: 24px 24px; }",
+    ".bg-dots { background-image: radial-gradient(#e2e8f0 1.5px, transparent 1.5px); background-size: 24px 24px; background-color: #ffffff; }",
     ".bg-dots-dark { background-image: radial-gradient(rgba(255,255,255,0.1) 1.5px, transparent 1.5px); background-size: 24px 24px; }",
     ".vertical-text { writing-mode: vertical-rl; transform: rotate(180deg); }",
     "@keyframes pulse-glow { 0%, 100% { opacity: 0.4; transform: scale(1); } 50% { opacity: 0.7; transform: scale(1.05); } }",
     "@keyframes subtle-zoom { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }",
     ".animate-pulse-glow { animation: pulse-glow 4s ease-in-out infinite; }",
-    ".animate-subtle-zoom { animation: subtle-zoom 20s ease-in-out alternate infinite; }"
+    ".animate-subtle-zoom { animation: subtle-zoom 20s ease-in-out alternate infinite; }",
+    "@keyframes marquee-ltr { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }",
+    "@keyframes marquee-rtl { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }",
+    ".marquee-ltr { animation: marquee-ltr 30s linear infinite; display: flex; width: max-content; }",
+    ".marquee-rtl { animation: marquee-rtl 38s linear infinite; display: flex; width: max-content; }",
+    ".marquee-ltr-fast { animation: marquee-ltr 22s linear infinite; display: flex; width: max-content; }"
   ].join("\n");
 
   const scrollTo = (id) => {
@@ -337,7 +342,7 @@ const GwidoPortfolio = () => {
         
         {/* Fixed background dots within the left wrapper */}
         <div className="absolute inset-0 pointer-events-none z-[-1]">
-             <div className="sticky top-0 w-full h-screen bg-dots opacity-60"></div>
+             <div className="sticky top-0 w-full h-screen bg-dots"></div>
         </div>
 
         {/* --- STATIC HEADER (Name + Initial Nav) --- */}
@@ -394,6 +399,52 @@ const GwidoPortfolio = () => {
                     </button>
                 </div>
             </section>
+
+            {/* ── MARQUEE IMAGE STRIP ───────────────────────────────── */}
+            <div className="w-full overflow-hidden border-y border-slate-100 bg-white py-4 space-y-3">
+              {[
+                { cls: 'marquee-ltr', images: [
+                  '/Image/Gwido/Image_Menu_Sans_Logo.png',
+                  '/Image/Gwido/Gwido001.png',
+                  '/Image/Gwido/Gwido002.png',
+                  '/Image/Gwido/Gwido003.png',
+                  '/eom/images/Menu.png',
+                  '/eom/images/Start.png',
+                  '/Image/Gwido/Gwido004.png',
+                  '/eom/images/Screen_Start.png',
+                ]},
+                { cls: 'marquee-rtl', images: [
+                  '/Image/Gwido/Capture_decran_2025-06-17_103656.png',
+                  '/Image/Gwido/Capture_decran_2025-06-17_104429.png',
+                  '/eom/images/MecaniqueSonore.png',
+                  '/Image/Gwido/Capture_decran_2025-06-17_104617.png',
+                  '/Image/Gwido/Capture_decran_2025-10-06_124630.png',
+                  '/eom/images/Screen_cube_Time_Stop.png',
+                  '/Image/Gwido/Capture_decran_2025-10-06_124834.png',
+                  '/eom/images/Screen_Repulsion_des_amas.png',
+                ]},
+                { cls: 'marquee-ltr-fast', images: [
+                  '/Image/Gwido/Gwido005.png',
+                  '/Image/Gwido/StartScreenGwido.png',
+                  '/eom/images/Mecanique_explosion.png',
+                  '/Image/Gwido/Image_Menu_Sans_Logo.png',
+                  '/Image/Gwido/Gwido001.png',
+                  '/eom/images/Menu.png',
+                  '/Image/Gwido/Gwido002.png',
+                  '/eom/images/Start.png',
+                ]},
+              ].map((row, ri) => (
+                <div key={ri} className="overflow-hidden">
+                  <div className={row.cls}>
+                    {[...row.images, ...row.images].map((src, i) => (
+                      <div key={i} className="flex-shrink-0 w-48 h-28 mx-1.5 rounded-lg overflow-hidden shadow-sm border border-slate-100">
+                        <img src={fixPath(src)} alt="" className="w-full h-full object-cover" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
 
             {/* PROJECTS SECTION */}
             <section id="projects" data-section="projects" className="section-observer min-h-screen flex flex-col justify-center px-8 md:px-16 py-24 border-t border-slate-100">
@@ -457,14 +508,14 @@ const GwidoPortfolio = () => {
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-6">
-                        <a href="mailto:rharlegand@gmail.com" className="flex justify-center items-center gap-3 bg-indigo-600 text-white px-8 py-4 text-xs font-bold uppercase tracking-widest hover:bg-indigo-700 transition-colors w-full sm:w-auto">
+                        <a href="https://app.fastmail.com/mail/drafts/?action=compose&to=rharlegand@gmail.com" target="_blank" rel="noopener noreferrer" className="flex justify-center items-center gap-3 bg-indigo-600 text-white px-8 py-4 text-xs font-bold uppercase tracking-widest hover:bg-indigo-700 transition-colors w-full sm:w-auto">
                             <Mail className="w-4 h-4" /> {t('contact.cta')}
                         </a>
                         <div className="flex gap-4 w-full sm:w-auto justify-center">
-                            <a href="https://www.linkedin.com/in/romain-harlegand/" className="flex justify-center items-center bg-white border border-slate-200 text-slate-600 hover:text-[#0f172a] hover:border-slate-400 px-6 py-4 transition-colors">
+                            <a href="https://www.linkedin.com/in/romain-harlegand/" target="_blank" rel="noopener noreferrer" className="flex justify-center items-center bg-white border border-slate-200 text-slate-600 hover:text-[#0f172a] hover:border-slate-400 px-6 py-4 transition-colors">
                                 <Linkedin className="w-5 h-5" />
                             </a>
-                            <a href="https://github.com/HARLEGANDRomain" className="flex justify-center items-center bg-white border border-slate-200 text-slate-600 hover:text-[#0f172a] hover:border-slate-400 px-6 py-4 transition-colors">
+                            <a href="https://github.com/HARLEGANDRomain" target="_blank" rel="noopener noreferrer" className="flex justify-center items-center bg-white border border-slate-200 text-slate-600 hover:text-[#0f172a] hover:border-slate-400 px-6 py-4 transition-colors">
                                 <Github className="w-5 h-5" />
                             </a>
                         </div>
