@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowUpRight, ArrowRight, Camera, Target, Calendar, User, Code2, Layout, Smartphone, Mail, Linkedin, Github } from 'lucide-react';
 import CaseStudy from './CaseStudy';
@@ -214,7 +214,7 @@ const GwidoPortfolio = () => {
           </defs>
         </svg>
 
-        <div className="w-full h-full overflow-hidden relative pointer-events-auto" style={{ clipPath: "url(#wave-right)" }}>
+        <div className="w-full h-full overflow-hidden relative pointer-events-auto bg-slate-950" style={{ clipPath: "url(#wave-right)" }}>
             
             {/* 1. Intro Visual — Marquee image strips */}
             <div className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${activeSection === 'intro' ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}>

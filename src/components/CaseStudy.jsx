@@ -515,7 +515,7 @@ const CarouselBlock = ({ block, onExpand }) => {
               className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/20 backdrop-blur hover:bg-white/35 transition flex items-center justify-center text-white z-10"
               aria-label="Previous"><ChevronLeft className="w-5 h-5" /></button>
             <button onClick={() => advance(1)}
-              className="absolute right-14 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/20 backdrop-blur hover:bg-white/35 transition flex items-center justify-center text-white z-10"
+              className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/20 backdrop-blur hover:bg-white/35 transition flex items-center justify-center text-white z-10"
               aria-label="Next"><ChevronRight className="w-5 h-5" /></button>
           </>
         )}
