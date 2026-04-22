@@ -222,7 +222,7 @@ const GwidoPortfolio = () => {
             
             {/* 1. Intro Visual — Marquee image strips */}
             <div className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${activeSection === 'intro' ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}>
-                <div className="absolute inset-0 bg-slate-950 overflow-hidden flex flex-col justify-center gap-3 py-4">
+                <div className="absolute inset-0 bg-slate-950 overflow-hidden flex flex-col justify-center gap-6 py-4">
                   {/* Authentic Topographic Map Pattern */}
                   <div className="absolute inset-0 opacity-40 pointer-events-none overflow-hidden">
                     <div className="absolute inset-[-20%] animate-topo flex items-center justify-center">
@@ -246,15 +246,14 @@ const GwidoPortfolio = () => {
 
                   <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-transparent to-transparent pointer-events-none z-10" />
                   {[
-                    { cls: 'marquee-rtl',      images: ['/gwido/images/Image_Menu_Sans_Logo.png','/gwido/images/Gwido001.png','/gwido/images/Gwido002.png','/gwido/images/Gwido003.png','/eom/images/Menu.png','/gwido/images/Gwido004.png','/eom/images/Screen_Start.png'] },
+                    { cls: 'marquee-rtl',      images: ['/gwido/images/Image_Menu_Sans_Logo.png','/gwido/images/Gwido001.png','/gwido/images/Gwido002.png','/gwido/images/Gwido003.png','/eom/images/Menu.png','/gwido/images/Gwido004.png','/eom/images/Screen_Start.png', '/eom/images/Screen_cube_Time_Stop.png'] },
                     { cls: 'marquee-ltr',      images: ['/gwido/images/Gwido001.png','/eom/images/Screen_Repulsion_des_amas.png', '/gwido/images/Gwido004.png','/gwido/images/Gwido002.png', '/gwido/images/Image_Menu_Sans_Logo.png', '/gwido/images/Gwido003.png'] },
-                    { cls: 'marquee-rtl',      images: ['/gwido/images/Gwido005.png','/gwido/images/Image_Menu_Sans_Logo.png','/gwido/images/Gwido001.png','/eom/images/Menu.png', '/gwido/images/Gwido002.png', '/gwido/images/Gwido003.png'] },
-                    { cls: 'marquee-ltr-fast', images: ['/gwido/images/Gwido003.png','/gwido/images/Gwido004.png','/eom/images/Screen_Start.png','/eom/images/Screen_cube_Time_Stop.png','/eom/images/Screen_Repulsion_des_amas.png','/gwido/images/Gwido001.png'] },
+                    { cls: 'marquee-rtl',      images: ['/gwido/images/Gwido005.png','/gwido/images/Image_Menu_Sans_Logo.png','/gwido/images/Gwido001.png','/eom/images/Menu.png', '/gwido/images/Gwido002.png', '/gwido/images/Gwido003.png', '/eom/images/Screen_Repulsion_des_amas.png'] },
                   ].map((row, ri) => (
                     <div key={ri} className="overflow-hidden flex-shrink-0">
                       <div className={row.cls}>
                         {[...row.images, ...row.images].map((src, i) => (
-                          <div key={i} className="flex-shrink-0 w-44 h-[100px] mx-1.5 rounded-lg overflow-hidden opacity-80">
+                          <div key={i} className="flex-shrink-0 w-72 h-[160px] mx-2 rounded-xl overflow-hidden opacity-80">
                             <img src={fixPath(src)} alt="" className="w-full h-full object-cover" />
                           </div>
                         ))}
@@ -357,7 +356,7 @@ const GwidoPortfolio = () => {
 
             {/* 3. Contact Visual — Marquee image strips */}
             <div className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${activeSection === 'contact' ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}>
-                <div className="absolute inset-0 bg-slate-950 overflow-hidden flex flex-col justify-center gap-3 py-4">
+                <div className="absolute inset-0 bg-slate-950 overflow-hidden flex flex-col justify-center gap-6 py-4">
                   {/* Authentic Topographic Map Pattern */}
                   <div className="absolute inset-0 opacity-40 pointer-events-none overflow-hidden">
                     <div className="absolute inset-[-20%] animate-topo flex items-center justify-center">
@@ -380,15 +379,14 @@ const GwidoPortfolio = () => {
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-transparent to-transparent pointer-events-none z-10" />
                   {[
-                    { cls: 'marquee-rtl',      images: ['/gwido/images/Image_Menu_Sans_Logo.png','/gwido/images/Gwido001.png','/gwido/images/Gwido002.png','/gwido/images/Gwido003.png','/eom/images/Menu.png','/gwido/images/Gwido004.png','/eom/images/Screen_Start.png'] },
+                    { cls: 'marquee-rtl',      images: ['/gwido/images/Image_Menu_Sans_Logo.png','/gwido/images/Gwido001.png','/gwido/images/Gwido002.png','/gwido/images/Gwido003.png','/eom/images/Menu.png','/gwido/images/Gwido004.png','/eom/images/Screen_Start.png', '/eom/images/Screen_cube_Time_Stop.png'] },
                     { cls: 'marquee-ltr',      images: ['/gwido/images/Gwido001.png','/eom/images/Screen_Repulsion_des_amas.png', '/gwido/images/Gwido004.png','/gwido/images/Gwido002.png', '/gwido/images/Image_Menu_Sans_Logo.png', '/gwido/images/Gwido003.png'] },
-                    { cls: 'marquee-rtl',      images: ['/gwido/images/Gwido005.png','/gwido/images/Image_Menu_Sans_Logo.png','/gwido/images/Gwido001.png','/eom/images/Menu.png', '/gwido/images/Gwido002.png', '/gwido/images/Gwido003.png'] },
-                    { cls: 'marquee-ltr-fast', images: ['/gwido/images/Gwido003.png','/gwido/images/Gwido004.png','/eom/images/Screen_Start.png','/eom/images/Screen_cube_Time_Stop.png','/eom/images/Screen_Repulsion_des_amas.png','/gwido/images/Gwido001.png'] },
+                    { cls: 'marquee-rtl',      images: ['/gwido/images/Gwido005.png','/gwido/images/Image_Menu_Sans_Logo.png','/gwido/images/Gwido001.png','/eom/images/Menu.png', '/gwido/images/Gwido002.png', '/gwido/images/Gwido003.png', '/eom/images/Screen_Repulsion_des_amas.png'] },
                   ].map((row, ri) => (
                     <div key={ri} className="overflow-hidden flex-shrink-0">
                       <div className={row.cls}>
                         {[...row.images, ...row.images].map((src, i) => (
-                          <div key={i} className="flex-shrink-0 w-44 h-[100px] mx-1.5 rounded-lg overflow-hidden opacity-80">
+                          <div key={i} className="flex-shrink-0 w-72 h-[160px] mx-2 rounded-xl overflow-hidden opacity-80">
                             <img src={fixPath(src)} alt="" className="w-full h-full object-cover" />
                           </div>
                         ))}
