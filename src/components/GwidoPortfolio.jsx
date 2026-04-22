@@ -222,7 +222,7 @@ const GwidoPortfolio = () => {
                   <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-transparent to-transparent pointer-events-none z-10" />
                   {[
                     { cls: 'marquee-ltr',      images: ['/gwido/images/Image_Menu_Sans_Logo.png','/gwido/images/Gwido001.png','/gwido/images/Gwido002.png','/gwido/images/Gwido003.png','/eom/images/Menu.png','/gwido/images/CameraBehaviourStick.png','/gwido/images/Gwido004.png','/eom/images/Screen_Start.png'] },
-                    { cls: 'marquee-rtl',      images: ['/gwido/images/CamMoving.png','/gwido/images/Cam_Center.png','/eom/images/MecaniqueSonore.png','/gwido/images/CameraAimRotation.png','/gwido/images/DaucrMiniDash.png','/eom/images/Screen_cube_Time_Stop.png','/gwido/images/DaucrGrandDash.png','/eom/images/Screen_Repulsion_des_amas.png'] },
+                    { cls: 'marquee-rtl',      images: ['/gwido/images/Cam_Center.png','/gwido/images/CamMoving.png','/eom/images/MecaniqueSonore.png','/gwido/images/CameraAimRotation.png','/gwido/images/DaucrMiniDash.png','/eom/images/Screen_cube_Time_Stop.png','/gwido/images/DaucrGrandDash.png','/eom/images/Screen_Repulsion_des_amas.png'] },
                     { cls: 'marquee-ltr-fast', images: ['/gwido/images/Gwido005.png','/gwido/images/CameraTriggerBetween.png','/eom/images/Mecanique_explosion.png','/gwido/images/Image_Menu.png','/gwido/images/Gwido001.png','/eom/images/Menu.png','/gwido/images/Patrol_Enemis.png'] },
                     { cls: 'marquee-rtl',      images: ['/gwido/images/Gwido003.png','/gwido/images/Gwido004.png','/eom/images/Screen_Start.png','/gwido/images/CameraBehaviour_Target.png','/eom/images/Screen_cube_Time_Stop.png','/gwido/images/CameraRotation_Trigger.png','/eom/images/Screen_Repulsion_des_amas.png','/gwido/images/Gwido005.png'] },
                   ].map((row, ri) => (
@@ -365,7 +365,7 @@ const GwidoPortfolio = () => {
         </div>
 
         {/* --- STATIC HEADER (Name + Initial Nav) --- */}
-        <header className="absolute top-0 left-0 w-full md:w-[70%] px-8 md:px-16 py-12 md:py-24 flex flex-col sm:flex-row items-start sm:items-center justify-between z-40">
+        <header className="absolute top-0 left-0 w-full md:w-[70%] px-8 md:px-16 py-8 md:py-16 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8 z-40">
             <div>
                 <h1 
                     className="text-3xl md:text-4xl font-black text-[#0f172a] uppercase tracking-tighter cursor-pointer whitespace-nowrap leading-none mb-1" 
