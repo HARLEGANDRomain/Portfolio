@@ -246,9 +246,9 @@ const GwidoPortfolio = () => {
 
                   <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-transparent to-transparent pointer-events-none z-10" />
                   {[
-                    { cls: 'marquee-rtl',      images: ['/gwido/images/Image_Menu_Sans_Logo.png','/gwido/images/Gwido001.png','/gwido/images/Gwido002.png','/gwido/images/Gwido003.png','/eom/images/Menu.png','/gwido/images/Gwido004.png','/eom/images/Screen_Start.png', '/eom/images/Screen_cube_Time_Stop.png'] },
-                    { cls: 'marquee-ltr',      images: ['/gwido/images/Gwido001.png','/eom/images/Screen_Repulsion_des_amas.png', '/gwido/images/Gwido004.png','/gwido/images/Gwido002.png', '/gwido/images/Image_Menu_Sans_Logo.png', '/gwido/images/Gwido003.png'] },
-                    { cls: 'marquee-rtl',      images: ['/gwido/images/Gwido005.png','/gwido/images/Image_Menu_Sans_Logo.png','/gwido/images/Gwido001.png','/eom/images/Menu.png', '/gwido/images/Gwido002.png', '/gwido/images/Gwido003.png', '/eom/images/Screen_Repulsion_des_amas.png'] },
+                    { cls: 'marquee-rtl',      images: ['/gwido/images/Gwido001.png', '/eom/images/Screen_cube_Time_Stop.png', '/gwido/images/Gwido003.png', '/eom/images/Menu.png', '/gwido/images/Gwido004.png', '/eom/images/Screen_Start.png'] },
+                    { cls: 'marquee-ltr',      images: ['/eom/images/Screen_Repulsion_des_amas.png', '/gwido/images/Image_Menu_Sans_Logo.png', '/eom/images/Start.png', '/gwido/images/Gwido002.png', '/eom/images/Screen_cube_Time_Stop.png', '/gwido/images/Gwido001.png'] },
+                    { cls: 'marquee-rtl',      images: ['/gwido/images/Gwido004.png', '/eom/images/Menu.png', '/gwido/images/Gwido002.png', '/eom/images/Screen_Start.png', '/gwido/images/Image_Menu_Sans_Logo.png', '/eom/images/Screen_Repulsion_des_amas.png'] },
                   ].map((row, ri) => (
                     <div key={ri} className="overflow-hidden flex-shrink-0">
                       <div className={row.cls}>
@@ -379,9 +379,9 @@ const GwidoPortfolio = () => {
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-transparent to-transparent pointer-events-none z-10" />
                   {[
-                    { cls: 'marquee-rtl',      images: ['/gwido/images/Image_Menu_Sans_Logo.png','/gwido/images/Gwido001.png','/gwido/images/Gwido002.png','/gwido/images/Gwido003.png','/eom/images/Menu.png','/gwido/images/Gwido004.png','/eom/images/Screen_Start.png', '/eom/images/Screen_cube_Time_Stop.png'] },
-                    { cls: 'marquee-ltr',      images: ['/gwido/images/Gwido001.png','/eom/images/Screen_Repulsion_des_amas.png', '/gwido/images/Gwido004.png','/gwido/images/Gwido002.png', '/gwido/images/Image_Menu_Sans_Logo.png', '/gwido/images/Gwido003.png'] },
-                    { cls: 'marquee-rtl',      images: ['/gwido/images/Gwido005.png','/gwido/images/Image_Menu_Sans_Logo.png','/gwido/images/Gwido001.png','/eom/images/Menu.png', '/gwido/images/Gwido002.png', '/gwido/images/Gwido003.png', '/eom/images/Screen_Repulsion_des_amas.png'] },
+                    { cls: 'marquee-rtl',      images: ['/gwido/images/Gwido001.png', '/eom/images/Screen_cube_Time_Stop.png', '/gwido/images/Gwido003.png', '/eom/images/Menu.png', '/gwido/images/Gwido004.png', '/eom/images/Screen_Start.png'] },
+                    { cls: 'marquee-ltr',      images: ['/eom/images/Screen_Repulsion_des_amas.png', '/gwido/images/Image_Menu_Sans_Logo.png', '/eom/images/Start.png', '/gwido/images/Gwido002.png', '/eom/images/Screen_cube_Time_Stop.png', '/gwido/images/Gwido001.png'] },
+                    { cls: 'marquee-rtl',      images: ['/gwido/images/Gwido004.png', '/eom/images/Menu.png', '/gwido/images/Gwido002.png', '/eom/images/Screen_Start.png', '/gwido/images/Image_Menu_Sans_Logo.png', '/eom/images/Screen_Repulsion_des_amas.png'] },
                   ].map((row, ri) => (
                     <div key={ri} className="overflow-hidden flex-shrink-0">
                       <div className={row.cls}>
