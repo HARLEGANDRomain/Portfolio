@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowUpRight, ArrowRight, Camera, Target, Calendar, User, Code2, Layout, Smartphone, Mail, Linkedin, Github } from 'lucide-react';
 import CaseStudy from './CaseStudy';
@@ -165,9 +165,9 @@ const GwidoPortfolio = () => {
     ".animate-subtle-zoom { animation: subtle-zoom 20s ease-in-out alternate infinite; }",
     "@keyframes marquee-ltr { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }",
     "@keyframes marquee-rtl { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }",
-    ".marquee-ltr { animation: marquee-ltr 30s linear infinite; display: flex; width: max-content; }",
-    ".marquee-rtl { animation: marquee-rtl 38s linear infinite; display: flex; width: max-content; }",
-    ".marquee-ltr-fast { animation: marquee-ltr 22s linear infinite; display: flex; width: max-content; }"
+    ".marquee-ltr { animation: marquee-ltr 80s linear infinite; display: flex; width: max-content; }",
+    ".marquee-rtl { animation: marquee-rtl 80s linear infinite; display: flex; width: max-content; }",
+    ".marquee-ltr-fast { animation: marquee-ltr 80s linear infinite; display: flex; width: max-content; }"
   ].join("\n");
 
   const scrollTo = (id) => {
@@ -331,11 +331,26 @@ const GwidoPortfolio = () => {
               </div>
             ))}
 
-            {/* 3. Contact Visual */}
+            {/* 3. Contact Visual — Marquee image strips */}
             <div className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${activeSection === 'contact' ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}>
-                <div className="absolute inset-0 bg-slate-950 flex flex-col items-center justify-center overflow-hidden">
-                    <div className="absolute w-[800px] h-[800px] bg-blue-600/10 rounded-full blur-[150px] animate-pulse-glow"></div>
-                    <div className="absolute right-0 top-0 w-full h-full bg-dots-dark opacity-30"></div>
+                <div className="absolute inset-0 bg-slate-950 overflow-hidden flex flex-col justify-center gap-3 py-4">
+                  <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-transparent to-transparent pointer-events-none z-10" />
+                  {[
+                    { cls: 'marquee-rtl',      images: ['/Image/Gwido/Image_Menu_Sans_Logo.png','/Image/Gwido/Gwido001.png','/Image/Gwido/Gwido002.png','/Image/Gwido/Gwido003.png','/Image/Gwido/Gwido004.png'] },
+                    { cls: 'marquee-ltr',      images: ['/Image/Gwido/Capture_decran_2025-06-17_103656.png','/Image/Gwido/Capture_decran_2025-06-17_104429.png','/eom/images/MecaniqueSonore.png','/Image/Gwido/Capture_decran_2025-06-17_104617.png','/Image/Gwido/Capture_decran_2025-10-06_124630.png','/eom/images/Screen_cube_Time_Stop.png','/Image/Gwido/Capture_decran_2025-10-06_124834.png','/eom/images/Screen_Repulsion_des_amas.png'] },
+                    { cls: 'marquee-rtl',      images: ['/Image/Gwido/Gwido005.png','/Image/Gwido/StartScreenGwido.png','/eom/images/Mecanique_explosion.png','/Image/Gwido/Image_Menu_Sans_Logo.png','/Image/Gwido/Gwido001.png','/eom/images/Menu.png','/Image/Gwido/Gwido002.png','/eom/images/Start.png'] },
+                    { cls: 'marquee-ltr-fast', images: ['/Image/Gwido/Gwido003.png','/Image/Gwido/Gwido004.png','/eom/images/Screen_Start.png','/Image/Gwido/Capture_decran_2025-06-17_103656.png','/eom/images/Screen_cube_Time_Stop.png','/Image/Gwido/Capture_decran_2025-10-06_124630.png','/eom/images/Screen_Repulsion_des_amas.png','/Image/Gwido/Gwido005.png'] },
+                  ].map((row, ri) => (
+                    <div key={ri} className="overflow-hidden flex-shrink-0">
+                      <div className={row.cls}>
+                        {[...row.images, ...row.images].map((src, i) => (
+                          <div key={i} className="flex-shrink-0 w-44 h-[100px] mx-1.5 rounded-lg overflow-hidden opacity-80">
+                            <img src={fixPath(src)} alt="" className="w-full h-full object-cover" />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
                 </div>
             </div>
 
@@ -456,7 +471,7 @@ const GwidoPortfolio = () => {
             </section>
 
             {/* CONTACT SECTION */}
-            <section id="contact" data-section="contact" className="section-observer min-h-[80vh] flex flex-col justify-center px-8 md:px-16 py-24 border-t border-slate-100 bg-slate-100/50">
+            <section id="contact" data-section="contact" className="section-observer min-h-[80vh] flex flex-col justify-center px-8 md:px-16 py-24 border-t border-slate-100">
                 <div className="max-w-xl">
                     <p className="text-[10px] font-bold uppercase tracking-widest text-indigo-500 mb-4">
                         {t('contact.label')}
