@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowUpRight, ArrowRight, Camera, Target, Calendar, User, Code2, Layout, Smartphone, Mail, Linkedin, Github } from 'lucide-react';
 import CaseStudy from './CaseStudy';
@@ -457,14 +457,14 @@ const GwidoPortfolio = () => {
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-6">
-                        <a href="mailto:contact@example.com" className="flex justify-center items-center gap-3 bg-indigo-600 text-white px-8 py-4 text-xs font-bold uppercase tracking-widest hover:bg-indigo-700 transition-colors w-full sm:w-auto">
+                        <a href="mailto:rharlegand@gmail.com" className="flex justify-center items-center gap-3 bg-indigo-600 text-white px-8 py-4 text-xs font-bold uppercase tracking-widest hover:bg-indigo-700 transition-colors w-full sm:w-auto">
                             <Mail className="w-4 h-4" /> {t('contact.cta')}
                         </a>
                         <div className="flex gap-4 w-full sm:w-auto justify-center">
-                            <a href="#" className="flex justify-center items-center bg-white border border-slate-200 text-slate-600 hover:text-[#0f172a] hover:border-slate-400 px-6 py-4 transition-colors">
+                            <a href="https://www.linkedin.com/in/romain-harlegand/" className="flex justify-center items-center bg-white border border-slate-200 text-slate-600 hover:text-[#0f172a] hover:border-slate-400 px-6 py-4 transition-colors">
                                 <Linkedin className="w-5 h-5" />
                             </a>
-                            <a href="#" className="flex justify-center items-center bg-white border border-slate-200 text-slate-600 hover:text-[#0f172a] hover:border-slate-400 px-6 py-4 transition-colors">
+                            <a href="https://github.com/HARLEGANDRomain" className="flex justify-center items-center bg-white border border-slate-200 text-slate-600 hover:text-[#0f172a] hover:border-slate-400 px-6 py-4 transition-colors">
                                 <Github className="w-5 h-5" />
                             </a>
                         </div>
