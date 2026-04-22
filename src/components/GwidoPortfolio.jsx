@@ -18,8 +18,10 @@ const GwidoPortfolio = () => {
 
   const fixPath = (path) => {
     if (!path) return path;
+    const base = import.meta.env.BASE_URL;
+    if (path.startsWith(base)) return path;
     if (path.startsWith('/') && !path.startsWith('http')) {
-      return (import.meta.env.BASE_URL + path.slice(1)).replace(/\/+/g, '/');
+      return (base + path.slice(1)).replace(/\/+/g, '/');
     }
     return path;
   };
