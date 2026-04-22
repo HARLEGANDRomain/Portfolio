@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowUpRight, ArrowRight, Camera, Target, Calendar, User, Code2, Layout, Smartphone, Mail, Linkedin, Github } from 'lucide-react';
 import CaseStudy from './CaseStudy';
-import gwidoImage from '../../Image/Gwido/Image_Menu_Sans_Logo.png';
 import { getGwidoContentBlocks } from '../data/gwidoData';
 import { getEomContentBlocks } from '../data/eomData';
 
@@ -108,7 +107,7 @@ const GwidoPortfolio = () => {
       date: '2024 - 2025',
       context: t('gwido.context'),
       contributions: [],
-      image: gwidoImage,
+      image: '/Image/Gwido/Image_Menu_Sans_Logo.png',
       platform: t('gwido.platform'),
       duration: t('gwido.duration'),
       genre: t('gwido.genre'),
@@ -221,7 +220,7 @@ const GwidoPortfolio = () => {
                    
                    {/* Ghost Image overlay */}
                    <img 
-                      src={fixPath(gwidoImage)} 
+                      src={fixPath('/Image/Gwido/Image_Menu_Sans_Logo.png')} 
                       alt="Atmospheric background" 
                       className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-40 animate-subtle-zoom" 
                       style={{ filter: 'grayscale(50%) contrast(1.2)' }}
