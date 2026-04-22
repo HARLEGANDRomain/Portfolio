@@ -216,22 +216,27 @@ const GwidoPortfolio = () => {
 
         <div className="w-full h-full overflow-hidden relative pointer-events-auto" style={{ clipPath: "url(#wave-right)" }}>
             
-            {/* 1. Intro Visual (Atmospheric) */}
+            {/* 1. Intro Visual — Marquee image strips */}
             <div className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${activeSection === 'intro' ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}>
-                <div className="absolute inset-0 bg-slate-900 overflow-hidden">
-                   {/* Blur Blobs */}
-                   <div className="absolute w-[800px] h-[800px] bg-indigo-600/30 rounded-full blur-[120px] animate-pulse-glow -top-20 -right-20"></div>
-                   <div className="absolute w-[600px] h-[600px] bg-slate-500/20 rounded-full blur-[100px] bottom-0 left-0"></div>
-                   
-                   {/* Ghost Image overlay */}
-                   <img 
-                      src={fixPath('/Image/Gwido/Image_Menu_Sans_Logo.png')} 
-                      alt="Atmospheric background" 
-                      className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-40 animate-subtle-zoom" 
-                      style={{ filter: 'grayscale(50%) contrast(1.2)' }}
-                   />
-                   
-                   <div className="absolute inset-0 bg-gradient-to-l from-transparent via-slate-900/50 to-slate-900 pointer-events-none"></div>
+                <div className="absolute inset-0 bg-slate-950 overflow-hidden flex flex-col justify-center gap-3 py-4">
+                  {/* dark overlay gradient on the left edge to blend with the wave */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-transparent to-transparent pointer-events-none z-10" />
+                  {[
+                    { cls: 'marquee-ltr',      images: ['/Image/Gwido/Image_Menu_Sans_Logo.png','/Image/Gwido/Gwido001.png','/Image/Gwido/Gwido002.png','/Image/Gwido/Gwido003.png','/eom/images/Menu.png','/eom/images/Start.png','/Image/Gwido/Gwido004.png','/eom/images/Screen_Start.png'] },
+                    { cls: 'marquee-rtl',      images: ['/Image/Gwido/Capture_decran_2025-06-17_103656.png','/Image/Gwido/Capture_decran_2025-06-17_104429.png','/eom/images/MecaniqueSonore.png','/Image/Gwido/Capture_decran_2025-06-17_104617.png','/Image/Gwido/Capture_decran_2025-10-06_124630.png','/eom/images/Screen_cube_Time_Stop.png','/Image/Gwido/Capture_decran_2025-10-06_124834.png','/eom/images/Screen_Repulsion_des_amas.png'] },
+                    { cls: 'marquee-ltr-fast', images: ['/Image/Gwido/Gwido005.png','/Image/Gwido/StartScreenGwido.png','/eom/images/Mecanique_explosion.png','/Image/Gwido/Image_Menu_Sans_Logo.png','/Image/Gwido/Gwido001.png','/eom/images/Menu.png','/Image/Gwido/Gwido002.png','/eom/images/Start.png'] },
+                    { cls: 'marquee-rtl',      images: ['/Image/Gwido/Gwido003.png','/Image/Gwido/Gwido004.png','/eom/images/Screen_Start.png','/Image/Gwido/Capture_decran_2025-06-17_103656.png','/eom/images/Screen_cube_Time_Stop.png','/Image/Gwido/Capture_decran_2025-10-06_124630.png','/eom/images/Screen_Repulsion_des_amas.png','/Image/Gwido/Gwido005.png'] },
+                  ].map((row, ri) => (
+                    <div key={ri} className="overflow-hidden flex-shrink-0">
+                      <div className={row.cls}>
+                        {[...row.images, ...row.images].map((src, i) => (
+                          <div key={i} className="flex-shrink-0 w-44 h-[100px] mx-1.5 rounded-lg overflow-hidden opacity-80">
+                            <img src={fixPath(src)} alt="" className="w-full h-full object-cover" />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
                 </div>
             </div>
 
@@ -400,52 +405,6 @@ const GwidoPortfolio = () => {
                 </div>
             </section>
 
-            {/* ── MARQUEE IMAGE STRIP ───────────────────────────────── */}
-            <div className="w-full overflow-hidden border-y border-slate-100 bg-white py-4 space-y-3">
-              {[
-                { cls: 'marquee-ltr', images: [
-                  '/Image/Gwido/Image_Menu_Sans_Logo.png',
-                  '/Image/Gwido/Gwido001.png',
-                  '/Image/Gwido/Gwido002.png',
-                  '/Image/Gwido/Gwido003.png',
-                  '/eom/images/Menu.png',
-                  '/eom/images/Start.png',
-                  '/Image/Gwido/Gwido004.png',
-                  '/eom/images/Screen_Start.png',
-                ]},
-                { cls: 'marquee-rtl', images: [
-                  '/Image/Gwido/Capture_decran_2025-06-17_103656.png',
-                  '/Image/Gwido/Capture_decran_2025-06-17_104429.png',
-                  '/eom/images/MecaniqueSonore.png',
-                  '/Image/Gwido/Capture_decran_2025-06-17_104617.png',
-                  '/Image/Gwido/Capture_decran_2025-10-06_124630.png',
-                  '/eom/images/Screen_cube_Time_Stop.png',
-                  '/Image/Gwido/Capture_decran_2025-10-06_124834.png',
-                  '/eom/images/Screen_Repulsion_des_amas.png',
-                ]},
-                { cls: 'marquee-ltr-fast', images: [
-                  '/Image/Gwido/Gwido005.png',
-                  '/Image/Gwido/StartScreenGwido.png',
-                  '/eom/images/Mecanique_explosion.png',
-                  '/Image/Gwido/Image_Menu_Sans_Logo.png',
-                  '/Image/Gwido/Gwido001.png',
-                  '/eom/images/Menu.png',
-                  '/Image/Gwido/Gwido002.png',
-                  '/eom/images/Start.png',
-                ]},
-              ].map((row, ri) => (
-                <div key={ri} className="overflow-hidden">
-                  <div className={row.cls}>
-                    {[...row.images, ...row.images].map((src, i) => (
-                      <div key={i} className="flex-shrink-0 w-48 h-28 mx-1.5 rounded-lg overflow-hidden shadow-sm border border-slate-100">
-                        <img src={fixPath(src)} alt="" className="w-full h-full object-cover" />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-
             {/* PROJECTS SECTION */}
             <section id="projects" data-section="projects" className="section-observer min-h-screen flex flex-col justify-center px-8 md:px-16 py-24 border-t border-slate-100">
                 <div className="absolute left-6 top-1/2 -translate-y-1/2 hidden lg:block sticky-label">
@@ -508,7 +467,7 @@ const GwidoPortfolio = () => {
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-6">
-                        <a href="https://app.fastmail.com/mail/drafts/?action=compose&to=rharlegand@gmail.com" target="_blank" rel="noopener noreferrer" className="flex justify-center items-center gap-3 bg-indigo-600 text-white px-8 py-4 text-xs font-bold uppercase tracking-widest hover:bg-indigo-700 transition-colors w-full sm:w-auto">
+                        <a href="mailto:rharlegand@gmail.com" className="flex justify-center items-center gap-3 bg-indigo-600 text-white px-8 py-4 text-xs font-bold uppercase tracking-widest hover:bg-indigo-700 transition-colors w-full sm:w-auto">
                             <Mail className="w-4 h-4" /> {t('contact.cta')}
                         </a>
                         <div className="flex gap-4 w-full sm:w-auto justify-center">
