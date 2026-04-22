@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowUpRight, ArrowRight, Camera, Target, Calendar, User, Code2, Layout, Smartphone, Mail, Linkedin, Github } from 'lucide-react';
 import CaseStudy from './CaseStudy';
@@ -167,7 +167,11 @@ const GwidoPortfolio = () => {
     "@keyframes marquee-rtl { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }",
     ".marquee-ltr { animation: marquee-ltr 80s linear infinite; display: flex; width: max-content; }",
     ".marquee-rtl { animation: marquee-rtl 80s linear infinite; display: flex; width: max-content; }",
-    ".marquee-ltr-fast { animation: marquee-ltr 80s linear infinite; display: flex; width: max-content; }"
+    ".marquee-ltr-fast { animation: marquee-ltr 80s linear infinite; display: flex; width: max-content; }",
+    "@keyframes wave-move { 0% { transform: translateX(-25%) translateY(2%); } 50% { transform: translateX(0%) translateY(-2%); } 100% { transform: translateX(-25%) translateY(2%); } }",
+    ".animate-wave { animation: wave-move 20s ease-in-out infinite; }",
+    "@keyframes topo-float { 0% { transform: scale(1) translate(0, 0); } 50% { transform: scale(1.05) translate(-2%, 2%); } 100% { transform: scale(1) translate(0, 0); } }",
+    ".animate-topo { animation: topo-float 30s ease-in-out infinite; }"
   ].join("\n");
 
   const scrollTo = (id) => {
@@ -219,6 +223,27 @@ const GwidoPortfolio = () => {
             {/* 1. Intro Visual — Marquee image strips */}
             <div className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${activeSection === 'intro' ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}>
                 <div className="absolute inset-0 bg-slate-950 overflow-hidden flex flex-col justify-center gap-3 py-4">
+                  {/* Authentic Topographic Map Pattern */}
+                  <div className="absolute inset-0 opacity-40 pointer-events-none overflow-hidden">
+                    <div className="absolute inset-[-20%] animate-topo flex items-center justify-center">
+                      <svg className="w-full h-full text-indigo-400/40" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice">
+                        <defs>
+                          <filter id="topo-intro" x="-50%" y="-50%" width="200%" height="200%" colorInterpolationFilters="sRGB">
+                            <feTurbulence type="fractalNoise" baseFrequency="0.005" numOctaves="2" result="noise" />
+                            <feDisplacementMap in="SourceGraphic" in2="noise" scale="100" xChannelSelector="R" yChannelSelector="G" />
+                            <feGaussianBlur stdDeviation="0.5" />
+                          </filter>
+                        </defs>
+                        <g filter="url(#topo-intro)" fill="none" stroke="currentColor" strokeWidth="2" opacity="0.6">
+                          {/* Flanc de colline / Vallées (Lignes horizontales déformées) */}
+                          {[...Array(120)].map((_, i) => (
+                            <line key={i} x1="-200" y1={i * 15 - 400} x2="1200" y2={i * 15 - 400} />
+                          ))}
+                        </g>
+                      </svg>
+                    </div>
+                  </div>
+
                   <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-transparent to-transparent pointer-events-none z-10" />
                   {[
                     { cls: 'marquee-rtl',      images: ['/gwido/images/Image_Menu_Sans_Logo.png','/gwido/images/Gwido001.png','/gwido/images/Gwido002.png','/gwido/images/Gwido003.png','/eom/images/Menu.png','/gwido/images/Gwido004.png','/eom/images/Screen_Start.png'] },
@@ -333,6 +358,26 @@ const GwidoPortfolio = () => {
             {/* 3. Contact Visual — Marquee image strips */}
             <div className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${activeSection === 'contact' ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}>
                 <div className="absolute inset-0 bg-slate-950 overflow-hidden flex flex-col justify-center gap-3 py-4">
+                  {/* Authentic Topographic Map Pattern */}
+                  <div className="absolute inset-0 opacity-40 pointer-events-none overflow-hidden">
+                    <div className="absolute inset-[-20%] animate-topo flex items-center justify-center">
+                      <svg className="w-full h-full text-indigo-400/40" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice">
+                        <defs>
+                          <filter id="topo-contact" x="-50%" y="-50%" width="200%" height="200%" colorInterpolationFilters="sRGB">
+                            <feTurbulence type="fractalNoise" baseFrequency="0.005" numOctaves="2" result="noise" seed="5" />
+                            <feDisplacementMap in="SourceGraphic" in2="noise" scale="100" xChannelSelector="R" yChannelSelector="G" />
+                            <feGaussianBlur stdDeviation="0.5" />
+                          </filter>
+                        </defs>
+                        <g filter="url(#topo-contact)" fill="none" stroke="currentColor" strokeWidth="2" opacity="0.6">
+                          {/* Sommet excentré (Cercles concentriques en haut à droite) */}
+                          {[...Array(120)].map((_, i) => (
+                            <circle key={i} cx="1000" cy="0" r={i * 18 + 20} />
+                          ))}
+                        </g>
+                      </svg>
+                    </div>
+                  </div>
                   <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-transparent to-transparent pointer-events-none z-10" />
                   {[
                     { cls: 'marquee-rtl',      images: ['/gwido/images/Image_Menu_Sans_Logo.png','/gwido/images/Gwido001.png','/gwido/images/Gwido002.png','/gwido/images/Gwido003.png','/eom/images/Menu.png','/gwido/images/Gwido004.png','/eom/images/Screen_Start.png'] },
