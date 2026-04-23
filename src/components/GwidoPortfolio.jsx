@@ -99,24 +99,23 @@ const GwidoPortfolio = () => {
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 80);
+
+      // Determine active section manually to prevent fast-scroll bugs
+      const sections = ['intro', 'projects', 'contact'];
+      for (const id of sections) {
+        const el = document.getElementById(id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          // A section is active if the middle of the screen is within its bounds
+          if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+            setActiveSection(id);
+          }
+        }
+      }
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll(); // init
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Intersection Observer for Sections
-  useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-               setActiveSection(entry.target.getAttribute('data-section'));
-            }
-        });
-    }, { rootMargin: "-30% 0px -50% 0px" });
-
-    document.querySelectorAll('.section-observer').forEach(el => observer.observe(el));
-    return () => observer.disconnect();
   }, []);
 
   // (Gwido bust position is fixed vertically via CSS — no scroll tracking needed)
