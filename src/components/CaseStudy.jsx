@@ -168,6 +168,45 @@ const fixPath = (path) => {
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
+// MEDIA LOADER — generic component for images and videos with a loading spinner
+// ─────────────────────────────────────────────────────────────────────────────
+const MediaLoader = ({ src, type = 'image', className = '', style = {}, imgProps = {}, videoProps = {} }) => {
+  const [loaded, setLoaded] = useState(false);
+  const combinedStyle = {
+    ...style,
+    opacity: loaded ? (style.opacity ?? 1) : 0,
+    transition: style.transition ? `${style.transition}, opacity 0.5s ease` : 'opacity 0.5s ease, transform 0.4s ease'
+  };
+  
+  return (
+    <>
+      {!loaded && (
+         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+           <div className="w-8 h-8 border-4 border-indigo-200/30 border-t-indigo-500 rounded-full animate-spin"></div>
+         </div>
+      )}
+      {type === 'video' ? (
+        <video 
+          src={src} 
+          {...videoProps}
+          className={`${className} relative z-10`} 
+          style={combinedStyle}
+          onLoadedData={() => setLoaded(true)}
+        />
+      ) : (
+        <img 
+          src={src} 
+          {...imgProps}
+          className={`${className} relative z-10`}
+          style={combinedStyle}
+          onLoad={() => setLoaded(true)}
+        />
+      )}
+    </>
+  );
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
 // LIGHTBOX
 // ─────────────────────────────────────────────────────────────────────────────
 const Lightbox = ({ item, onClose }) => {
@@ -183,13 +222,15 @@ const Lightbox = ({ item, onClose }) => {
   return (
     <div className="lightbox-backdrop" onClick={onClose}>
       <button className="lb-close" onClick={onClose} aria-label="Close"><X className="w-5 h-5" /></button>
-      <div className="lightbox-inner" onClick={(e) => e.stopPropagation()}>
-        {item.type === 'video' ? (
-          <video src={src} autoPlay controls loop playsInline />
-        ) : (
-          <img src={src} alt={item.caption ?? 'Media'} />
-        )}
-        {item.caption && <div className="exp-caption">{item.caption}</div>}
+      <div className="lightbox-inner bg-slate-900/80 min-h-[30vh] flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
+        <MediaLoader 
+          src={src} 
+          type={item.type} 
+          imgProps={{ alt: item.caption ?? 'Media' }}
+          videoProps={{ autoPlay: true, controls: true, loop: true, playsInline: true }}
+          style={{ transition: 'opacity 0.3s ease' }}
+        />
+        {item.caption && <div className="exp-caption z-20 relative">{item.caption}</div>}
       </div>
     </div>
   );
@@ -202,16 +243,17 @@ const ExpandableMedia = ({ item, onExpand, aspectClass = 'aspect-video' }) => {
   const src = fixPath(item.src);
   return (
     <div
-      className={`exp-media ${aspectClass}`}
+      className={`exp-media ${aspectClass} bg-slate-100/30`}
       onClick={() => onExpand({ type: item.type, src: item.src, caption: item.caption })}
     >
-      {item.type === 'video' ? (
-        <video src={src} autoPlay muted loop playsInline className="w-full h-full" />
-      ) : (
-        <img src={src} alt={item.caption ?? ''} className="w-full h-full" />
-      )}
-      {item.caption && <div className="exp-caption">{item.caption}</div>}
-      <div className="exp-overlay">
+      <MediaLoader 
+        src={src} 
+        type={item.type} 
+        imgProps={{ alt: item.caption ?? '' }}
+        videoProps={{ autoPlay: true, muted: true, loop: true, playsInline: true }}
+      />
+      {item.caption && <div className="exp-caption z-20 relative">{item.caption}</div>}
+      <div className="exp-overlay z-20 relative">
         <div className="exp-btn"><Maximize2 className="w-3.5 h-3.5" /></div>
       </div>
     </div>
@@ -708,8 +750,11 @@ const CaseStudy = ({ project, onBack }) => {
 
         {/* Right — morphing bubble */}
         <div className="hidden lg:flex items-center justify-center px-12 py-20">
-          <div className="bubble-container w-[520px] h-[520px]">
-            <img src={fixPath(project.image) ?? `https://picsum.photos/seed/${project.id ?? project.title}/800/800`} alt={project.title} />
+          <div className="bubble-container w-[520px] h-[520px] bg-slate-100/50">
+            <MediaLoader 
+              src={fixPath(project.image) ?? `https://picsum.photos/seed/${project.id ?? project.title}/800/800`} 
+              imgProps={{ alt: project.title }} 
+            />
           </div>
         </div>
       </section>

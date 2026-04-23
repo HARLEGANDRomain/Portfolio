@@ -35,6 +35,26 @@ const GwidoPortfolio = () => {
     i18n.changeLanguage(currentLang === 'fr' ? 'en' : 'fr');
   };
 
+  const ImageLoader = ({ src, alt, className = '', style = {} }) => {
+    const [loaded, setLoaded] = useState(false);
+    return (
+      <div className={`relative ${className}`} style={style}>
+        {!loaded && (
+           <div className="absolute inset-0 flex items-center justify-center bg-slate-900/20 z-0">
+             <div className="w-6 h-6 border-2 border-indigo-200/30 border-t-indigo-500 rounded-full animate-spin"></div>
+           </div>
+        )}
+        <img 
+          src={src} 
+          alt={alt} 
+          className={`w-full h-full object-cover transition-opacity duration-700 ease-in-out relative z-10 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+          style={style}
+          onLoad={() => setLoaded(true)}
+        />
+      </div>
+    );
+  };
+
   // Mouse parallax tracking
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -276,7 +296,7 @@ const GwidoPortfolio = () => {
                       <div className={row.cls}>
                         {[...row.images, ...row.images].map((src, i) => (
                           <div key={i} className="flex-shrink-0 w-72 h-[160px] mx-2 rounded-xl overflow-hidden opacity-80">
-                            <img src={fixPath(src)} alt="" className="w-full h-full object-cover" />
+                            <ImageLoader src={fixPath(src)} alt="" className="w-full h-full" />
                           </div>
                         ))}
                       </div>
@@ -303,10 +323,10 @@ const GwidoPortfolio = () => {
                       className="relative w-full h-full z-10 transition-transform duration-700 ease-out"
                       style={{ transform: `translate(${mousePos.x * -1}px, ${mousePos.y * -1}px) scale(1.05)` }}
                     >
-                      <img 
+                      <ImageLoader 
                         src={fixPath(project.image)} 
                         alt={project.title} 
-                        className="w-full h-full object-cover object-center mix-blend-lighten"
+                        className="w-full h-full mix-blend-lighten"
                         style={{ maskImage: "linear-gradient(to left, black 60%, transparent 100%)", WebkitMaskImage: "linear-gradient(to left, black 60%, transparent 100%)" }}
                       />
                     </div>
@@ -331,10 +351,11 @@ const GwidoPortfolio = () => {
                         perspective: '1000px'
                       }}
                     >
-                        <img 
+                        <ImageLoader 
                           src={fixPath(project.image)} 
                           alt={project.title}
-                          className="w-full h-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-105"
+                          className="w-full h-full transition-transform duration-700 group-hover:scale-105"
+                          style={{ opacity: 0.9 }}
                         />
                         
                         {/* Overlay tech effect */}
