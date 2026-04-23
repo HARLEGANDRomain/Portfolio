@@ -14,13 +14,13 @@ export const getGwidoContentBlocks = (t) => [
     interval: 4000,
     busteConfig: {
       css: {
-        left: '7%',
+        left: '-2%',
         top: '20%',
       },
-      initialTransform: 'translateY(60px) translateX(40px) rotate(-30deg)',
+      initialTransform: 'translateY(70px) translateX(70px) rotate(-40deg)',
       imgCss: {
         height: '120px',
-        transform: 'rotate(-30deg)',
+        transform: 'rotate(-40deg)',
       }
     },
     items: [
@@ -136,10 +136,10 @@ export const getGwidoContentBlocks = (t) => [
     description: t('gwido.split02_desc'),
     busteConfig: {
       css: {
-        right: '7%',
+        right: '-1%',
         top: '25%',
       },
-      initialTransform: 'translateY(80px) translateX(-40px) rotate(40deg)',
+      initialTransform: 'translateY(80px) translateX(-60px) rotate(40deg)',
       imgCss: {
         height: '120px',
         transform: 'rotate(40deg)',
@@ -185,7 +185,7 @@ export const getGwidoContentBlocks = (t) => [
     interval: 7000,
     busteConfig: {
       css: {
-        right: '28%',
+        right: '24%',
         top: '-1%',
       },
       initialTransform: 'translateY(70px) translateX(0px) rotate(0deg)',

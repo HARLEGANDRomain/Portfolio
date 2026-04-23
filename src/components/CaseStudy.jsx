@@ -580,12 +580,14 @@ const ContentBlock = ({ block, index, onExpand }) => {
   return (
     <div className="relative" ref={blockRef}>
       {block.busteConfig && (
-        <div
-          className="absolute pointer-events-none z-0"
-          style={{
-            ...block.busteConfig.css
-          }}
-        >
+        <div className="absolute inset-0 w-full hidden lg:flex justify-center pointer-events-none z-0">
+          <div className="relative w-full max-w-7xl">
+            <div
+              className="absolute"
+              style={{
+                ...block.busteConfig.css
+              }}
+            >
           <img
             src={fixPath('/gwido/images/Gwido_Buste.png')}
             alt=""
@@ -603,6 +605,8 @@ const ContentBlock = ({ block, index, onExpand }) => {
               transitionDelay: isVisible ? (block.busteConfig.delay || '0.5s') : '0s'
             }}
           />
+            </div>
+          </div>
         </div>
       )}
       <div className="relative z-10">
