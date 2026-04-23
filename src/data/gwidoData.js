@@ -12,6 +12,17 @@ export const getGwidoContentBlocks = (t) => [
     label: t('gwido.carousel00_label'),
     title: t('gwido.carousel00_title'),
     interval: 4000,
+    busteConfig: {
+      css: {
+        left: '7%',
+        top: '20%',
+      },
+      initialTransform: 'translateY(60px) translateX(40px) rotate(-30deg)',
+      imgCss: {
+        height: '120px',
+        transform: 'rotate(-30deg)',
+      }
+    },
     items: [
       { type: 'image', src: '/gwido/images/Image_Menu_Sans_Logo.png', caption: t('gwido.carousel00_cap1') },
       { type: 'image', src: '/gwido/images/Gwido001.png',             caption: t('gwido.carousel00_cap2') },
@@ -123,6 +134,17 @@ export const getGwidoContentBlocks = (t) => [
     label: t('gwido.split02_label'),
     title: t('gwido.split02_title'),
     description: t('gwido.split02_desc'),
+    busteConfig: {
+      css: {
+        right: '7%',
+        top: '25%',
+      },
+      initialTransform: 'translateY(80px) translateX(-40px) rotate(40deg)',
+      imgCss: {
+        height: '120px',
+        transform: 'rotate(40deg)',
+      }
+    },
   },
   {
     type: 'media-grid',
@@ -161,6 +183,17 @@ export const getGwidoContentBlocks = (t) => [
     type: 'carousel',
     label: t('gwido.carousel02_label'),
     interval: 7000,
+    busteConfig: {
+      css: {
+        right: '28%',
+        top: '-1%',
+      },
+      initialTransform: 'translateY(70px) translateX(0px) rotate(0deg)',
+      imgCss: {
+        height: '120px',
+        transform: 'rotate(0deg)',
+      }
+    },
     items: [
       { type: 'video', src: '/gwido/videos/FocusBetweenTriggered.mp4',   caption: t('gwido.carousel02_cap1') },
       { type: 'video', src: '/gwido/videos/FocusTargetTriggered.mp4',    caption: t('gwido.carousel02_cap2') },

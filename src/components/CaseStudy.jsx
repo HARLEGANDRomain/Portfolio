@@ -549,15 +549,67 @@ const CarouselBlock = ({ block, onExpand }) => {
 // CONTENT BLOCK DISPATCHER
 // ─────────────────────────────────────────────────────────────────────────────
 const ContentBlock = ({ block, index, onExpand }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const blockRef = useRef(null);
+
+  useEffect(() => {
+    if (!block.busteConfig) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0.2, rootMargin: '0px 0px -10% 0px' }
+    );
+    if (blockRef.current) observer.observe(blockRef.current);
+    return () => observer.disconnect();
+  }, [block.busteConfig]);
+
+  let content = null;
   switch (block.type) {
-    case 'split':             return <SplitBlock block={block} index={index} onExpand={onExpand} />;
-    case 'carousel':          return <CarouselBlock block={block} onExpand={onExpand} />;
-    case 'media-grid':        return <MediaGrid block={block} onExpand={onExpand} />;
-    case 'text-block':        return <TextBlock block={block} />;
-    case 'section-divider':   return <SectionDivider block={block} />;
-    case 'summary-card-pair': return <SummaryCardPair block={block} onExpand={onExpand} />;
+    case 'split':             content = <SplitBlock block={block} index={index} onExpand={onExpand} />; break;
+    case 'carousel':          content = <CarouselBlock block={block} onExpand={onExpand} />; break;
+    case 'media-grid':        content = <MediaGrid block={block} onExpand={onExpand} />; break;
+    case 'text-block':        content = <TextBlock block={block} />; break;
+    case 'section-divider':   content = <SectionDivider block={block} />; break;
+    case 'summary-card-pair': content = <SummaryCardPair block={block} onExpand={onExpand} />; break;
     default:                  return null;
   }
+
+  if (!content) return null;
+
+  return (
+    <div className="relative" ref={blockRef}>
+      {block.busteConfig && (
+        <div
+          className="absolute pointer-events-none z-0"
+          style={{
+            ...block.busteConfig.css
+          }}
+        >
+          <img
+            src={fixPath('/gwido/images/Gwido_Buste.png')}
+            alt=""
+            style={{
+              width: 'auto',
+              display: 'block',
+              transformOrigin: 'center center',
+              filter: 'drop-shadow(6px 0 28px rgba(99,102,241,0.5))',
+              ...block.busteConfig.imgCss,
+              transform: isVisible 
+                ? (block.busteConfig.imgCss?.transform || 'rotate(40deg)')
+                : (block.busteConfig.initialTransform || 'translateY(100px) rotate(0deg)'),
+              opacity: isVisible ? 1 : 0,
+              transition: 'opacity 0.6s ease, transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)',
+              transitionDelay: isVisible ? (block.busteConfig.delay || '0.5s') : '0s'
+            }}
+          />
+        </div>
+      )}
+      <div className="relative z-10">
+        {content}
+      </div>
+    </div>
+  );
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -579,7 +631,7 @@ const CaseStudy = ({ project, onBack }) => {
   const contentBlocks = project.contentBlocks ?? [];
 
   return (
-    <div className="cs-page min-h-screen text-slate-900 font-sans">
+    <div className="cs-page min-h-screen text-slate-900 font-sans relative z-0">
       <style dangerouslySetInnerHTML={{ __html: caseStudyStyles }} />
 
       {/* ── Lightbox ─────────────────────────────────── */}
