@@ -463,7 +463,7 @@ const GwidoPortfolio = () => {
         <header className="absolute top-0 left-0 w-full md:w-[70%] px-8 md:px-16 py-8 md:py-16 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8 z-40">
             <div>
                 <h1 
-                    className="text-3xl md:text-4xl font-black text-[#0f172a] uppercase tracking-tighter cursor-pointer whitespace-nowrap leading-none mb-1" 
+                    className="text-3xl md:text-4xl font-black text-[#0f172a] uppercase tracking-tighter cursor-pointer whitespace-nowrap leading-none mb-4" 
                     onClick={() => window.scrollTo({top: 0, behavior:'smooth'})}
                 >
                     HARLEGAND Romain
@@ -494,7 +494,7 @@ const GwidoPortfolio = () => {
         {/* Floating pill nav has been moved to root level (above this main) */}
 
         {/* Content sections below */}
-        <div className="relative z-10 pt-16">
+        <div className="relative z-10 pt-32">
             
             {/* INTRO SECTION */}
             <section id="intro" data-section="intro" className="section-observer min-h-screen flex flex-col justify-center px-8 md:px-16 pb-24">
