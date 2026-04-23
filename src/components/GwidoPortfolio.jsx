@@ -14,6 +14,11 @@ const GwidoPortfolio = () => {
   const [activeCaseStudy, setActiveCaseStudy] = useState(null);
   
   const wavePathRightRef = useRef(null);
+  const gwidoProjectRef = useRef(null);
+  // ── Gwido bust: toggled by hovering the Gwido project row ──
+  const [gwidoBustHovered, setGwidoBustHovered] = useState(false);
+  // ── Gwido bust: tracks the Gwido row's vertical position so it scrolls with it ──
+  const [gwidoBustTop, setGwidoBustTop] = useState(0);
 
   const fixPath = (path) => {
     if (!path) return path;
@@ -93,6 +98,23 @@ const GwidoPortfolio = () => {
 
     document.querySelectorAll('.section-observer').forEach(el => observer.observe(el));
     return () => observer.disconnect();
+  }, []);
+
+  // (Gwido bust position is fixed vertically via CSS — no scroll tracking needed)
+
+  // Gwido bust: track the Gwido project row's Y so the bust scrolls with it
+  // (position:fixed lets it reach the browser left edge; top mirrors the row)
+  useEffect(() => {
+    const updateBustPos = () => {
+      if (gwidoProjectRef.current) {
+        const rect = gwidoProjectRef.current.getBoundingClientRect();
+        // Offset tweaks how high above the row centre the bust sits ─ adjust here
+        setGwidoBustTop(rect.top + rect.height / 2);
+      }
+    };
+    window.addEventListener('scroll', updateBustPos, { passive: true });
+    updateBustPos(); // sync on mount
+    return () => window.removeEventListener('scroll', updateBustPos);
   }, []);
 
   const projects = [
@@ -475,7 +497,18 @@ const GwidoPortfolio = () => {
                     {projects.map((project, index) => (
                       <div 
                         key={project.id}
-                        onMouseEnter={() => !project.incoming && setActiveProject(index)}
+                        ref={index === 0 ? gwidoProjectRef : null}
+                        onMouseEnter={() => {
+                          if (!project.incoming) {
+                            setActiveProject(index);
+                            // ── Show bust only when hovering the Gwido (index 0) row ──
+                            if (index === 0) setGwidoBustHovered(true);
+                          }
+                        }}
+                        onMouseLeave={() => {
+                          // ── Hide bust when leaving the Gwido row ──
+                          if (index === 0) setGwidoBustHovered(false);
+                        }}
                         className={"group transition-all duration-500 relative " + 
                           (project.incoming 
                             ? "opacity-40 cursor-default select-none" 
@@ -541,6 +574,61 @@ const GwidoPortfolio = () => {
 
         </div>
       </main>
+
+      {/* ════════════════════════════════════════════════════
+          Gwido Bust — peeks from the LEFT edge on hover
+          Trigger  : onMouseEnter/Leave on the Gwido project row
+          ════════════════════════════════════════════════════ */}
+      {(() => {
+        const bustActive = gwidoBustHovered;
+        return (
+          // Outer wrapper: clips the right/far side of the rotated image
+          // so we never see a hard horizontal cut — only the left edge peeks in
+          <div
+            style={{
+              position: 'fixed',
+              left: 0,
+              // ── Follows the Gwido title while scrolling (updated via scroll listener) ──
+              top: gwidoBustTop,
+              zIndex: 60,
+              pointerEvents: 'none',
+              // clip anything that slides too far right (avoids cut-edge artefact)
+              overflow: 'hidden',
+              // enough padding so the rotated image isn't cropped on top/bottom
+              paddingRight: '24px',
+              paddingTop: '24px',
+              paddingBottom: '24px',
+              // ──────────────────────────────────────────────────────────────────
+              // FINAL PEEK POSITION: change translateX(-8%) below to control
+              // how far the bust slides in when hovered.
+              //   0%   = fully visible (right edge at left:0)
+              //  -8%   = slight peek (default)
+              //  -30%  = only a sliver visible
+              // ──────────────────────────────────────────────────────────────────
+              transform: bustActive
+                ? 'translateY(-80%) translateX(-32%)' // ← FINAL peek position
+                : 'translateY(-50%) translateX(-50%)',
+              opacity: bustActive ? 1 : 0,
+              transition: 'opacity 0.45s ease, transform 0.75s cubic-bezier(0.34, 1.56, 0.64, 1)',
+              filter: 'drop-shadow(6px 0 28px rgba(99,102,241,0.5))',
+            }}
+          >
+            <img
+              src={fixPath('/gwido/images/Gwido_Buste.png')}
+              alt=""
+              style={{
+                // ── Image size ──
+                height: '140px',
+                width: 'auto',
+                display: 'block',
+                // ── Rotation: 312° so the bust leans toward the screen ──
+                transform: 'rotate(40deg)',
+                transformOrigin: 'center center',
+              }}
+            />
+          </div>
+        );
+      })()}
 
     </div>
   );
