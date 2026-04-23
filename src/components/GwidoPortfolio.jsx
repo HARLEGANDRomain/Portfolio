@@ -39,6 +39,7 @@ const GwidoPortfolio = () => {
   const [gwidoBustHovered, setGwidoBustHovered] = useState(false);
   // ── Gwido bust: tracks the Gwido row's vertical position so it scrolls with it ──
   const [gwidoBustTop, setGwidoBustTop] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
   const fixPath = (path) => {
     if (!path) return path;
@@ -65,6 +66,14 @@ const GwidoPortfolio = () => {
     };
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  // Mobile detection
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   // Wave rendering
@@ -539,6 +548,12 @@ const GwidoPortfolio = () => {
                           // ── Hide bust when leaving the Gwido row ──
                           if (index === 0) setGwidoBustHovered(false);
                         }}
+                        onClick={() => {
+                          if (!project.incoming) {
+                            setActiveProject(index);
+                            if (index === 0 && !isMobile) setGwidoBustHovered(true);
+                          }
+                        }}
                         className={"group transition-all duration-500 relative " + 
                           (project.incoming 
                             ? "opacity-40 cursor-default select-none" 
@@ -564,7 +579,14 @@ const GwidoPortfolio = () => {
                           <p className="text-slate-600 mb-5 text-sm leading-relaxed border-l-2 border-slate-200 pl-4">
                             {project.description}
                           </p>
-                          <button onClick={() => setActiveCaseStudy(index)} className="flex items-center text-xs font-bold uppercase tracking-widest text-[#0f172a] hover:text-blue-600 transition-colors">
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setGwidoBustHovered(false);
+                              setActiveCaseStudy(index);
+                            }} 
+                            className="flex items-center text-xs font-bold uppercase tracking-widest text-[#0f172a] hover:text-blue-600 transition-colors"
+                          >
                             {t('projects.exploreCaseStudy')} <ArrowRight className="w-4 h-4 ml-2" />
                           </button>
                         </div>
@@ -609,7 +631,7 @@ const GwidoPortfolio = () => {
           Gwido Bust — peeks from the LEFT edge on hover
           Trigger  : onMouseEnter/Leave on the Gwido project row
           ════════════════════════════════════════════════════ */}
-      {(() => {
+      {!isMobile && (() => {
         const bustActive = gwidoBustHovered;
         return (
           // Outer wrapper: clips the right/far side of the rotated image
