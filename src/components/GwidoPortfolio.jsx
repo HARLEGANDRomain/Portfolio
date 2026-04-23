@@ -4,6 +4,7 @@ import { ArrowUpRight, ArrowRight, Camera, Target, Calendar, User, Code2, Layout
 import CaseStudy from './CaseStudy';
 import { getGwidoContentBlocks } from '../data/gwidoData';
 import { getEomContentBlocks } from '../data/eomData';
+import { trackPageView } from '../utils/analytics';
 
 const ImageLoader = ({ src, alt, className = '', style = {} }) => {
   const [loaded, setLoaded] = useState(false);
@@ -134,6 +135,16 @@ const GwidoPortfolio = () => {
     updateBustPos(); // sync on mount
     return () => window.removeEventListener('scroll', updateBustPos);
   }, []);
+
+  // Tracking: Page Views & Section Changes
+  useEffect(() => {
+    if (activeCaseStudy !== null) {
+      const project = projects[activeCaseStudy];
+      trackPageView(`/projects/${project.title.toLowerCase().replace(/\s+/g, '-')}`, `Project: ${project.title}`);
+    } else {
+      trackPageView(`/${activeSection}`, `Section: ${activeSection}`);
+    }
+  }, [activeSection, activeCaseStudy]);
 
   const projects = [
     {
