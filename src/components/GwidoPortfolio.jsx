@@ -5,6 +5,25 @@ import CaseStudy from './CaseStudy';
 import { getGwidoContentBlocks } from '../data/gwidoData';
 import { getEomContentBlocks } from '../data/eomData';
 
+const ImageLoader = ({ src, alt, className = '', style = {} }) => {
+  const [loaded, setLoaded] = useState(false);
+  return (
+    <div className={`relative ${className}`} style={style}>
+      {!loaded && (
+         <div className="absolute inset-0 flex items-center justify-center bg-slate-900/20 z-0">
+           <div className="w-6 h-6 border-2 border-indigo-200/30 border-t-indigo-500 rounded-full animate-spin"></div>
+         </div>
+      )}
+      <img 
+        src={src} 
+        alt={alt} 
+        className={`w-full h-full object-cover transition-opacity duration-700 ease-in-out relative z-10 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+        style={style}
+        onLoad={() => setLoaded(true)}
+      />
+    </div>
+  );
+};
 const GwidoPortfolio = () => {
   const { t, i18n } = useTranslation();
   const [activeSection, setActiveSection] = useState('intro');
@@ -33,26 +52,6 @@ const GwidoPortfolio = () => {
   const currentLang = i18n.language?.startsWith('fr') ? 'fr' : 'en';
   const toggleLanguage = () => {
     i18n.changeLanguage(currentLang === 'fr' ? 'en' : 'fr');
-  };
-
-  const ImageLoader = ({ src, alt, className = '', style = {} }) => {
-    const [loaded, setLoaded] = useState(false);
-    return (
-      <div className={`relative ${className}`} style={style}>
-        {!loaded && (
-           <div className="absolute inset-0 flex items-center justify-center bg-slate-900/20 z-0">
-             <div className="w-6 h-6 border-2 border-indigo-200/30 border-t-indigo-500 rounded-full animate-spin"></div>
-           </div>
-        )}
-        <img 
-          src={src} 
-          alt={alt} 
-          className={`w-full h-full object-cover transition-opacity duration-700 ease-in-out relative z-10 ${loaded ? 'opacity-100' : 'opacity-0'}`}
-          style={style}
-          onLoad={() => setLoaded(true)}
-        />
-      </div>
-    );
   };
 
   // Mouse parallax tracking
