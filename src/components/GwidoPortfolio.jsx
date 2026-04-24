@@ -18,6 +18,8 @@ const ImageLoader = ({ src, alt, className = '', style = {} }) => {
       <img 
         src={src} 
         alt={alt} 
+        loading="lazy"
+        decoding="async"
         className={`w-full h-full object-cover transition-opacity duration-700 ease-in-out relative z-10 ${loaded ? 'opacity-100' : 'opacity-0'}`}
         style={style}
         onLoad={() => setLoaded(true)}
@@ -454,7 +456,7 @@ const GwidoPortfolio = () => {
                       <div className={row.cls}>
                         {[...row.images, ...row.images].map((src, i) => (
                           <div key={i} className="flex-shrink-0 w-72 h-[160px] mx-2 rounded-xl overflow-hidden opacity-80">
-                            <img src={fixPath(src)} alt="" className="w-full h-full object-cover" />
+                            <img src={fixPath(src)} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover" />
                           </div>
                         ))}
                       </div>
@@ -674,6 +676,8 @@ const GwidoPortfolio = () => {
             <img
               src={fixPath('/gwido/images/Gwido_Buste.png')}
               alt=""
+              loading="lazy"
+              decoding="async"
               style={{
                 // ── Image size ──
                 height: '140px',

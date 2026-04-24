@@ -188,6 +188,7 @@ const MediaLoader = ({ src, type = 'image', className = '', style = {}, imgProps
       {type === 'video' ? (
         <video 
           src={src} 
+          preload="metadata"
           {...videoProps}
           className={`${className} relative z-10`} 
           style={combinedStyle}
@@ -196,6 +197,8 @@ const MediaLoader = ({ src, type = 'image', className = '', style = {}, imgProps
       ) : (
         <img 
           src={src} 
+          loading="lazy"
+          decoding="async"
           {...imgProps}
           className={`${className} relative z-10`}
           style={combinedStyle}
@@ -633,6 +636,8 @@ const ContentBlock = ({ block, index, onExpand }) => {
           <img
             src={fixPath('/gwido/images/Gwido_Buste.png')}
             alt=""
+            loading="lazy"
+            decoding="async"
             style={{
               width: 'auto',
               display: 'block',
