@@ -174,6 +174,9 @@ const GwidoPortfolio = () => {
       timeline: t('gwido.timeline'),
       teamSize: t('gwido.teamSize'),
       rolesList: ['Game Designer', 'Lead Game Programmer', 'UX/UI Designer'],
+      links: [
+        { type: 'pdf', url: '/gwido/Gwido_Game_Document.pdf', labelKey: 'gwido.documentation_btn' }
+      ],
 
       contentBlocks: getGwidoContentBlocks(t),
     },
@@ -194,6 +197,9 @@ const GwidoPortfolio = () => {
       timeline: t('eom.timeline'),
       teamSize: t('eom.teamSize'),
       rolesList: ['Lead Game Designer', 'Game Programmer'],
+      links: [
+        { type: 'itchio', url: 'https://harlegand-romain.itch.io/echoes-of-memories', labelKey: 'eom.itchio_btn' }
+      ],
 
       contentBlocks: getEomContentBlocks(t),
     },

@@ -143,7 +143,8 @@
     "split05_title": "Un outil modulaire pour le level designer",
     "split05_desc": "Pour que les ennemis s'intègrent naturellement dans le level design sans nécessiter de code supplémentaire, j'ai développé un outil de patrouille personnalisé directement dans l'inspecteur Unity. Il permet de composer des routes complexes et variées, adaptées à chaque zone du niveau.",
     "split05_note": "Points de passage, vitesse, temps d'attente à chaque waypoint et comportements spéciaux sont tous configurables en quelques clics.",
-    "grid08_cap1": "L'ennemi en patrouille — détection du joueur lors du passage"
+    "grid08_cap1": "L'ennemi en patrouille — détection du joueur lors du passage",
+    "documentation_btn": "Voir le Game Doc (PDF)"
   },
   "eom": {
     "category": "Jeux vidéo | Sandbox Musical",
@@ -219,6 +220,7 @@
     "sec04_label": "Démonstration",
     "sec04_title": "Le jouet en action",
     "sec04_desc": "Une session de jeu complète illustrant l'exploration libre, la mécanique du trou noir et la génération musicale dynamique.",
-    "grid04_cap1": "Gameplay complet — Echoes Of Memories"
+    "grid04_cap1": "Gameplay complet — Echoes Of Memories",
+    "itchio_btn": "Jouer sur Itch.io"
   }
 }

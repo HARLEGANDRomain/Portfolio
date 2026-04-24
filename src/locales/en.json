@@ -143,7 +143,8 @@
     "split05_title": "A Modular Tool for Level Designers",
     "split05_desc": "For enemies to integrate naturally into level design without requiring additional code, I developed a custom patrol tool directly in the Unity inspector. It allows composing complex and varied routes, adapted to each zone of the level.",
     "split05_note": "Waypoints, speed, wait time at each waypoint and special behaviors are all configurable in a few clicks.",
-    "grid08_cap1": "Enemy on patrol — player detection during passage"
+    "grid08_cap1": "Enemy on patrol — player detection during passage",
+    "documentation_btn": "View Game Doc (PDF)"
   },
   "eom": {
     "category": "Video Games | Musical Sandbox",
@@ -219,6 +220,7 @@
     "sec04_label": "Demonstration",
     "sec04_title": "The Toy in Action",
     "sec04_desc": "A complete gameplay session illustrating free exploration, the black hole mechanic and dynamic music generation.",
-    "grid04_cap1": "Full gameplay — Echoes Of Memories"
+    "grid04_cap1": "Full gameplay — Echoes Of Memories",
+    "itchio_btn": "Play on Itch.io"
   }
 }

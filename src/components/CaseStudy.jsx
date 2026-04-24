@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import {
   ArrowLeft, Calendar, Users,
   ChevronLeft, ChevronRight, Play, Pause,
-  X, Maximize2,
+  X, Maximize2, FileText, Gamepad2, ExternalLink
 } from 'lucide-react';
 
 // ─── CSS ──────────────────────────────────────────────────────────────────────
@@ -741,6 +741,25 @@ const CaseStudy = ({ project, onBack }) => {
                     <span key={i} className="border border-indigo-200 rounded-full text-xs px-3 py-1 text-indigo-600 font-medium bg-indigo-50/80">
                       {r}
                     </span>
+                  ))}
+                </div>
+              </div>
+            )}
+            {project.links && project.links.length > 0 && (
+              <div className="sm:col-span-2 mt-4">
+                <div className="flex flex-wrap gap-4">
+                  {project.links.map((link, i) => (
+                    <a 
+                      key={i} 
+                      href={fixPath(link.url)} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="group/link flex items-center gap-3 bg-slate-900 text-white px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-indigo-600 transition-all duration-300 shadow-lg shadow-slate-900/10 hover:shadow-indigo-500/20 hover:-translate-y-1"
+                    >
+                      {link.type === 'pdf' ? <FileText className="w-4 h-4" /> : <Gamepad2 className="w-4 h-4" />}
+                      {t(link.labelKey)}
+                      <ExternalLink className="w-3.5 h-3.5 opacity-0 -translate-y-1 translate-x-1 group-hover/link:opacity-100 group-hover/link:translate-y-0 group-hover/link:translate-x-0 transition-all duration-300" />
+                    </a>
                   ))}
                 </div>
               </div>
