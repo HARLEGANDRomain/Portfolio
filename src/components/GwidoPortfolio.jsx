@@ -225,6 +225,7 @@ const GwidoPortfolio = () => {
 
   const customStyles = [
     ".bg-dots { background-image: radial-gradient(#e2e8f0 1.5px, transparent 1.5px); background-size: 24px 24px; background-color: #ffffff; }",
+    ".bg-dots-tracker { --dot-radius: 80px; position: absolute; inset: 0; pointer-events: none; z-index: 0; background-image: radial-gradient(#64748b 1.5px, transparent 1.5px); background-size: 24px 24px; mask-image: radial-gradient(circle var(--dot-radius) at var(--mouse-client-x, -200px) var(--mouse-client-y, -200px), black 0%, transparent 100%); -webkit-mask-image: radial-gradient(circle var(--dot-radius) at var(--mouse-client-x, -200px) var(--mouse-client-y, -200px), black 0%, transparent 100%); }",
     ".bg-dots-dark { background-image: radial-gradient(rgba(255,255,255,0.1) 1.5px, transparent 1.5px); background-size: 24px 24px; }",
     ".vertical-text { writing-mode: vertical-rl; transform: rotate(180deg); }",
     "@keyframes pulse-glow { 0%, 100% { opacity: 0.4; transform: scale(1); } 50% { opacity: 0.7; transform: scale(1.05); } }",
@@ -473,7 +474,9 @@ const GwidoPortfolio = () => {
         
         {/* Fixed background dots within the left wrapper */}
         <div className="absolute inset-0 pointer-events-none z-[-1]">
-             <div className="sticky top-0 w-full h-screen bg-dots"></div>
+             <div className="sticky top-0 w-full h-screen bg-dots">
+                 <div className="bg-dots-tracker"></div>
+             </div>
         </div>
 
         {/* --- STATIC HEADER (Name + Initial Nav) --- */}

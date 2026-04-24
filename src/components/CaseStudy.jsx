@@ -10,9 +10,22 @@ import {
 const caseStudyStyles = `
   /* ── Page background (dots everywhere) ── */
   .cs-page {
+    --dot-radius: 80px;
     background-image: radial-gradient(#e2e8f0 1.5px, transparent 1.5px);
     background-size: 24px 24px;
     background-color: #ffffff;
+    position: relative;
+  }
+  .cs-page::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    background-image: radial-gradient(#64748b 1.5px, transparent 1.5px);
+    background-size: 24px 24px;
+    mask-image: radial-gradient(circle var(--dot-radius) at var(--mouse-page-x, -200px) var(--mouse-page-y, -200px), black 0%, transparent 100%);
+    -webkit-mask-image: radial-gradient(circle var(--dot-radius) at var(--mouse-page-x, -200px) var(--mouse-page-y, -200px), black 0%, transparent 100%);
   }
 
   /* ── Morphing Bubble (hero) ── */
