@@ -24,11 +24,11 @@ export const getGwidoContentBlocks = (t) => [
       }
     },
     items: [
-      { type: 'image', src: '/gwido/images/Image_Menu_Sans_Logo.png', caption: t('gwido.carousel00_cap1') },
-      { type: 'image', src: '/gwido/images/Gwido001.png',             caption: t('gwido.carousel00_cap2') },
-      { type: 'image', src: '/gwido/images/Gwido002.png',             caption: t('gwido.carousel00_cap3') },
-      { type: 'image', src: '/gwido/images/Gwido003.png',             caption: t('gwido.carousel00_cap4') },
-      { type: 'image', src: '/gwido/images/Gwido004.png',             caption: t('gwido.carousel00_cap5') },
+      { type: 'image', src: '/gwido/images/Image_Menu_Sans_Logo.webp', caption: t('gwido.carousel00_cap1') },
+      { type: 'image', src: '/gwido/images/Gwido001.webp',             caption: t('gwido.carousel00_cap2') },
+      { type: 'image', src: '/gwido/images/Gwido002.webp',             caption: t('gwido.carousel00_cap3') },
+      { type: 'image', src: '/gwido/images/Gwido003.webp',             caption: t('gwido.carousel00_cap4') },
+      { type: 'image', src: '/gwido/images/Gwido004.webp',             caption: t('gwido.carousel00_cap5') },
     ],
   },
 

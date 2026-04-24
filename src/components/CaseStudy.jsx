@@ -634,7 +634,7 @@ const ContentBlock = ({ block, index, onExpand }) => {
               }}
             >
           <img
-            src={fixPath('/gwido/images/Gwido_Buste.png')}
+            src={fixPath('/gwido/images/Gwido_Buste.webp')}
             alt=""
             loading="lazy"
             decoding="async"
