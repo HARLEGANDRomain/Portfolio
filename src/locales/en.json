@@ -1,4 +1,26 @@
 {
+  "identityPage": {
+    "back": "Back to portfolio",
+    "whoAmI": "Who I am",
+    "whoAmIDesc": "Curious by nature, I started by studying life sciences with a degree focused on microbiology, because understanding how systems work has always fascinated me. But another passion took over: video games. From great classics to more niche titles like Warframe, whose game design deeply impacted me, I eventually discovered that this could be a career.\n\nWhile training in game design, I found something familiar: a huge part of good design relies on understanding human behavior, what we call UX, which goes hand in hand with UI to make an interface pleasant and make people want to return. It's no coincidence that I'm increasingly interested in it. It's a field that extends beyond video games and reaches a much broader audience.\n\nI thus have two complementary facets: on one hand, the desire to design and prototype game mechanics directly in engines, testing an idea, feeling it work. On the other hand, an attraction to a broader field, where the same design principles apply to experiences that impact even more users.",
+    "diplomas": "Diplomas",
+    "diplomaSchool": "ICAN - Institut de Création et d'Animation Numérique",
+    "diplomaName": "Bachelor Game Design",
+    "diplomaSub": "Digital Designer - RNCP Title Level 6",
+    "techStack": "Tech Stack",
+    "figma": "Figma",
+    "figmaDesc": "Doing screen pages, interactive prototypes, and Art Direction.",
+    "illustrator": "Illustrator",
+    "illustratorDesc": "Using vector tools and doing vectorization work.",
+    "photoshop": "Photoshop",
+    "photoshopDesc": "Basic tool usage, deleting backgrounds, image retouching, and gradient color adjustments.",
+    "unity": "Unity",
+    "unityDesc": "Making games and prototyping with C# oriented GameObjects.",
+    "blender": "Blender",
+    "blenderDesc": "Modeling simple assets and 3D prototyping.",
+    "git": "Git",
+    "gitDesc": "Understanding how it works, using it effectively, and setting it up easily."
+  },
   "nav": {
     "identity": "Identity",
     "works": "Works",

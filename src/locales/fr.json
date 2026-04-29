@@ -1,4 +1,26 @@
 {
+  "identityPage": {
+    "back": "Retour au portfolio",
+    "whoAmI": "Qui suis-je",
+    "whoAmIDesc": "Curieux de nature, j'ai commencé par étudier le vivant, un bac STL orienté microbiologie, parce que comprendre comment les systèmes fonctionnent m'a toujours fasciné. Mais une autre passion a pris le dessus : les jeux vidéo. Des grands classiques jusqu'à des titres qui étaient plus de niche comme Warframe, dont le game design m'a profondément marqué, j'ai fini par découvrir qu'on pouvait en faire un métier.\n\nEn me formant au game design, j'ai retrouvé quelque chose de familier : une grande partie du bon design repose sur la compréhension du comportement humain, ce qu'on appelle l'UX, qui ne va pas sans UI pour rendre une interface agréable et avoir envie d'y retourner. Ce n'est pas un hasard si je m'y intéresse de plus en plus. C'est un domaine qui dépasse le jeu vidéo et qui touche beaucoup plus de gens.\n\nJ'ai donc deux facettes complémentaires : d'un côté, l'envie de concevoir et prototyper des mécaniques de jeu directement dans les moteurs, tester une idée, la sentir fonctionner. De l'autre, l'attrait pour un champ plus large, où les mêmes principes de design s'appliquent à des expériences qui impactent encore plus d'utilisateurs.",
+    "diplomas": "Diplôme",
+    "diplomaSchool": "ICAN - Institut de Création et d'Animation Numérique",
+    "diplomaName": "Bachelor Game Design",
+    "diplomaSub": "Designer Numérique - Titre RNCP Niveau 6",
+    "techStack": "Outils techniques",
+    "figma": "Figma",
+    "figmaDesc": "Création d'écrans, de prototypes interactifs et Direction Artistique.",
+    "illustrator": "Illustrator",
+    "illustratorDesc": "Utilisation de l'outil vectoriel et travail de vectorisation.",
+    "photoshop": "Photoshop",
+    "photoshopDesc": "Utilisation basique, détourage, retouche d'image et création de dégradés.",
+    "unity": "Unity",
+    "unityDesc": "Création de jeux et prototypage avec C# orienté GameObject.",
+    "blender": "Blender",
+    "blenderDesc": "Modélisation de petits assets et prototypage 3D.",
+    "git": "Git",
+    "gitDesc": "Compréhension de l'outil, utilisation efficace et configuration rapide."
+  },
   "nav": {
     "identity": "Identité",
     "works": "Projets",

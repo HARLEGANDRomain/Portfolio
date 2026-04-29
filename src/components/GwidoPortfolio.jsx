@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowUpRight, ArrowRight, Camera, Target, Calendar, User, Code2, Layout, Smartphone, Mail, Linkedin, Github } from 'lucide-react';
 import CaseStudy from './CaseStudy';
+import Identity from './Identity';
 import { getGwidoContentBlocks } from '../data/gwidoData';
 import { getEomContentBlocks } from '../data/eomData';
 import { trackPageView } from '../utils/analytics';
@@ -34,7 +35,7 @@ const GwidoPortfolio = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [activeCaseStudy, setActiveCaseStudy] = useState(null);
-  
+  const [showIdentity, setShowIdentity] = useState(false);
   const wavePathRightRef = useRef(null);
   const gwidoProjectRef = useRef(null);
   // ── Gwido bust: toggled by hovering the Gwido project row ──
@@ -254,6 +255,10 @@ const GwidoPortfolio = () => {
     return <CaseStudy project={projects[activeCaseStudy]} onBack={() => setActiveCaseStudy(null)} />;
   }
 
+  if (showIdentity) {
+    return <Identity onBack={() => setShowIdentity(false)} />;
+  }
+
   return (
     <div className="min-h-screen text-slate-900 font-sans relative flex">
       <style dangerouslySetInnerHTML={{ __html: customStyles }} />
@@ -261,7 +266,7 @@ const GwidoPortfolio = () => {
       {/* --- FLOATING PILL NAV (root level, outside main, above wave) --- */}
       <div className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 flex justify-center transition-all duration-500 ${isScrolled ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-8 pointer-events-none'}`}>
           <nav className="flex items-center gap-6 text-[10px] font-bold uppercase tracking-widest bg-white/90 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.1)] px-8 py-4 rounded-full border border-slate-200">
-              <button onClick={() => scrollTo('intro')} className={`hover:text-indigo-600 transition-colors ${activeSection === 'intro' ? 'text-indigo-600' : 'text-slate-500'}`}>{t('nav.identity')}</button>
+              <button onClick={() => setShowIdentity(true)} className="text-slate-500 hover:text-indigo-600 transition-colors">{t('nav.identity')}</button>
               <button onClick={() => scrollTo('projects')} className={`hover:text-indigo-600 transition-colors ${activeSection === 'projects' ? 'text-indigo-600' : 'text-slate-500'}`}>{t('nav.works')}</button>
               <button onClick={() => scrollTo('contact')} className={`hover:text-indigo-600 transition-colors ${activeSection === 'contact' ? 'text-indigo-600' : 'text-slate-500'}`}>{t('nav.contact')}</button>
               <span className="text-slate-200">|</span>
@@ -495,7 +500,7 @@ const GwidoPortfolio = () => {
             
             {/* Initial Nav links visible at top */}
             <nav className="mt-8 sm:mt-0 flex items-center gap-6 text-[10px] font-bold uppercase tracking-widest opacity-100">
-                <button onClick={() => scrollTo('intro')} className={`hover:text-indigo-600 transition-colors ${activeSection === 'intro' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-slate-600'}`}>{t('nav.identity')}</button>
+                <button onClick={() => setShowIdentity(true)} className="text-slate-600 hover:text-indigo-600 transition-colors">{t('nav.identity')}</button>
                 <button onClick={() => scrollTo('projects')} className={`hover:text-indigo-600 transition-colors ${activeSection === 'projects' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-slate-600'}`}>{t('nav.works')}</button>
                 <button onClick={() => scrollTo('contact')} className={`hover:text-indigo-600 transition-colors ${activeSection === 'contact' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-slate-600'}`}>{t('nav.contact')}</button>
                 <span className="text-slate-300">|</span>
