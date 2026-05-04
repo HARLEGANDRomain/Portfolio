@@ -37,6 +37,8 @@ const GwidoPortfolio = () => {
   const [activeCaseStudy, setActiveCaseStudy] = useState(null);
   const [showIdentity, setShowIdentity] = useState(false);
   const wavePathRightRef = useRef(null);
+  const wavePathRightBg1Ref = useRef(null);
+  const wavePathRightBg2Ref = useRef(null);
   const gwidoProjectRef = useRef(null);
   // ── Gwido bust: toggled by hovering the Gwido project row ──
   const [gwidoBustHovered, setGwidoBustHovered] = useState(false);
@@ -85,23 +87,48 @@ const GwidoPortfolio = () => {
     const renderWave = (time) => {
       const segments = 60;
       let dRight = '';
+      let dRightBg1 = '';
+      let dRightBg2 = '';
       for (let i = 0; i <= segments; i++) {
         const y = i / segments;
-        const screenX_vw = 60 - (20 * y); 
+        const screenX_vw = 60 - (15 * y); 
         const amplitude_vw = 2;
         const frequence = Math.PI * 4;
-        const waveOffset_vw = amplitude_vw * Math.sin(y * frequence - time * 0.001);
+        const waveOffset_vw = amplitude_vw * Math.sin(y * frequence - time * 0.0005);
         const finalScreenX_vw = screenX_vw + waveOffset_vw;
         const xRight = (finalScreenX_vw - 25) / 75;
         
-        if (i === 0) { dRight += "M " + xRight + "," + y + " "; } 
-        else { dRight += "L " + xRight + "," + y + " "; }
+        // Background wave 1
+        const waveOffsetBg1_vw = amplitude_vw * 1.1 * Math.sin(y * frequence * 0.8 - time * 0.0003 + 0.5);
+        const rotatedScreenXBg1_vw = screenX_vw - 3 - (y * -3);
+        const finalScreenXBg1_vw = rotatedScreenXBg1_vw + waveOffsetBg1_vw;
+        const xRightBg1 = (finalScreenXBg1_vw - 25) / 75;
+
+        // Background wave 2
+        const waveOffsetBg2_vw = amplitude_vw * 1.3 * Math.sin(y * frequence * 0.7 - time * 0.0002 + 1.2);
+        const rotatedScreenXBg2_vw = screenX_vw - 3 - (y * -8);
+        const finalScreenXBg2_vw = rotatedScreenXBg2_vw + waveOffsetBg2_vw;
+        const xRightBg2 = (finalScreenXBg2_vw - 25) / 75;
+
+        if (i === 0) { 
+            dRight += "M " + xRight + "," + y + " "; 
+            dRightBg1 += "M " + xRightBg1 + "," + y + " ";
+            dRightBg2 += "M " + xRightBg2 + "," + y + " ";
+        } 
+        else { 
+            dRight += "L " + xRight + "," + y + " "; 
+            dRightBg1 += "L " + xRightBg1 + "," + y + " ";
+            dRightBg2 += "L " + xRightBg2 + "," + y + " ";
+        }
       }
       dRight += "L 1,1 L 1,0 Z";
+      dRightBg1 += "L 1,1 L 1,0 Z";
+      dRightBg2 += "L 1,1 L 1,0 Z";
       
-      if (wavePathRightRef.current) {
-        wavePathRightRef.current.setAttribute('d', dRight);
-      }
+      if (wavePathRightRef.current) wavePathRightRef.current.setAttribute('d', dRight);
+      if (wavePathRightBg1Ref.current) wavePathRightBg1Ref.current.setAttribute('d', dRightBg1);
+      if (wavePathRightBg2Ref.current) wavePathRightBg2Ref.current.setAttribute('d', dRightBg2);
+      
       animationFrameId = requestAnimationFrame(renderWave);
     };
     animationFrameId = requestAnimationFrame(renderWave);
@@ -165,6 +192,7 @@ const GwidoPortfolio = () => {
       category: t('gwido.category'),
       role: 'Game designer | Lead Game Programmer | UX/UI Designer',
       color: 'bg-indigo-950',
+      waveColors: ['bg-[#4f8499]/60', 'bg-[#4e889d]/80'],
       description: t('gwido.description'),
       sceneType: 'gaming',
       date: '2024 - 2025',
@@ -189,6 +217,7 @@ const GwidoPortfolio = () => {
       category: t('eom.category'),
       role: 'Lead Game Designer | Game Programmer',
       color: 'bg-slate-900',
+      waveColors: ['bg-[#fdcdb7]/60', 'bg-[#af99c7]/80'],
       description: t('eom.description'),
       sceneType: 'gaming',
       date: '2023 - 2024',
@@ -212,6 +241,7 @@ const GwidoPortfolio = () => {
       category: t('projects.nextProjectCategory'),
       role: '',
       color: 'bg-slate-800',
+      waveColors: ['bg-slate-400/40', 'bg-slate-700/50'],
       description: t('projects.nextProjectDescription'),
       sceneType: 'incoming',
       date: '\u2014',
@@ -289,10 +319,30 @@ const GwidoPortfolio = () => {
             <clipPath id="wave-right" clipPathUnits="objectBoundingBox">
               <path ref={wavePathRightRef} d="" fill="black" />
             </clipPath>
+            <clipPath id="wave-right-bg1" clipPathUnits="objectBoundingBox">
+              <path ref={wavePathRightBg1Ref} d="" fill="black" />
+            </clipPath>
+            <clipPath id="wave-right-bg2" clipPathUnits="objectBoundingBox">
+              <path ref={wavePathRightBg2Ref} d="" fill="black" />
+            </clipPath>
           </defs>
         </svg>
 
-        <div className="w-full h-full overflow-hidden relative pointer-events-auto bg-slate-950" style={{ clipPath: "url(#wave-right)" }}>
+        {/* Background Wave 2 (Deepest) */}
+        <div 
+           className={`absolute top-0 right-0 w-full h-full pointer-events-none transition-colors duration-1000 ease-in-out z-0 
+             ${activeSection === 'projects' ? projects[activeProject].waveColors[1] : 'bg-slate-800/40'} backdrop-blur-md`} 
+           style={{ clipPath: "url(#wave-right-bg2)" }}
+        ></div>
+
+        {/* Background Wave 1 */}
+        <div 
+           className={`absolute top-0 right-0 w-full h-full pointer-events-none transition-colors duration-1000 ease-in-out z-10 
+             ${activeSection === 'projects' ? projects[activeProject].waveColors[0] : 'bg-slate-600/30'} backdrop-blur-sm`} 
+           style={{ clipPath: "url(#wave-right-bg1)" }}
+        ></div>
+
+        <div className="w-full h-full overflow-hidden relative pointer-events-auto bg-slate-950 z-20" style={{ clipPath: "url(#wave-right)" }}>
             
             {/* 1. Intro Visual — Marquee image strips */}
             <div className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${activeSection === 'intro' ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}>
