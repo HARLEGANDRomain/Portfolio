@@ -7,7 +7,7 @@ import { getGwidoContentBlocks } from '../data/gwidoData';
 import { getEomContentBlocks } from '../data/eomData';
 import { trackPageView } from '../utils/analytics';
 
-const ImageLoader = ({ src, alt, className = '', style = {} }) => {
+const ImageLoader = ({ src, alt, className = '', style = {}, eagerLoad = false }) => {
   const [loaded, setLoaded] = useState(false);
   return (
     <div className={`relative ${className}`} style={style}>
@@ -19,8 +19,8 @@ const ImageLoader = ({ src, alt, className = '', style = {} }) => {
       <img 
         src={src} 
         alt={alt} 
-        loading="lazy"
-        decoding="async"
+        loading={eagerLoad ? 'eager' : 'lazy'}
+        decoding={eagerLoad ? 'sync' : 'async'}
         className={`w-full h-full object-cover transition-opacity duration-700 ease-in-out relative z-10 ${loaded ? 'opacity-100' : 'opacity-0'}`}
         style={style}
         onLoad={() => setLoaded(true)}
@@ -39,12 +39,32 @@ const GwidoPortfolio = () => {
   const wavePathRightRef = useRef(null);
   const wavePathRightBg1Ref = useRef(null);
   const wavePathRightBg2Ref = useRef(null);
+  const waveContainerRef = useRef(null); // tracks actual container width for coord math
   const gwidoProjectRef = useRef(null);
   // ── Gwido bust: toggled by hovering the Gwido project row ──
   const [gwidoBustHovered, setGwidoBustHovered] = useState(false);
   // ── Gwido bust: tracks the Gwido row's vertical position so it scrolls with it ──
   const [gwidoBustTop, setGwidoBustTop] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+
+  // ── Splash screen state ──
+  const [isSplash, setIsSplash] = useState(true);
+  // splashPhase: 'active' | 'transitioning' | 'done'
+  const [splashPhase, setSplashPhase] = useState('active');
+  // splashTextVisible: controls opacity of splash text
+  const [splashTextVisible, setSplashTextVisible] = useState(true);
+  // normalContentVisible: controls opacity of normal left content
+  const [normalContentVisible, setNormalContentVisible] = useState(false);
+  // marqueeVisible state removed — wave clipPath hides/reveals the marquee naturally
+
+  // Splash offset refs per wave layer (in vw, subtracted from base split)
+  // Splash: negative offset pushes wave LEFT to cover ~93% of screen
+  // Normal: 0. Main wave is fastest, bg waves staggered.
+  const SPLASH_OFFSET = -50; // vw — main wave covers ~10vw left edge at top
+  const splashOffsetRef   = useRef(SPLASH_OFFSET); // main wave
+  const splashTargetRef   = useRef(SPLASH_OFFSET);
+  const splashOffsetBg1Ref = useRef(SPLASH_OFFSET); // bg1 — slightly delayed
+  const splashOffsetBg2Ref = useRef(SPLASH_OFFSET); // bg2 — most delayed
 
   const fixPath = (path) => {
     if (!path) return path;
@@ -81,54 +101,95 @@ const GwidoPortfolio = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  // Splash transition handler
+  const handleSplashExplore = () => {
+    if (splashPhase !== 'active') return;
+    setSplashPhase('transitioning');
+
+    // 1. Fade out splash text (300ms)
+    setSplashTextVisible(false);
+
+    // 2. Start lerping all wave layers toward normal (each at different speed)
+    splashTargetRef.current = 0; // signal waves to move
+
+    // 3. After 600ms, fade in normal left content
+    setTimeout(() => {
+      setNormalContentVisible(true);
+    }, 600);
+
+    // 4. After 1400ms, mark splash done
+    setTimeout(() => {
+      setIsSplash(false);
+      setSplashPhase('done');
+    }, 1400);
+  };
+
   // Wave rendering
   useEffect(() => {
     let animationFrameId;
     const renderWave = (time) => {
-      const segments = 60;
+      // ── Lerp each wave layer toward its target at staggered speeds ──
+      // Main wave: fastest  | bg1: medium  | bg2: slowest
+      const targetOff = splashTargetRef.current;
+      splashOffsetRef.current   += (targetOff - splashOffsetRef.current)   * 0.045;
+      splashOffsetBg1Ref.current += (targetOff - splashOffsetBg1Ref.current) * 0.030;
+      splashOffsetBg2Ref.current += (targetOff - splashOffsetBg2Ref.current) * 0.018;
+
+      const offMain = splashOffsetRef.current;
+      const offBg1  = splashOffsetBg1Ref.current;
+      const offBg2  = splashOffsetBg2Ref.current;
+
+      // Coordinate normalization: always use full-screen vw math.
+      // Container is now w-full (100vw), so containerLeft=0, containerW=100.
+      // But clipPath fills from the wave edge to the RIGHT (L 1,1 L 1,0 Z),
+      // so we still normalize into [0,1] relative to the 100vw container.
+      const containerW   = 100;
+      const containerLeft = 0;
+
+      // Fewer segments during transition = less CPU per frame, imperceptible visually
+      const segments = splashPhase === 'done' ? 60 : 48;
       let dRight = '';
       let dRightBg1 = '';
       let dRightBg2 = '';
       for (let i = 0; i <= segments; i++) {
         const y = i / segments;
-        const screenX_vw = 60 - (15 * y); 
+        const baseX_vw = 60 - (15 * y);
         const amplitude_vw = 2;
         const frequence = Math.PI * 4;
+
+        // Main wave
+        const screenX_vw = baseX_vw + offMain;
         const waveOffset_vw = amplitude_vw * Math.sin(y * frequence - time * 0.0005);
-        const finalScreenX_vw = screenX_vw + waveOffset_vw;
-        const xRight = (finalScreenX_vw - 25) / 75;
-        
+        const xRight = ((screenX_vw + waveOffset_vw) - containerLeft) / containerW;
+
         // Background wave 1
-        const waveOffsetBg1_vw = amplitude_vw * 1.1 * Math.sin(y * frequence * 0.8 - time * 0.0003 + 0.5);
-        const rotatedScreenXBg1_vw = screenX_vw - 3 - (y * -3);
-        const finalScreenXBg1_vw = rotatedScreenXBg1_vw + waveOffsetBg1_vw;
-        const xRightBg1 = (finalScreenXBg1_vw - 25) / 75;
+        const rotatedXBg1 = (baseX_vw + offBg1) - 3 - (y * -3);
+        const waveOffsetBg1 = amplitude_vw * 1.1 * Math.sin(y * frequence * 0.8 - time * 0.0003 + 0.5);
+        const xRightBg1 = ((rotatedXBg1 + waveOffsetBg1) - containerLeft) / containerW;
 
         // Background wave 2
-        const waveOffsetBg2_vw = amplitude_vw * 1.3 * Math.sin(y * frequence * 0.7 - time * 0.0002 + 1.2);
-        const rotatedScreenXBg2_vw = screenX_vw - 3 - (y * -8);
-        const finalScreenXBg2_vw = rotatedScreenXBg2_vw + waveOffsetBg2_vw;
-        const xRightBg2 = (finalScreenXBg2_vw - 25) / 75;
+        const rotatedXBg2 = (baseX_vw + offBg2) - 3 - (y * -8);
+        const waveOffsetBg2 = amplitude_vw * 1.3 * Math.sin(y * frequence * 0.7 - time * 0.0002 + 1.2);
+        const xRightBg2 = ((rotatedXBg2 + waveOffsetBg2) - containerLeft) / containerW;
 
-        if (i === 0) { 
-            dRight += "M " + xRight + "," + y + " "; 
-            dRightBg1 += "M " + xRightBg1 + "," + y + " ";
-            dRightBg2 += "M " + xRightBg2 + "," + y + " ";
-        } 
-        else { 
-            dRight += "L " + xRight + "," + y + " "; 
-            dRightBg1 += "L " + xRightBg1 + "," + y + " ";
-            dRightBg2 += "L " + xRightBg2 + "," + y + " ";
+        if (i === 0) {
+          dRight    += 'M ' + xRight    + ',' + y + ' ';
+          dRightBg1 += 'M ' + xRightBg1 + ',' + y + ' ';
+          dRightBg2 += 'M ' + xRightBg2 + ',' + y + ' ';
+        } else {
+          dRight    += 'L ' + xRight    + ',' + y + ' ';
+          dRightBg1 += 'L ' + xRightBg1 + ',' + y + ' ';
+          dRightBg2 += 'L ' + xRightBg2 + ',' + y + ' ';
         }
       }
-      dRight += "L 1,1 L 1,0 Z";
-      dRightBg1 += "L 1,1 L 1,0 Z";
-      dRightBg2 += "L 1,1 L 1,0 Z";
-      
-      if (wavePathRightRef.current) wavePathRightRef.current.setAttribute('d', dRight);
+      dRight    += 'L 1,1 L 1,0 Z';
+      dRightBg1 += 'L 1,1 L 1,0 Z';
+      dRightBg2 += 'L 1,1 L 1,0 Z';
+
+      if (wavePathRightRef.current)    wavePathRightRef.current.setAttribute('d', dRight);
       if (wavePathRightBg1Ref.current) wavePathRightBg1Ref.current.setAttribute('d', dRightBg1);
       if (wavePathRightBg2Ref.current) wavePathRightBg2Ref.current.setAttribute('d', dRightBg2);
-      
+
       animationFrameId = requestAnimationFrame(renderWave);
     };
     animationFrameId = requestAnimationFrame(renderWave);
@@ -290,7 +351,7 @@ const GwidoPortfolio = () => {
   }
 
   return (
-    <div className="min-h-screen text-slate-900 font-sans relative flex">
+    <div className="min-h-screen text-slate-900 font-sans relative flex bg-white">
       <style dangerouslySetInnerHTML={{ __html: customStyles }} />
 
       {/* --- FLOATING PILL NAV (root level, outside main, above wave) --- */}
@@ -313,7 +374,18 @@ const GwidoPortfolio = () => {
       </div>
 
       {/* --- RIGHT SIDE FIXED VISUALS (The "Wave") --- */}
-      <div className="hidden md:block fixed top-0 right-0 h-screen w-[75%] pointer-events-none z-20 transition-all duration-700" style={{ filter: "drop-shadow(-20px 0px 40px rgba(0,0,0,0.3))" }}>
+      <div
+        ref={waveContainerRef}
+        className="hidden md:block fixed top-0 right-0 h-screen w-full pointer-events-none z-20"
+        style={{
+          // drop-shadow removed during splash/transition — it prevents GPU layer promotion
+          // on a full-screen clipped element, making every rAF frame very expensive.
+          // Restored (with a fade) once the transition is fully done.
+          filter: splashPhase === 'done' ? 'drop-shadow(-20px 0px 40px rgba(0,0,0,0.3))' : 'none',
+          transition: splashPhase === 'done' ? 'filter 600ms ease-out' : 'none',
+          willChange: splashPhase !== 'done' ? 'clip-path' : 'auto',
+        }}
+      >
         <svg style={{ position: 'absolute', width: 0, height: 0 }}>
           <defs>
             <clipPath id="wave-right" clipPathUnits="objectBoundingBox">
@@ -328,26 +400,28 @@ const GwidoPortfolio = () => {
           </defs>
         </svg>
 
-        {/* Background Wave 2 (Deepest) */}
+        {/* Background Wave 2 (Deepest) — no backdrop-blur: clip-path changes 60fps, blur is non-compositable */}
         <div 
            className={`absolute top-0 right-0 w-full h-full pointer-events-none transition-colors duration-1000 ease-in-out z-0 
-             ${activeSection === 'projects' ? projects[activeProject].waveColors[1] : 'bg-slate-800/40'} backdrop-blur-md`} 
-           style={{ clipPath: "url(#wave-right-bg2)" }}
+             ${activeSection === 'projects' ? projects[activeProject].waveColors[1] : 'bg-slate-800/60'}`} 
+           style={{ clipPath: 'url(#wave-right-bg2)', willChange: splashPhase !== 'done' ? 'clip-path' : 'auto' }}
         ></div>
 
-        {/* Background Wave 1 */}
+        {/* Background Wave 1 — no backdrop-blur for same reason */}
         <div 
            className={`absolute top-0 right-0 w-full h-full pointer-events-none transition-colors duration-1000 ease-in-out z-10 
-             ${activeSection === 'projects' ? projects[activeProject].waveColors[0] : 'bg-slate-600/30'} backdrop-blur-sm`} 
-           style={{ clipPath: "url(#wave-right-bg1)" }}
+             ${activeSection === 'projects' ? projects[activeProject].waveColors[0] : 'bg-slate-600/50'}`} 
+           style={{ clipPath: 'url(#wave-right-bg1)', willChange: splashPhase !== 'done' ? 'clip-path' : 'auto' }}
         ></div>
 
-        <div className="w-full h-full overflow-hidden relative pointer-events-auto bg-slate-950 z-20" style={{ clipPath: "url(#wave-right)" }}>
+        <div className="w-full h-full overflow-hidden relative pointer-events-auto bg-slate-950 z-20"
+          style={{ clipPath: 'url(#wave-right)', willChange: splashPhase !== 'done' ? 'clip-path' : 'auto' }}
+        >
             
             {/* 1. Intro Visual — Marquee image strips */}
             <div className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${activeSection === 'intro' ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}>
                 <div className="absolute inset-0 bg-slate-950 overflow-hidden flex flex-col justify-center gap-6 py-4">
-                  {/* Authentic Topographic Map Pattern */}
+                  {/* Topographic Map Pattern — always visible */}
                   <div className="absolute inset-0 opacity-40 pointer-events-none overflow-hidden">
                     <div className="absolute inset-[-20%] animate-topo flex items-center justify-center">
                       <svg className="w-full h-full text-indigo-400/40" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice">
@@ -359,7 +433,6 @@ const GwidoPortfolio = () => {
                           </filter>
                         </defs>
                         <g filter="url(#topo-intro)" fill="none" stroke="currentColor" strokeWidth="2" opacity="0.6">
-                          {/* Flanc de colline / Vallées (Lignes horizontales déformées) */}
                           {[...Array(120)].map((_, i) => (
                             <line key={i} x1="-200" y1={i * 15 - 400} x2="1200" y2={i * 15 - 400} />
                           ))}
@@ -369,21 +442,52 @@ const GwidoPortfolio = () => {
                   </div>
 
                   <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-transparent to-transparent pointer-events-none z-10" />
+
+                  {/* Marquee rows — always in DOM, clipped by wave during splash, revealed on transition */}
+                  <div
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      gap: '24px',
+                      padding: '16px 0',
+                      zIndex: 5,
+                    }}
+                  >
                   {[
-                    { cls: 'marquee-rtl',      images: ['/gwido/images/Gwido001.webp', '/eom/images/Screen_cube_Time_Stop.png', '/gwido/images/Gwido003.webp', '/eom/images/Menu.png', '/gwido/images/Gwido004.webp', '/eom/images/Screen_Start.png', '/gwido/images/Gwido005.webp', '/gwido/images/Gwido006.webp'] },
-                    { cls: 'marquee-ltr',      images: ['/eom/images/Screen_Repulsion_des_amas.png', '/gwido/images/Image_Menu_Sans_Logo.webp', '/eom/images/Start.png', '/gwido/images/Gwido002.webp', '/eom/images/Screen_cube_Time_Stop.png', '/gwido/images/Gwido001.webp', '/gwido/images/Gwido007.webp', '/gwido/images/Gwido008.webp'] },
-                    { cls: 'marquee-rtl',      images: ['/gwido/images/Gwido004.webp', '/eom/images/Menu.png', '/gwido/images/Gwido002.webp', '/eom/images/Screen_Start.png', '/gwido/images/Image_Menu_Sans_Logo.webp', '/eom/images/Screen_Repulsion_des_amas.png', '/gwido/images/Gwido009.webp'] },
+                    { cls: 'marquee-rtl', images: ['/gwido/images/Gwido001.webp', '/eom/images/Screen_cube_Time_Stop.png', '/gwido/images/Gwido003.webp', '/eom/images/Menu.png', '/gwido/images/Gwido004.webp', '/eom/images/Screen_Start.png', '/gwido/images/Gwido005.webp', '/gwido/images/Gwido006.webp'] },
+                    { cls: 'marquee-ltr', images: ['/eom/images/Screen_Repulsion_des_amas.png', '/gwido/images/Image_Menu_Sans_Logo.webp', '/eom/images/Start.png', '/gwido/images/Gwido002.webp', '/eom/images/Screen_cube_Time_Stop.png', '/gwido/images/Gwido001.webp', '/gwido/images/Gwido007.webp', '/gwido/images/Gwido008.webp'] },
+                    { cls: 'marquee-rtl', images: ['/gwido/images/Gwido004.webp', '/eom/images/Menu.png', '/gwido/images/Gwido002.webp', '/eom/images/Screen_Start.png', '/gwido/images/Image_Menu_Sans_Logo.webp', '/eom/images/Screen_Repulsion_des_amas.png', '/gwido/images/Gwido009.webp'] },
                   ].map((row, ri) => (
                     <div key={ri} className="overflow-hidden flex-shrink-0">
                       <div className={row.cls}>
                         {[...row.images, ...row.images].map((src, i) => (
                           <div key={i} className="flex-shrink-0 w-72 h-[160px] mx-2 rounded-xl overflow-hidden opacity-80">
-                            <ImageLoader src={fixPath(src)} alt="" className="w-full h-full" />
+                            {/* eager loading: images are ready before transition fires */}
+                            <ImageLoader src={fixPath(src)} alt="" className="w-full h-full" eagerLoad />
                           </div>
                         ))}
                       </div>
                     </div>
                   ))}
+                  </div>
+
+                  {/* Splash dimmer — darkens the marquee during splash, fades out on transition */}
+                  <div
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      zIndex: 15,
+                      pointerEvents: 'none',
+                      backgroundColor: 'rgba(2, 6, 23, 0.78)',
+                      opacity: splashPhase === 'active' ? 1 : 0,
+                      transition: splashPhase === 'active'
+                        ? 'none'
+                        : 'opacity 1000ms cubic-bezier(0.16, 1, 0.32, 1)',
+                    }}
+                  />
                 </div>
             </div>
 
@@ -524,8 +628,91 @@ const GwidoPortfolio = () => {
         </div>
       </div>
 
+      {/* ── SPLASH OVERLAY — centered inside the dark wave ── */}
+      {isSplash && (
+        <div
+          className="fixed inset-0 z-25 pointer-events-none"
+          style={{ zIndex: 25 }}
+          aria-hidden={!isSplash}
+        >
+          {/* Full-screen clickable overlay — triggers transition */}
+          <div
+            className="absolute inset-0 pointer-events-auto"
+            onClick={handleSplashExplore}
+          />
+
+          {/* Splash text — centered on screen, in the dark wave zone */}
+          <div
+            className="absolute inset-0 flex items-center justify-center pointer-events-none"
+            style={{
+              transition: splashTextVisible ? 'opacity 0ms' : 'opacity 300ms cubic-bezier(0.16, 1, 0.32, 1)',
+              opacity: splashTextVisible ? 1 : 0,
+            }}
+          >
+            <div
+              className="text-center pointer-events-auto"
+              style={{ userSelect: 'none' }}
+            >
+              <h1
+                style={{
+                  fontSize: 'clamp(4rem, 10vw, 9rem)',
+                  fontWeight: 900,
+                  letterSpacing: '-0.04em',
+                  textTransform: 'uppercase',
+                  color: '#f8fafc',
+                  lineHeight: 0.9,
+                  marginBottom: '28px',
+                  textShadow: '0 4px 60px rgba(99,102,241,0.4)',
+                }}
+              >
+                PORTFOLIO
+              </h1>
+              <p
+                style={{
+                  fontSize: 'clamp(0.85rem, 1.4vw, 1.1rem)',
+                  fontWeight: 600,
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                  color: 'rgba(226,232,240,0.9)',
+                  marginBottom: '6px',
+                }}
+              >
+                HARLEGAND Romain
+              </p>
+              <p
+                style={{
+                  fontSize: 'clamp(0.7rem, 1vw, 0.85rem)',
+                  fontWeight: 400,
+                  color: 'rgba(148,163,184,0.8)',
+                  letterSpacing: '0.05em',
+                  marginBottom: '48px',
+                }}
+              >
+                Technical Game Designer &nbsp;·&nbsp; UX/UI Designer
+              </p>
+              <button
+                onClick={handleSplashExplore}
+                className="inline-flex items-center gap-3 text-xs font-bold uppercase tracking-widest pb-1 group"
+                style={{
+                  color: '#e2e8f0',
+                  borderBottom: '1.5px solid rgba(226,232,240,0.5)',
+                  pointerEvents: 'auto',
+                  transition: 'color 200ms, border-color 200ms',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.color='#a5b4fc'; e.currentTarget.style.borderColor='#a5b4fc'; }}
+                onMouseLeave={e => { e.currentTarget.style.color='#e2e8f0'; e.currentTarget.style.borderColor='rgba(226,232,240,0.5)'; }}
+              >
+                Explorer <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* --- SCROLLING CONTENT (Left Side) --- */}
-      <main className="relative z-10 w-full md:w-[70%] bg-white/95 backdrop-blur-2xl pb-32 mix-blend-normal isolate">
+      <main
+        className="relative z-10 w-full md:w-[70%] bg-white/95 backdrop-blur-2xl pb-32 mix-blend-normal isolate"
+      >
         
         {/* Fixed background dots within the left wrapper */}
         <div className="absolute inset-0 pointer-events-none z-[-1]">
@@ -535,6 +722,7 @@ const GwidoPortfolio = () => {
         </div>
 
         {/* --- STATIC HEADER (Name + Initial Nav) --- */}
+        <div>
         <header className="absolute top-0 left-0 w-full md:w-[70%] px-8 md:px-16 py-8 md:py-16 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8 z-40">
             <div>
                 <h1 
@@ -690,6 +878,8 @@ const GwidoPortfolio = () => {
                 </div>
             </section>
 
+        </div>
+        {/* End content fade wrapper */}
         </div>
       </main>
 
