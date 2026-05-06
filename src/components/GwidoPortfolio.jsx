@@ -55,7 +55,9 @@ const GwidoPortfolio = () => {
   const [splashTextVisible, setSplashTextVisible] = useState(true);
   // normalContentVisible: controls opacity of normal left content
   const [normalContentVisible, setNormalContentVisible] = useState(false);
-  // marqueeVisible state removed — wave clipPath hides/reveals the marquee naturally
+  // — Page transition for case studies —
+  // 'none' | 'entering' | 'cs_active' | 'exiting'
+  const caseStudyPhaseRef = useRef('none'); // ref so rAF can read it without stale closure
 
   // Splash offset refs per wave layer (in vw, subtracted from base split)
   // Splash: negative offset pushes wave LEFT to cover ~93% of screen
@@ -129,11 +131,15 @@ const GwidoPortfolio = () => {
     let animationFrameId;
     const renderWave = (time) => {
       // ── Lerp each wave layer toward its target at staggered speeds ──
-      // Main wave: fastest  | bg1: medium  | bg2: slowest
+      // Lerp speed: faster during page transitions
+      const isPageTrans = caseStudyPhaseRef.current === 'entering' || caseStudyPhaseRef.current === 'exiting';
+      const lM = isPageTrans ? 0.09 : 0.045;
+      const lB1 = isPageTrans ? 0.07 : 0.030;
+      const lB2 = isPageTrans ? 0.05 : 0.018;
       const targetOff = splashTargetRef.current;
-      splashOffsetRef.current   += (targetOff - splashOffsetRef.current)   * 0.045;
-      splashOffsetBg1Ref.current += (targetOff - splashOffsetBg1Ref.current) * 0.030;
-      splashOffsetBg2Ref.current += (targetOff - splashOffsetBg2Ref.current) * 0.018;
+      splashOffsetRef.current    += (targetOff - splashOffsetRef.current)    * lM;
+      splashOffsetBg1Ref.current += (targetOff - splashOffsetBg1Ref.current) * lB1;
+      splashOffsetBg2Ref.current += (targetOff - splashOffsetBg2Ref.current) * lB2;
 
       const offMain = splashOffsetRef.current;
       const offBg1  = splashOffsetBg1Ref.current;
@@ -342,9 +348,50 @@ const GwidoPortfolio = () => {
     }
   };
 
-  if (activeCaseStudy !== null) {
-    return <CaseStudy project={projects[activeCaseStudy]} onBack={() => setActiveCaseStudy(null)} />;
-  }
+  // Open case study with wave transition
+  const handleOpenCaseStudy = (index) => {
+    if (isSplash || caseStudyPhaseRef.current !== 'none') return;
+    caseStudyPhaseRef.current = 'entering';
+    // Phase 1: wave covers screen
+    splashTargetRef.current = -60;
+    setTimeout(() => {
+      // Mount case study while wave covers screen
+      setActiveCaseStudy(index);
+      // Phase 2: wave exits right
+      splashTargetRef.current = 70;
+    }, 550);
+    setTimeout(() => {
+      // Wave fully off-screen — snap refs so no drift on next enter
+      splashOffsetRef.current    = 70;
+      splashOffsetBg1Ref.current = 70;
+      splashOffsetBg2Ref.current = 70;
+      caseStudyPhaseRef.current = 'cs_active';
+    }, 1050);
+  };
+
+  // Back from case study with wave transition
+  const handleCaseStudyBack = () => {
+    if (caseStudyPhaseRef.current !== 'cs_active') return;
+    caseStudyPhaseRef.current = 'exiting';
+    // Start from off-screen right
+    splashOffsetRef.current    = 70;
+    splashOffsetBg1Ref.current = 70;
+    splashOffsetBg2Ref.current = 70;
+    splashTargetRef.current    = 70;
+    requestAnimationFrame(() => {
+      // Phase 1: wave enters from right, covers screen
+      splashTargetRef.current = -60;
+    });
+    setTimeout(() => {
+      // Unmount case study while wave covers screen
+      setActiveCaseStudy(null);
+      // Phase 2: wave retreats to normal split
+      splashTargetRef.current = 0;
+    }, 600);
+    setTimeout(() => {
+      caseStudyPhaseRef.current = 'none';
+    }, 1300);
+  };
 
   if (showIdentity) {
     return <Identity onBack={() => setShowIdentity(false)} />;
@@ -837,7 +884,7 @@ const GwidoPortfolio = () => {
                             onClick={(e) => {
                               e.stopPropagation();
                               setGwidoBustHovered(false);
-                              setActiveCaseStudy(index);
+                              handleOpenCaseStudy(index);
                             }} 
                             className="flex items-center text-xs font-bold uppercase tracking-widest text-[#0f172a] hover:text-blue-600 transition-colors"
                           >
@@ -939,6 +986,19 @@ const GwidoPortfolio = () => {
           </div>
         );
       })()}
+
+      {/* ── Case Study overlay — sits behind wave (z-20), revealed when wave exits right ── */}
+      {activeCaseStudy !== null && (
+        <div
+          className="fixed inset-0"
+          style={{ zIndex: 15, overflowY: 'auto' }}
+        >
+          <CaseStudy
+            project={projects[activeCaseStudy]}
+            onBack={handleCaseStudyBack}
+          />
+        </div>
+      )}
 
     </div>
   );
