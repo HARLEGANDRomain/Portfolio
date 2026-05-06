@@ -55,9 +55,12 @@ const GwidoPortfolio = () => {
   const [splashTextVisible, setSplashTextVisible] = useState(true);
   // normalContentVisible: controls opacity of normal left content
   const [normalContentVisible, setNormalContentVisible] = useState(false);
-  // — Page transition for case studies —
-  // 'none' | 'entering' | 'cs_active' | 'exiting'
-  const caseStudyPhaseRef = useRef('none'); // ref so rAF can read it without stale closure
+  // — Page transition for case studies / identity —
+  // ref so rAF can read phase without stale closure
+  const caseStudyPhaseRef  = useRef('none');
+  // DOM refs to imperatively flip opacity without a React re-render
+  const caseStudyOverlayRef = useRef(null);
+  const identityOverlayRef  = useRef(null);
 
   // Splash offset refs per wave layer (in vw, subtracted from base split)
   // Splash: negative offset pushes wave LEFT to cover ~93% of screen
@@ -355,13 +358,15 @@ const GwidoPortfolio = () => {
     // Phase 1: wave covers screen
     splashTargetRef.current = -60;
     setTimeout(() => {
-      // Mount case study while wave covers screen
+      // Mount under wave cover, then reveal + exit right
       setActiveCaseStudy(index);
-      // Phase 2: wave exits right
+      // Reveal is handled by ref after mount in next frame
+      requestAnimationFrame(() => {
+        if (caseStudyOverlayRef.current) caseStudyOverlayRef.current.style.opacity = '1';
+      });
       splashTargetRef.current = 70;
     }, 550);
     setTimeout(() => {
-      // Wave fully off-screen — snap refs so no drift on next enter
       splashOffsetRef.current    = 70;
       splashOffsetBg1Ref.current = 70;
       splashOffsetBg2Ref.current = 70;
@@ -373,24 +378,19 @@ const GwidoPortfolio = () => {
   const handleCaseStudyBack = () => {
     if (caseStudyPhaseRef.current !== 'cs_active') return;
     caseStudyPhaseRef.current = 'exiting';
-    // Start from off-screen right
+    // Hide overlay immediately (wave will cover anyway)
+    if (caseStudyOverlayRef.current) caseStudyOverlayRef.current.style.opacity = '0';
     splashOffsetRef.current    = 70;
     splashOffsetBg1Ref.current = 70;
     splashOffsetBg2Ref.current = 70;
     splashTargetRef.current    = 70;
-    requestAnimationFrame(() => {
-      // Phase 1: wave enters from right, covers screen
-      splashTargetRef.current = -60;
-    });
+    requestAnimationFrame(() => { splashTargetRef.current = -60; });
     setTimeout(() => {
-      // Unmount case study while wave covers screen
+      // Unmount under the wave cover
       setActiveCaseStudy(null);
-      // Phase 2: wave retreats to normal split
       splashTargetRef.current = 0;
     }, 600);
-    setTimeout(() => {
-      caseStudyPhaseRef.current = 'none';
-    }, 1300);
+    setTimeout(() => { caseStudyPhaseRef.current = 'none'; }, 1300);
   };
 
   // Open Identity page with wave transition
@@ -400,6 +400,9 @@ const GwidoPortfolio = () => {
     splashTargetRef.current = -60;
     setTimeout(() => {
       setShowIdentity(true);
+      requestAnimationFrame(() => {
+        if (identityOverlayRef.current) identityOverlayRef.current.style.opacity = '1';
+      });
       splashTargetRef.current = 70;
     }, 550);
     setTimeout(() => {
@@ -414,6 +417,7 @@ const GwidoPortfolio = () => {
   const handleIdentityBack = () => {
     if (caseStudyPhaseRef.current !== 'cs_active') return;
     caseStudyPhaseRef.current = 'exiting';
+    if (identityOverlayRef.current) identityOverlayRef.current.style.opacity = '0';
     splashOffsetRef.current    = 70;
     splashOffsetBg1Ref.current = 70;
     splashOffsetBg2Ref.current = 70;
@@ -1016,16 +1020,24 @@ const GwidoPortfolio = () => {
         );
       })()}
 
-      {/* ── Case Study overlay — sits behind wave (z-20), revealed when wave exits right ── */}
+      {/* ── Case Study overlay — pre-mounted at opacity:0, revealed when wave covers ── */}
       {activeCaseStudy !== null && (
-        <div className="fixed inset-0" style={{ zIndex: 15, overflowY: 'auto' }}>
+        <div
+          ref={caseStudyOverlayRef}
+          className="fixed inset-0"
+          style={{ zIndex: 15, overflowY: 'auto', opacity: 0 }}
+        >
           <CaseStudy project={projects[activeCaseStudy]} onBack={handleCaseStudyBack} />
         </div>
       )}
 
-      {/* ── Identity overlay — same wave transition pattern ── */}
+      {/* ── Identity overlay — same pre-mount pattern ── */}
       {showIdentity && (
-        <div className="fixed inset-0" style={{ zIndex: 15, overflowY: 'auto' }}>
+        <div
+          ref={identityOverlayRef}
+          className="fixed inset-0"
+          style={{ zIndex: 15, overflowY: 'auto', opacity: 0 }}
+        >
           <Identity onBack={handleIdentityBack} />
         </div>
       )}

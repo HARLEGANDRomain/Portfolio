@@ -201,7 +201,7 @@ const MediaLoader = ({ src, type = 'image', className = '', style = {}, imgProps
       {type === 'video' ? (
         <video 
           src={src} 
-          preload="metadata"
+          preload="none"
           {...videoProps}
           className={`${className} relative z-10`} 
           style={combinedStyle}
