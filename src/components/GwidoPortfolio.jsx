@@ -203,44 +203,86 @@ const GwidoPortfolio = () => {
       const containerLeft = 0;
 
       // Fewer segments during transition = less CPU per frame, imperceptible visually
-      const segments = splashPhase === 'done' ? 60 : 48;
+      const isMobile = window.innerWidth < 768;
+      const segments = splashPhase === 'done' ? (isMobile ? 36 : 60) : 48;
       let dRight = '';
       let dRightBg1 = '';
       let dRightBg2 = '';
+
       for (let i = 0; i <= segments; i++) {
-        const y = i / segments;
-        const baseX_vw = 60 - (15 * y);
-        const amplitude_vw = 2;
-        const frequence = Math.PI * 4;
+        if (!isMobile) {
+          const y = i / segments;
+          const baseX_vw = 60 - (15 * y);
+          const amplitude_vw = 2;
+          const frequence = Math.PI * 4;
 
-        // Main wave
-        const screenX_vw = baseX_vw + offMain;
-        const waveOffset_vw = amplitude_vw * Math.sin(y * frequence - time * 0.0005);
-        const xRight = ((screenX_vw + waveOffset_vw) - containerLeft) / containerW;
+          // Main wave
+          const screenX_vw = baseX_vw + offMain;
+          const waveOffset_vw = amplitude_vw * Math.sin(y * frequence - time * 0.0005);
+          const xRight = ((screenX_vw + waveOffset_vw) - containerLeft) / containerW;
 
-        // Background wave 1
-        const rotatedXBg1 = (baseX_vw + offBg1) - 3 - (y * -3);
-        const waveOffsetBg1 = amplitude_vw * 1.1 * Math.sin(y * frequence * 0.8 - time * 0.0003 + 0.5);
-        const xRightBg1 = ((rotatedXBg1 + waveOffsetBg1) - containerLeft) / containerW;
+          // Background wave 1
+          const rotatedXBg1 = (baseX_vw + offBg1) - 3 - (y * -3);
+          const waveOffsetBg1 = amplitude_vw * 1.1 * Math.sin(y * frequence * 0.8 - time * 0.0003 + 0.5);
+          const xRightBg1 = ((rotatedXBg1 + waveOffsetBg1) - containerLeft) / containerW;
 
-        // Background wave 2
-        const rotatedXBg2 = (baseX_vw + offBg2) - 3 - (y * -8);
-        const waveOffsetBg2 = amplitude_vw * 1.3 * Math.sin(y * frequence * 0.7 - time * 0.0002 + 1.2);
-        const xRightBg2 = ((rotatedXBg2 + waveOffsetBg2) - containerLeft) / containerW;
+          // Background wave 2
+          const rotatedXBg2 = (baseX_vw + offBg2) - 3 - (y * -8);
+          const waveOffsetBg2 = amplitude_vw * 1.3 * Math.sin(y * frequence * 0.7 - time * 0.0002 + 1.2);
+          const xRightBg2 = ((rotatedXBg2 + waveOffsetBg2) - containerLeft) / containerW;
 
-        if (i === 0) {
-          dRight    += 'M ' + xRight    + ',' + y + ' ';
-          dRightBg1 += 'M ' + xRightBg1 + ',' + y + ' ';
-          dRightBg2 += 'M ' + xRightBg2 + ',' + y + ' ';
+          if (i === 0) {
+            dRight    += 'M ' + xRight    + ',' + y + ' ';
+            dRightBg1 += 'M ' + xRightBg1 + ',' + y + ' ';
+            dRightBg2 += 'M ' + xRightBg2 + ',' + y + ' ';
+          } else {
+            dRight    += 'L ' + xRight    + ',' + y + ' ';
+            dRightBg1 += 'L ' + xRightBg1 + ',' + y + ' ';
+            dRightBg2 += 'L ' + xRightBg2 + ',' + y + ' ';
+          }
         } else {
-          dRight    += 'L ' + xRight    + ',' + y + ' ';
-          dRightBg1 += 'L ' + xRightBg1 + ',' + y + ' ';
-          dRightBg2 += 'L ' + xRightBg2 + ',' + y + ' ';
+          // Mobile: Horizontal wave (top to bottom split)
+          const x = i / segments;
+          // On cache complètement la vague sur la landing page mobile (110vh = en dessous de l'écran)
+          const baseY_vh = 110 + (10 * x); 
+          const amplitude_vh = 2;
+          const frequence = Math.PI * 3;
+
+          // Multiplicateur augmenté (2.5) pour que la vague parcoure plus de distance
+          // et couvre bien tout l'écran même en partant de plus bas
+          const screenY_vh = baseY_vh + (offMain * 2.5);
+          const waveOffset_vh = amplitude_vh * Math.sin(x * frequence - time * 0.0005);
+          const yBottom = ((screenY_vh + waveOffset_vh) - containerLeft) / containerW;
+
+          const rotatedYBg1 = (baseY_vh + offBg1 * 2.5) - 3 - (x * -3);
+          const waveOffsetBg1 = amplitude_vh * 1.1 * Math.sin(x * frequence * 0.8 - time * 0.0003 + 0.5);
+          const yBottomBg1 = ((rotatedYBg1 + waveOffsetBg1) - containerLeft) / containerW;
+
+          const rotatedYBg2 = (baseY_vh + offBg2 * 2.5) - 3 - (x * -8);
+          const waveOffsetBg2 = amplitude_vh * 1.3 * Math.sin(x * frequence * 0.7 - time * 0.0002 + 1.2);
+          const yBottomBg2 = ((rotatedYBg2 + waveOffsetBg2) - containerLeft) / containerW;
+
+          if (i === 0) {
+            dRight    += 'M ' + x + ',' + yBottom + ' ';
+            dRightBg1 += 'M ' + x + ',' + yBottomBg1 + ' ';
+            dRightBg2 += 'M ' + x + ',' + yBottomBg2 + ' ';
+          } else {
+            dRight    += 'L ' + x + ',' + yBottom + ' ';
+            dRightBg1 += 'L ' + x + ',' + yBottomBg1 + ' ';
+            dRightBg2 += 'L ' + x + ',' + yBottomBg2 + ' ';
+          }
         }
       }
-      dRight    += 'L 1,1 L 1,0 Z';
-      dRightBg1 += 'L 1,1 L 1,0 Z';
-      dRightBg2 += 'L 1,1 L 1,0 Z';
+      
+      if (!isMobile) {
+        dRight    += 'L 1,1 L 1,0 Z';
+        dRightBg1 += 'L 1,1 L 1,0 Z';
+        dRightBg2 += 'L 1,1 L 1,0 Z';
+      } else {
+        dRight    += 'L 1,1 L 0,1 Z';
+        dRightBg1 += 'L 1,1 L 0,1 Z';
+        dRightBg2 += 'L 1,1 L 0,1 Z';
+      }
 
       if (wavePathRightRef.current)    wavePathRightRef.current.setAttribute('d', dRight);
       if (wavePathRightBg1Ref.current) wavePathRightBg1Ref.current.setAttribute('d', dRightBg1);
@@ -494,7 +536,7 @@ const GwidoPortfolio = () => {
       {/* --- RIGHT SIDE FIXED VISUALS (The "Wave") --- */}
       <div
         ref={waveContainerRef}
-        className="hidden md:block fixed top-0 right-0 h-screen w-full pointer-events-none z-20"
+        className="fixed top-0 right-0 h-screen w-full pointer-events-none z-20"
         style={{
           // drop-shadow removed during splash/transition — it prevents GPU layer promotion
           // on a full-screen clipped element, making every rAF frame very expensive.
@@ -833,7 +875,7 @@ const GwidoPortfolio = () => {
 
       {/* --- SCROLLING CONTENT (Left Side) --- */}
       <main
-        className="relative z-10 w-full md:w-[70%] bg-white/95 backdrop-blur-2xl pb-32 mix-blend-normal isolate"
+        className="relative z-10 w-full md:w-[70%] bg-white/95 backdrop-blur-2xl pb-[45vh] md:pb-32 mix-blend-normal isolate"
       >
         
         {/* Fixed background dots within the left wrapper */}
