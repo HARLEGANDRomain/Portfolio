@@ -58,6 +58,10 @@ const GwidoPortfolio = () => {
   // — Page transition for case studies / identity —
   // ref so rAF can read phase without stale closure
   const caseStudyPhaseRef = useRef('none');
+  const projectRefs = useRef([]);
+  const [visibleProjects, setVisibleProjects] = useState([]);
+  const [typedPortfolio, setTypedPortfolio] = useState('');
+  const [showCursor, setShowCursor] = useState(true);
 
   // Splash offset refs per wave layer (in vw, subtracted from base split)
   // Splash: negative offset pushes wave LEFT to cover ~93% of screen
@@ -93,6 +97,52 @@ const GwidoPortfolio = () => {
     };
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  // Splash screen text typewriter effect
+  useEffect(() => {
+    if (!isSplash) return;
+    const text = "PORTFOLIO";
+    let i = 0;
+    const typingInterval = setInterval(() => {
+      setTypedPortfolio(text.substring(0, i + 1));
+      i++;
+      if (i >= text.length) {
+        clearInterval(typingInterval);
+      }
+    }, 120); // Typing speed
+
+    return () => clearInterval(typingInterval);
+  }, [isSplash]);
+
+  // Cursor blink effect
+  useEffect(() => {
+    const cursorInterval = setInterval(() => {
+      setShowCursor(prev => !prev);
+    }, 500);
+    return () => clearInterval(cursorInterval);
+  }, []);
+
+  // Intersection Observer for project fade-in
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setVisibleProjects(prev => {
+            if (!prev.includes(entry.target.dataset.index)) {
+               return [...prev, entry.target.dataset.index];
+            }
+            return prev;
+          });
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+    projectRefs.current.forEach(ref => {
+      if (ref) observer.observe(ref);
+    });
+
+    return () => observer.disconnect();
   }, []);
 
   // Mobile detection
@@ -731,9 +781,13 @@ const GwidoPortfolio = () => {
                   lineHeight: 0.9,
                   marginBottom: '28px',
                   textShadow: '0 4px 60px rgba(99,102,241,0.4)',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}
               >
-                PORTFOLIO
+                {typedPortfolio}
+                <span style={{ opacity: showCursor ? 1 : 0, marginLeft: '8px', color: '#6366f1' }}>_</span>
               </h1>
               <p
                 style={{
@@ -855,10 +909,16 @@ const GwidoPortfolio = () => {
                 
                 <div className="flex-1 flex flex-col justify-center relative z-10 max-w-xl">
                   <div className="space-y-12 pl-4 lg:pl-16">
-                    {projects.map((project, index) => (
+                    {projects.map((project, index) => {
+                      const inView = visibleProjects.includes(String(index));
+                      return (
                       <div 
                         key={project.id}
-                        ref={index === 0 ? gwidoProjectRef : null}
+                        data-index={index}
+                        ref={el => {
+                          if (index === 0) gwidoProjectRef.current = el;
+                          projectRefs.current[index] = el;
+                        }}
                         onMouseEnter={() => {
                           if (!project.incoming) {
                             setActiveProject(index);
@@ -876,10 +936,13 @@ const GwidoPortfolio = () => {
                             if (index === 0 && !isMobile) setGwidoBustHovered(true);
                           }
                         }}
-                        className={"group transition-all duration-500 relative " + 
-                          (project.incoming 
-                            ? "opacity-40 cursor-default select-none" 
-                            : "cursor-pointer " + (activeProject === index ? "opacity-100 scale-100" : "opacity-30 scale-95 hover:opacity-70"))}
+                        className={`group transition-all relative transform duration-700 ease-out ${
+                          inView ? 'translate-y-0' : 'translate-y-12 opacity-0'
+                        } ${
+                          !inView ? '' : project.incoming 
+                            ? 'opacity-40 cursor-default select-none' 
+                            : 'cursor-pointer ' + (activeProject === index ? 'opacity-100 scale-100' : 'opacity-30 scale-95 hover:opacity-70')
+                        }`}
                       >
                         <div className={"absolute -left-8 top-1 w-1 bg-slate-900 transition-all duration-700 ease-out origin-top " + (!project.incoming && activeProject === index ? "h-full opacity-100" : "h-0 opacity-0")}></div>
                         
@@ -914,7 +977,7 @@ const GwidoPortfolio = () => {
                         </div>
                         )}
                       </div>
-                    ))}
+                    )})}
                   </div>
                 </div>
             </section>
