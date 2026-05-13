@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://harlegandromain.github.io/Portfolio/sitemap.xml
