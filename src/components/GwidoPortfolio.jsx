@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ArrowUpRight, ArrowRight, Camera, Target, Calendar, User, Code2, Layout, Smartphone, Mail, Linkedin, Github } from 'lucide-react';
 import CaseStudy from './CaseStudy';
 import Identity from './Identity';
+import MentionsLegales from './MentionsLegales';
 import { getGwidoContentBlocks } from '../data/gwidoData';
 import { getEomContentBlocks } from '../data/eomData';
 import { trackPageView } from '../utils/analytics';
@@ -36,6 +37,7 @@ const GwidoPortfolio = () => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [activeCaseStudy, setActiveCaseStudy] = useState(null);
   const [showIdentity, setShowIdentity] = useState(false);
+  const [showMentions, setShowMentions] = useState(false);
   const wavePathRightRef = useRef(null);
   const wavePathRightBg1Ref = useRef(null);
   const wavePathRightBg2Ref = useRef(null);
@@ -505,6 +507,37 @@ const GwidoPortfolio = () => {
     requestAnimationFrame(() => { splashTargetRef.current = -60; });
     setTimeout(() => {
       setShowIdentity(false);
+      splashTargetRef.current = 0;
+    }, 600);
+    setTimeout(() => { caseStudyPhaseRef.current = 'none'; }, 1300);
+  };
+
+  const handleOpenMentions = () => {
+    if (isSplash || caseStudyPhaseRef.current !== 'none') return;
+    caseStudyPhaseRef.current = 'entering';
+    splashTargetRef.current = -60;
+    setTimeout(() => {
+      setShowMentions(true);
+      splashTargetRef.current = 70;
+    }, 550);
+    setTimeout(() => {
+      splashOffsetRef.current    = 70;
+      splashOffsetBg1Ref.current = 70;
+      splashOffsetBg2Ref.current = 70;
+      caseStudyPhaseRef.current = 'cs_active';
+    }, 1050);
+  };
+
+  const handleMentionsBack = () => {
+    if (caseStudyPhaseRef.current !== 'cs_active') return;
+    caseStudyPhaseRef.current = 'exiting';
+    splashOffsetRef.current    = 70;
+    splashOffsetBg1Ref.current = 70;
+    splashOffsetBg2Ref.current = 70;
+    splashTargetRef.current    = 70;
+    requestAnimationFrame(() => { splashTargetRef.current = -60; });
+    setTimeout(() => {
+      setShowMentions(false);
       splashTargetRef.current = 0;
     }, 600);
     setTimeout(() => { caseStudyPhaseRef.current = 'none'; }, 1300);
@@ -1049,6 +1082,16 @@ const GwidoPortfolio = () => {
                         </div>
                     </div>
                 </div>
+                
+                {/* Footer Link */}
+                <div className="absolute bottom-8 left-8 md:left-16 z-50">
+                    <button 
+                        onClick={handleOpenMentions} 
+                        className="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-indigo-600 transition-colors"
+                    >
+                        Mentions Légales
+                    </button>
+                </div>
             </section>
 
         </div>
@@ -1130,6 +1173,16 @@ const GwidoPortfolio = () => {
           style={{ zIndex: 15, overflowY: 'auto' }}
         >
           <Identity onBack={handleIdentityBack} />
+        </div>
+      )}
+
+      {/* ── Mentions Légales overlay ── */}
+      {showMentions && (
+        <div
+          className="fixed inset-0"
+          style={{ zIndex: 15, overflowY: 'auto' }}
+        >
+          <MentionsLegales onBack={handleMentionsBack} />
         </div>
       )}
 
