@@ -1,12 +1,80 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowUpRight, ArrowRight, Camera, Target, Calendar, User, Code2, Layout, Smartphone, Mail, Linkedin, Github } from 'lucide-react';
-import CaseStudy from './CaseStudy';
-import Identity from './Identity';
-import MentionsLegales from './MentionsLegales';
+
+const CaseStudy = React.lazy(() => import('./CaseStudy'));
+const Identity = React.lazy(() => import('./Identity'));
+const MentionsLegales = React.lazy(() => import('./MentionsLegales'));
+
 import { getGwidoContentBlocks } from '../data/gwidoData';
 import { getEomContentBlocks } from '../data/eomData';
 import { trackPageView } from '../utils/analytics';
+
+const generateWavePath = (offset, time, type, isMobile) => {
+  const segments = isMobile ? 24 : 36;
+  let d = '';
+  const containerW = 100;
+  const containerLeft = 0;
+
+  for (let i = 0; i <= segments; i++) {
+    if (!isMobile) {
+      const y = i / segments;
+      const baseX_vw = 60 - (15 * y);
+      const amplitude_vw = 2;
+      const frequence = Math.PI * 4;
+
+      let screenX_vw = baseX_vw + offset;
+      let waveOffset_vw = 0;
+      
+      if (type === 'main') {
+        waveOffset_vw = amplitude_vw * Math.sin(y * frequence - time * 0.0005);
+      } else if (type === 'bg1') {
+        screenX_vw = screenX_vw - 3 - (y * -3);
+        waveOffset_vw = amplitude_vw * 1.1 * Math.sin(y * frequence * 0.8 - time * 0.0003 + 0.5);
+      } else if (type === 'bg2') {
+        screenX_vw = screenX_vw - 3 - (y * -8);
+        waveOffset_vw = amplitude_vw * 1.3 * Math.sin(y * frequence * 0.7 - time * 0.0002 + 1.2);
+      }
+
+      const xRight = ((screenX_vw + waveOffset_vw) - containerLeft) / containerW;
+      d += (i === 0 ? 'M ' : 'L ') + xRight + ',' + y + ' ';
+    } else {
+      const x = i / segments;
+      const baseY_vh = 110 + (10 * x);
+      const amplitude_vh = 2;
+      const frequence = Math.PI * 3;
+
+      const screenY_vh = baseY_vh + (offset * 2.5);
+      let waveOffset_vh = 0;
+
+      if (type === 'main') {
+        waveOffset_vh = amplitude_vh * Math.sin(x * frequence - time * 0.0005);
+      } else if (type === 'bg1') {
+        const rotatedYBg1 = screenY_vh - 3 - (x * -3);
+        waveOffset_vh = amplitude_vh * 1.1 * Math.sin(x * frequence * 0.8 - time * 0.0003 + 0.5);
+        const yBottomBg1 = ((rotatedYBg1 + waveOffset_vh) - containerLeft) / containerW;
+        d += (i === 0 ? 'M ' : 'L ') + x + ',' + yBottomBg1 + ' ';
+        continue;
+      } else if (type === 'bg2') {
+        const rotatedYBg2 = screenY_vh - 3 - (x * -8);
+        waveOffset_vh = amplitude_vh * 1.3 * Math.sin(x * frequence * 0.7 - time * 0.0002 + 1.2);
+        const yBottomBg2 = ((rotatedYBg2 + waveOffset_vh) - containerLeft) / containerW;
+        d += (i === 0 ? 'M ' : 'L ') + x + ',' + yBottomBg2 + ' ';
+        continue;
+      }
+
+      const yBottom = ((screenY_vh + waveOffset_vh) - containerLeft) / containerW;
+      d += (i === 0 ? 'M ' : 'L ') + x + ',' + yBottom + ' ';
+    }
+  }
+
+  if (!isMobile) {
+    d += 'L 1,1 L 1,0 Z';
+  } else {
+    d += 'L 1,1 L 0,1 Z';
+  }
+  return d;
+};
 
 const ImageLoader = ({ src, alt, className = '', style = {}, eagerLoad = false }) => {
   const [loaded, setLoaded] = useState(false);
@@ -42,11 +110,8 @@ const GwidoPortfolio = () => {
   const wavePathRightBg1Ref = useRef(null);
   const wavePathRightBg2Ref = useRef(null);
   const waveContainerRef = useRef(null); // tracks actual container width for coord math
-  const gwidoProjectRef = useRef(null);
   // ── Gwido bust: toggled by hovering the Gwido project row ──
   const [gwidoBustHovered, setGwidoBustHovered] = useState(false);
-  // ── Gwido bust: tracks the Gwido row's vertical position so it scrolls with it ──
-  const [gwidoBustTop, setGwidoBustTop] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
 
   // ── Splash screen state ──
@@ -62,8 +127,13 @@ const GwidoPortfolio = () => {
   const caseStudyPhaseRef = useRef('none');
   const projectRefs = useRef([]);
   const [visibleProjects, setVisibleProjects] = useState([]);
-  const [typedPortfolio, setTypedPortfolio] = useState('');
+  const [typedPortfolio, setTypedPortfolio] = useState('PORTFOLIO');
   const [showCursor, setShowCursor] = useState(true);
+
+  // Intent Prefetching helpers
+  const prefetchIdentity = () => import('./Identity');
+  const prefetchCaseStudy = () => import('./CaseStudy');
+  const prefetchMentions = () => import('./MentionsLegales');
 
   // Splash offset refs per wave layer (in vw, subtracted from base split)
   // Splash: negative offset pushes wave LEFT to cover ~93% of screen
@@ -104,6 +174,7 @@ const GwidoPortfolio = () => {
   // Splash screen text typewriter effect
   useEffect(() => {
     if (!isSplash) return;
+    setTypedPortfolio(''); // reset for typewriter animation
     const text = "PORTFOLIO";
     let i = 0;
     const typingInterval = setInterval(() => {
@@ -180,15 +251,31 @@ const GwidoPortfolio = () => {
 
   // Wave rendering
   useEffect(() => {
+    // Respect user accessibility preference
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    if (splashPhase === 'active' || prefersReducedMotion) {
+      // Set static initial wave paths once and do not start animation loop
+      if (wavePathRightRef.current)    wavePathRightRef.current.setAttribute('d', generateWavePath(splashOffsetRef.current, 0, 'main', isMobile));
+      if (wavePathRightBg1Ref.current) wavePathRightBg1Ref.current.setAttribute('d', generateWavePath(splashOffsetBg1Ref.current, 0, 'bg1', isMobile));
+      if (wavePathRightBg2Ref.current) wavePathRightBg2Ref.current.setAttribute('d', generateWavePath(splashOffsetBg2Ref.current, 0, 'bg2', isMobile));
+      return;
+    }
+
     let animationFrameId;
     const renderWave = (time) => {
+      if (document.hidden) {
+        animationFrameId = requestAnimationFrame(renderWave);
+        return;
+      }
+
       // ── Lerp each wave layer toward its target at staggered speeds ──
-      // Lerp speed: faster during page transitions
       const isPageTrans = caseStudyPhaseRef.current === 'entering' || caseStudyPhaseRef.current === 'exiting';
       const lM = isPageTrans ? 0.09 : 0.045;
       const lB1 = isPageTrans ? 0.07 : 0.030;
       const lB2 = isPageTrans ? 0.05 : 0.018;
       const targetOff = splashTargetRef.current;
+      
       splashOffsetRef.current    += (targetOff - splashOffsetRef.current)    * lM;
       splashOffsetBg1Ref.current += (targetOff - splashOffsetBg1Ref.current) * lB1;
       splashOffsetBg2Ref.current += (targetOff - splashOffsetBg2Ref.current) * lB2;
@@ -197,94 +284,9 @@ const GwidoPortfolio = () => {
       const offBg1  = splashOffsetBg1Ref.current;
       const offBg2  = splashOffsetBg2Ref.current;
 
-      // Coordinate normalization: always use full-screen vw math.
-      // Container is now w-full (100vw), so containerLeft=0, containerW=100.
-      // But clipPath fills from the wave edge to the RIGHT (L 1,1 L 1,0 Z),
-      // so we still normalize into [0,1] relative to the 100vw container.
-      const containerW   = 100;
-      const containerLeft = 0;
-
-      // Fewer segments during transition = less CPU per frame, imperceptible visually
-      const isMobile = window.innerWidth < 768;
-      const segments = splashPhase === 'done' ? (isMobile ? 36 : 60) : 48;
-      let dRight = '';
-      let dRightBg1 = '';
-      let dRightBg2 = '';
-
-      for (let i = 0; i <= segments; i++) {
-        if (!isMobile) {
-          const y = i / segments;
-          const baseX_vw = 60 - (15 * y);
-          const amplitude_vw = 2;
-          const frequence = Math.PI * 4;
-
-          // Main wave
-          const screenX_vw = baseX_vw + offMain;
-          const waveOffset_vw = amplitude_vw * Math.sin(y * frequence - time * 0.0005);
-          const xRight = ((screenX_vw + waveOffset_vw) - containerLeft) / containerW;
-
-          // Background wave 1
-          const rotatedXBg1 = (baseX_vw + offBg1) - 3 - (y * -3);
-          const waveOffsetBg1 = amplitude_vw * 1.1 * Math.sin(y * frequence * 0.8 - time * 0.0003 + 0.5);
-          const xRightBg1 = ((rotatedXBg1 + waveOffsetBg1) - containerLeft) / containerW;
-
-          // Background wave 2
-          const rotatedXBg2 = (baseX_vw + offBg2) - 3 - (y * -8);
-          const waveOffsetBg2 = amplitude_vw * 1.3 * Math.sin(y * frequence * 0.7 - time * 0.0002 + 1.2);
-          const xRightBg2 = ((rotatedXBg2 + waveOffsetBg2) - containerLeft) / containerW;
-
-          if (i === 0) {
-            dRight    += 'M ' + xRight    + ',' + y + ' ';
-            dRightBg1 += 'M ' + xRightBg1 + ',' + y + ' ';
-            dRightBg2 += 'M ' + xRightBg2 + ',' + y + ' ';
-          } else {
-            dRight    += 'L ' + xRight    + ',' + y + ' ';
-            dRightBg1 += 'L ' + xRightBg1 + ',' + y + ' ';
-            dRightBg2 += 'L ' + xRightBg2 + ',' + y + ' ';
-          }
-        } else {
-          // Mobile: Horizontal wave (top to bottom split)
-          const x = i / segments;
-          // On cache complètement la vague sur la landing page mobile (110vh = en dessous de l'écran)
-          const baseY_vh = 110 + (10 * x); 
-          const amplitude_vh = 2;
-          const frequence = Math.PI * 3;
-
-          // Multiplicateur augmenté (2.5) pour que la vague parcoure plus de distance
-          // et couvre bien tout l'écran même en partant de plus bas
-          const screenY_vh = baseY_vh + (offMain * 2.5);
-          const waveOffset_vh = amplitude_vh * Math.sin(x * frequence - time * 0.0005);
-          const yBottom = ((screenY_vh + waveOffset_vh) - containerLeft) / containerW;
-
-          const rotatedYBg1 = (baseY_vh + offBg1 * 2.5) - 3 - (x * -3);
-          const waveOffsetBg1 = amplitude_vh * 1.1 * Math.sin(x * frequence * 0.8 - time * 0.0003 + 0.5);
-          const yBottomBg1 = ((rotatedYBg1 + waveOffsetBg1) - containerLeft) / containerW;
-
-          const rotatedYBg2 = (baseY_vh + offBg2 * 2.5) - 3 - (x * -8);
-          const waveOffsetBg2 = amplitude_vh * 1.3 * Math.sin(x * frequence * 0.7 - time * 0.0002 + 1.2);
-          const yBottomBg2 = ((rotatedYBg2 + waveOffsetBg2) - containerLeft) / containerW;
-
-          if (i === 0) {
-            dRight    += 'M ' + x + ',' + yBottom + ' ';
-            dRightBg1 += 'M ' + x + ',' + yBottomBg1 + ' ';
-            dRightBg2 += 'M ' + x + ',' + yBottomBg2 + ' ';
-          } else {
-            dRight    += 'L ' + x + ',' + yBottom + ' ';
-            dRightBg1 += 'L ' + x + ',' + yBottomBg1 + ' ';
-            dRightBg2 += 'L ' + x + ',' + yBottomBg2 + ' ';
-          }
-        }
-      }
-      
-      if (!isMobile) {
-        dRight    += 'L 1,1 L 1,0 Z';
-        dRightBg1 += 'L 1,1 L 1,0 Z';
-        dRightBg2 += 'L 1,1 L 1,0 Z';
-      } else {
-        dRight    += 'L 1,1 L 0,1 Z';
-        dRightBg1 += 'L 1,1 L 0,1 Z';
-        dRightBg2 += 'L 1,1 L 0,1 Z';
-      }
+      const dRight = generateWavePath(offMain, time, 'main', isMobile);
+      const dRightBg1 = generateWavePath(offBg1, time, 'bg1', isMobile);
+      const dRightBg2 = generateWavePath(offBg2, time, 'bg2', isMobile);
 
       if (wavePathRightRef.current)    wavePathRightRef.current.setAttribute('d', dRight);
       if (wavePathRightBg1Ref.current) wavePathRightBg1Ref.current.setAttribute('d', dRightBg1);
@@ -292,9 +294,10 @@ const GwidoPortfolio = () => {
 
       animationFrameId = requestAnimationFrame(renderWave);
     };
+    
     animationFrameId = requestAnimationFrame(renderWave);
     return () => cancelAnimationFrame(animationFrameId);
-  }, []);
+  }, [splashPhase, isMobile]);
 
   // Scroll logic for Top Nav & Active Sections
   useEffect(() => {
@@ -320,21 +323,6 @@ const GwidoPortfolio = () => {
   }, []);
 
   // (Gwido bust position is fixed vertically via CSS — no scroll tracking needed)
-
-  // Gwido bust: track the Gwido project row's Y so the bust scrolls with it
-  // (position:fixed lets it reach the browser left edge; top mirrors the row)
-  useEffect(() => {
-    const updateBustPos = () => {
-      if (gwidoProjectRef.current) {
-        const rect = gwidoProjectRef.current.getBoundingClientRect();
-        // Offset tweaks how high above the row centre the bust sits ─ adjust here
-        setGwidoBustTop(rect.top + rect.height / 2);
-      }
-    };
-    window.addEventListener('scroll', updateBustPos, { passive: true });
-    updateBustPos(); // sync on mount
-    return () => window.removeEventListener('scroll', updateBustPos);
-  }, []);
 
   // Tracking: Page Views & Section Changes
   useEffect(() => {
@@ -550,7 +538,7 @@ const GwidoPortfolio = () => {
       {/* --- FLOATING PILL NAV (root level, outside main, above wave) --- */}
       <div className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 flex justify-center transition-all duration-500 ${isScrolled ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-8 pointer-events-none'}`}>
           <nav className="flex items-center gap-6 text-[10px] font-bold uppercase tracking-widest bg-white/90 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.1)] px-8 py-4 rounded-full border border-slate-200">
-              <button onClick={handleOpenIdentity} className="text-slate-500 hover:text-indigo-600 transition-colors">{t('nav.identity')}</button>
+              <button onClick={handleOpenIdentity} onMouseEnter={prefetchIdentity} className="text-slate-500 hover:text-indigo-600 transition-colors">{t('nav.identity')}</button>
               <button onClick={() => scrollTo('projects')} className={`hover:text-indigo-600 transition-colors ${activeSection === 'projects' ? 'text-indigo-600' : 'text-slate-500'}`}>{t('nav.works')}</button>
               <button onClick={() => scrollTo('contact')} className={`hover:text-indigo-600 transition-colors ${activeSection === 'contact' ? 'text-indigo-600' : 'text-slate-500'}`}>{t('nav.contact')}</button>
               <span className="text-slate-200">|</span>
@@ -582,13 +570,13 @@ const GwidoPortfolio = () => {
         <svg style={{ position: 'absolute', width: 0, height: 0 }}>
           <defs>
             <clipPath id="wave-right" clipPathUnits="objectBoundingBox">
-              <path ref={wavePathRightRef} d="" fill="black" />
+              <path ref={wavePathRightRef} d={generateWavePath(SPLASH_OFFSET, 0, 'main', isMobile)} fill="black" />
             </clipPath>
             <clipPath id="wave-right-bg1" clipPathUnits="objectBoundingBox">
-              <path ref={wavePathRightBg1Ref} d="" fill="black" />
+              <path ref={wavePathRightBg1Ref} d={generateWavePath(SPLASH_OFFSET, 0, 'bg1', isMobile)} fill="black" />
             </clipPath>
             <clipPath id="wave-right-bg2" clipPathUnits="objectBoundingBox">
-              <path ref={wavePathRightBg2Ref} d="" fill="black" />
+              <path ref={wavePathRightBg2Ref} d={generateWavePath(SPLASH_OFFSET, 0, 'bg2', isMobile)} fill="black" />
             </clipPath>
           </defs>
         </svg>
@@ -935,7 +923,7 @@ const GwidoPortfolio = () => {
             
             {/* Initial Nav links visible at top */}
             <nav className="mt-8 sm:mt-0 flex items-center gap-6 text-[10px] font-bold uppercase tracking-widest opacity-100">
-                <button onClick={handleOpenIdentity} className="text-slate-600 hover:text-indigo-600 transition-colors">{t('nav.identity')}</button>
+                <button onClick={handleOpenIdentity} onMouseEnter={prefetchIdentity} className="text-slate-600 hover:text-indigo-600 transition-colors">{t('nav.identity')}</button>
                 <button onClick={() => scrollTo('projects')} className={`hover:text-indigo-600 transition-colors ${activeSection === 'projects' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-slate-600'}`}>{t('nav.works')}</button>
                 <button onClick={() => scrollTo('contact')} className={`hover:text-indigo-600 transition-colors ${activeSection === 'contact' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-slate-600'}`}>{t('nav.contact')}</button>
                 <span className="text-slate-300">|</span>
@@ -991,12 +979,12 @@ const GwidoPortfolio = () => {
                         key={project.id}
                         data-index={index}
                         ref={el => {
-                          if (index === 0) gwidoProjectRef.current = el;
                           projectRefs.current[index] = el;
                         }}
                         onMouseEnter={() => {
                           if (!project.incoming) {
                             setActiveProject(index);
+                            prefetchCaseStudy();
                             // ── Show bust only when hovering the Gwido (index 0) row ──
                             if (index === 0) setGwidoBustHovered(true);
                           }
@@ -1019,6 +1007,41 @@ const GwidoPortfolio = () => {
                             : 'cursor-pointer ' + (activeProject === index ? 'opacity-100 scale-100' : 'opacity-30 scale-95 hover:opacity-70')
                         }`}
                       >
+                        {index === 0 && !isMobile && (
+                          <div
+                            style={{
+                              position: 'absolute',
+                              zIndex: 60,
+                              pointerEvents: 'none',
+                              overflow: 'hidden',
+                              paddingRight: '24px',
+                              paddingTop: '24px',
+                              paddingBottom: '24px',
+                              top: '50%',
+                              transform: gwidoBustHovered
+                                ? 'translateY(-80%) translateX(-32%)'
+                                : 'translateY(-50%) translateX(-50%)',
+                              opacity: gwidoBustHovered ? 1 : 0,
+                              transition: 'opacity 0.45s ease, transform 0.75s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                              filter: 'drop-shadow(6px 0 28px rgba(99,102,241,0.5))',
+                            }}
+                            className="left-[-80px] lg:left-[-128px]"
+                          >
+                            <img
+                              src={fixPath('/gwido/images/Gwido_Buste.webp')}
+                              alt=""
+                              loading="lazy"
+                              decoding="async"
+                              style={{
+                                height: '140px',
+                                width: 'auto',
+                                display: 'block',
+                                transform: 'rotate(40deg)',
+                                transformOrigin: 'center center',
+                              }}
+                            />
+                          </div>
+                        )}
                         <div className={"absolute -left-8 top-1 w-1 bg-slate-900 transition-all duration-700 ease-out origin-top " + (!project.incoming && activeProject === index ? "h-full opacity-100" : "h-0 opacity-0")}></div>
                         
                         <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-3">
@@ -1087,6 +1110,7 @@ const GwidoPortfolio = () => {
                 <div className="absolute bottom-8 left-8 md:left-16 z-50">
                     <button 
                         onClick={handleOpenMentions} 
+                        onMouseEnter={prefetchMentions}
                         className="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-indigo-600 transition-colors"
                     >
                         Mentions Légales
@@ -1099,92 +1123,40 @@ const GwidoPortfolio = () => {
         </div>
       </main>
 
-      {/* ════════════════════════════════════════════════════
-          Gwido Bust — peeks from the LEFT edge on hover
-          Trigger  : onMouseEnter/Leave on the Gwido project row
-          ════════════════════════════════════════════════════ */}
-      {!isMobile && (() => {
-        const bustActive = gwidoBustHovered;
-        return (
-          // Outer wrapper: clips the right/far side of the rotated image
-          // so we never see a hard horizontal cut — only the left edge peeks in
+
+
+      {/* ── Suspense wrapper for lazy-loaded overlays ── */}
+      <React.Suspense fallback={null}>
+        {/* ── Case Study overlay — mounts under wave cover at t=550ms, always opacity:1 ── */}
+        {activeCaseStudy !== null && (
           <div
-            style={{
-              position: 'fixed',
-              left: 0,
-              // ── Follows the Gwido title while scrolling (updated via scroll listener) ──
-              top: gwidoBustTop,
-              zIndex: 60,
-              pointerEvents: 'none',
-              // clip anything that slides too far right (avoids cut-edge artefact)
-              overflow: 'hidden',
-              // enough padding so the rotated image isn't cropped on top/bottom
-              paddingRight: '24px',
-              paddingTop: '24px',
-              paddingBottom: '24px',
-              // ──────────────────────────────────────────────────────────────────
-              // FINAL PEEK POSITION: change translateX(-8%) below to control
-              // how far the bust slides in when hovered.
-              //   0%   = fully visible (right edge at left:0)
-              //  -8%   = slight peek (default)
-              //  -30%  = only a sliver visible
-              // ──────────────────────────────────────────────────────────────────
-              transform: bustActive
-                ? 'translateY(-80%) translateX(-32%)' // ← FINAL peek position
-                : 'translateY(-50%) translateX(-50%)',
-              opacity: bustActive ? 1 : 0,
-              transition: 'opacity 0.45s ease, transform 0.75s cubic-bezier(0.34, 1.56, 0.64, 1)',
-              filter: 'drop-shadow(6px 0 28px rgba(99,102,241,0.5))',
-            }}
+            className="fixed inset-0"
+            style={{ zIndex: 15, overflowY: 'auto' }}
           >
-            <img
-              src={fixPath('/gwido/images/Gwido_Buste.webp')}
-              alt=""
-              loading="lazy"
-              decoding="async"
-              style={{
-                // ── Image size ──
-                height: '140px',
-                width: 'auto',
-                display: 'block',
-                // ── Rotation: 312° so the bust leans toward the screen ──
-                transform: 'rotate(40deg)',
-                transformOrigin: 'center center',
-              }}
-            />
+            <CaseStudy project={projects[activeCaseStudy]} onBack={handleCaseStudyBack} />
           </div>
-        );
-      })()}
+        )}
 
-      {/* ── Case Study overlay — mounts under wave cover at t=550ms, always opacity:1 ── */}
-      {activeCaseStudy !== null && (
-        <div
-          className="fixed inset-0"
-          style={{ zIndex: 15, overflowY: 'auto' }}
-        >
-          <CaseStudy project={projects[activeCaseStudy]} onBack={handleCaseStudyBack} />
-        </div>
-      )}
+        {/* ── Identity overlay ── */}
+        {showIdentity && (
+          <div
+            className="fixed inset-0"
+            style={{ zIndex: 15, overflowY: 'auto' }}
+          >
+            <Identity onBack={handleIdentityBack} />
+          </div>
+        )}
 
-      {/* ── Identity overlay ── */}
-      {showIdentity && (
-        <div
-          className="fixed inset-0"
-          style={{ zIndex: 15, overflowY: 'auto' }}
-        >
-          <Identity onBack={handleIdentityBack} />
-        </div>
-      )}
-
-      {/* ── Mentions Légales overlay ── */}
-      {showMentions && (
-        <div
-          className="fixed inset-0"
-          style={{ zIndex: 15, overflowY: 'auto' }}
-        >
-          <MentionsLegales onBack={handleMentionsBack} />
-        </div>
-      )}
+        {/* ── Mentions Légales overlay ── */}
+        {showMentions && (
+          <div
+            className="fixed inset-0"
+            style={{ zIndex: 15, overflowY: 'auto' }}
+          >
+            <MentionsLegales onBack={handleMentionsBack} />
+          </div>
+        )}
+      </React.Suspense>
 
     </div>
   );

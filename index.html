@@ -11,6 +11,12 @@
     <meta name="keywords" content="Portfolio, Game Design, Technical Game Designer, UX Designer, UI Designer, Unity, C#, Prototypage, Romain Harlegand" />
     <link rel="canonical" href="https://harlegandromain.github.io/Portfolio/" />
 
+    <!-- Google Fonts Preconnect and Load (Inter Font) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" /></noscript>
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://harlegandromain.github.io/Portfolio/" />
@@ -24,9 +30,95 @@
     <meta property="twitter:title" content="Portfolio - HARLEGAND Romain | Technical Game Designer & UX/UI Designer" />
     <meta property="twitter:description" content="Découvrez mes projets de jeux vidéo et mes travaux de design d'expérience et d'interface." />
     <meta property="twitter:image" content="https://harlegandromain.github.io/Portfolio/Image/og-image.png" />
+
+    <style>
+      /* Static LCP Splash styles (removed automatically when React mounts) */
+      .lcp-splash {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #020617; /* Matches bg-slate-950 */
+        z-index: 9999;
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        color: #f8fafc;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+      .lcp-content {
+        text-align: center;
+        user-select: none;
+      }
+      .lcp-title {
+        font-size: clamp(4rem, 10vw, 9rem);
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        text-transform: uppercase;
+        color: #f8fafc;
+        line-height: 0.9;
+        margin: 0 0 28px 0;
+        text-shadow: 0 4px 60px rgba(99,102,241,0.4);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .lcp-cursor {
+        margin-left: 8px;
+        color: #6366f1;
+        animation: lcp-blink 1s step-end infinite;
+      }
+      .lcp-name {
+        font-size: clamp(0.85rem, 1.4vw, 1.1rem);
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(226,232,240,0.9);
+        margin: 0 0 6px 0;
+      }
+      .lcp-desc {
+        font-size: clamp(0.7rem, 1vw, 0.85rem);
+        font-weight: 400;
+        color: rgba(148,163,184,0.8);
+        letter-spacing: 0.05em;
+        margin: 0 0 48px 0;
+      }
+      .lcp-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: #e2e8f0;
+        border: none;
+        border-bottom: 1.5px solid rgba(226,232,240,0.5);
+        background: transparent;
+        padding-bottom: 4px;
+        cursor: pointer;
+      }
+      @keyframes lcp-blink {
+        from, to { opacity: 1; }
+        50% { opacity: 0; }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Static Splash Screen for LCP Optimization (removed automatically when React mounts) -->
+      <div class="lcp-splash">
+        <div class="lcp-content">
+          <h1 class="lcp-title">PORTFOLIO<span class="lcp-cursor">_</span></h1>
+          <p class="lcp-name">HARLEGAND Romain</p>
+          <p class="lcp-desc">Technical Game Designer &nbsp;·&nbsp; UX/UI Designer</p>
+          <button class="lcp-btn">
+            Explorer →
+          </button>
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
