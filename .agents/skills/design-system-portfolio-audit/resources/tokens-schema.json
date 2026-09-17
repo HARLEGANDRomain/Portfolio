@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DesignSystemTokens",
+  "type": "object",
+  "required": ["version", "colors", "typography", "spacing"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "example": "1.0.0"
+    },
+    "colors": {
+      "type": "object",
+      "properties": {
+        "primary": { "type": "object" },
+        "secondary": { "type": "object" },
+        "neutral": { "type": "object" },
+        "semantic": {
+          "type": "object",
+          "properties": {
+            "success": { "type": "string" },
+            "warning": { "type": "string" },
+            "error": { "type": "string" },
+            "info": { "type": "string" }
+          }
+        },
+        "hardcodedDetected": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "typography": {
+      "type": "object",
+      "properties": {
+        "fontFamilies": { "type": "object" },
+        "fontSizes": { "type": "object" },
+        "fontWeights": { "type": "object" },
+        "lineHeights": { "type": "object" },
+        "letterSpacings": { "type": "object" }
+      }
+    },
+    "spacing": {
+      "type": "object",
+      "properties": {
+        "scale": { "type": "object" },
+        "method": { "type": "string" }
+      }
+    },
+    "shadows": { "type": "object" },
+    "borderRadius": { "type": "object" },
+    "breakpoints": { "type": "object" },
+    "zIndex": { "type": "object" },
+    "transitions": { "type": "object" }
+  }
+}
