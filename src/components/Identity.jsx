@@ -71,7 +71,7 @@ const Identity = ({ onBack }) => {
             <p className="text-xs font-bold uppercase tracking-widest text-indigo-500 mb-4">
               {t('nav.identity')}
             </p>
-            <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-[#0f172a] mb-8">
+            <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-slate-900 mb-8">
               {t('identityPage.whoAmI')}
             </h1>
             <p className="text-lg text-slate-600 mb-10 leading-relaxed max-w-3xl font-medium whitespace-pre-line">
@@ -80,13 +80,13 @@ const Identity = ({ onBack }) => {
           </div>
 
           <div className="col-span-1 md:border-l-2 md:border-slate-200 md:pl-8 flex flex-col justify-start">
-            <h2 className="text-2xl font-bold uppercase tracking-tighter text-[#0f172a] mb-6">
+            <h2 className="text-2xl font-bold uppercase tracking-tighter text-slate-900 mb-6">
               {t('identityPage.diplomas')}
             </h2>
             <div className="space-y-6">
               <div className="bg-white/90 backdrop-blur-sm p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-indigo-300 hover:shadow-md transition-all hover:-translate-y-1">
                 <p className="font-bold text-[10px] uppercase tracking-widest text-indigo-600 mb-2">Diplôme obtenu</p>
-                <p className="text-xl font-black text-[#0f172a] mb-2 leading-tight">{t('identityPage.diplomaName')}</p>
+                <p className="text-xl font-black text-slate-900 mb-2 leading-tight">{t('identityPage.diplomaName')}</p>
                 <p className="text-sm font-bold text-slate-700 mb-3">{t('identityPage.diplomaSchool')}</p>
                 <p className="text-xs text-slate-500 font-medium bg-slate-100 inline-block px-3 py-1.5 rounded-md border border-slate-200">{t('identityPage.diplomaSub')}</p>
               </div>

@@ -911,7 +911,7 @@ const GwidoPortfolio = () => {
         <header className="absolute top-0 left-0 w-full md:w-[70%] px-8 md:px-16 py-8 md:py-16 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8 z-40">
             <div>
                 <h1 
-                    className="text-3xl md:text-4xl font-black text-[#0f172a] uppercase tracking-tighter cursor-pointer whitespace-nowrap leading-none mb-4" 
+                    className="text-3xl md:text-4xl font-black text-slate-900 uppercase tracking-tighter cursor-pointer whitespace-nowrap leading-none mb-4" 
                     onClick={() => window.scrollTo({top: 0, behavior:'smooth'})}
                 >
                     HARLEGAND Romain
@@ -947,7 +947,7 @@ const GwidoPortfolio = () => {
             {/* INTRO SECTION */}
             <section id="intro" data-section="intro" className="section-observer min-h-screen flex flex-col justify-center px-8 md:px-16 pb-24">
                 <div className="max-w-xl">
-                    <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-[#0f172a] mb-8 leading-tight">
+                    <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-slate-900 mb-8 leading-tight">
                         {t('intro.headline')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-emerald-500">{t('intro.headlineAccent')}</span>
                     </h2>
                     <p className="text-lg text-slate-600 mb-6 leading-relaxed font-medium">
@@ -1053,7 +1053,7 @@ const GwidoPortfolio = () => {
                           )}
                         </p>
                         <h2 className={"text-4xl md:text-5xl font-black uppercase tracking-tighter mb-4 transition-transform duration-500 " + 
-                          (project.incoming ? "text-slate-300" : "text-[#0f172a] group-hover:translate-x-3")}>
+                          (project.incoming ? "text-slate-300" : "text-slate-900 group-hover:translate-x-3")}>
                           {project.incoming ? '???' : project.title}
                         </h2>
                         
@@ -1068,7 +1068,7 @@ const GwidoPortfolio = () => {
                               setGwidoBustHovered(false);
                               handleOpenCaseStudy(index);
                             }} 
-                            className="flex items-center text-xs font-bold uppercase tracking-widest text-[#0f172a] hover:text-blue-600 transition-colors"
+                            className="flex items-center text-xs font-bold uppercase tracking-widest text-slate-900 hover:text-blue-600 transition-colors"
                           >
                             {t('projects.exploreCaseStudy')} <ArrowRight className="w-4 h-4 ml-2" />
                           </button>
@@ -1096,10 +1096,10 @@ const GwidoPortfolio = () => {
                             <Mail className="w-4 h-4" /> {t('contact.cta')}
                         </a>
                         <div className="flex gap-4 w-full sm:w-auto justify-center">
-                            <a href="https://www.linkedin.com/in/romain-harlegand/" target="_blank" rel="noopener noreferrer" className="flex justify-center items-center bg-white border border-slate-200 text-slate-600 hover:text-[#0f172a] hover:border-slate-400 px-6 py-4 transition-colors">
+                            <a href="https://www.linkedin.com/in/romain-harlegand/" target="_blank" rel="noopener noreferrer" className="flex justify-center items-center bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:border-slate-400 px-6 py-4 transition-colors">
                                 <Linkedin className="w-5 h-5" />
                             </a>
-                            <a href="https://github.com/HARLEGANDRomain" target="_blank" rel="noopener noreferrer" className="flex justify-center items-center bg-white border border-slate-200 text-slate-600 hover:text-[#0f172a] hover:border-slate-400 px-6 py-4 transition-colors">
+                            <a href="https://github.com/HARLEGANDRomain" target="_blank" rel="noopener noreferrer" className="flex justify-center items-center bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:border-slate-400 px-6 py-4 transition-colors">
                                 <Github className="w-5 h-5" />
                             </a>
                         </div>
