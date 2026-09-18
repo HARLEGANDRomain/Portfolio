@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:tokens": "node src/design-system/build-tokens.js"
   },
   "dependencies": {
     "@react-spring/three": "9.7",
@@ -29,6 +30,7 @@
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.32",
     "sharp": "^0.34.5",
+    "style-dictionary": "^5.5.4",
     "tailwindcss": "^3.4.0",
     "vite": "^5.0.8",
     "vite-plugin-image-optimizer": "^2.0.3"

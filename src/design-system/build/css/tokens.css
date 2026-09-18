@@ -1,0 +1,125 @@
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --color-primary-indigo-400: #818cf8; /** Indigo 400 - Accent clair */
+  --color-primary-indigo-500: #6366f1; /** Indigo 500 - Accent principal */
+  --color-primary-indigo-600: #4f46e5; /** Indigo 600 - Accent sombre */
+  --color-primary-indigo-700: #4338ca; /** Indigo 700 - Accent foncé */
+  --color-primary-indigo-950: #1e1b4b; /** Indigo 950 - Fond profond Gwido */
+  --color-neutral-white: #ffffff; /** Blanc pur */
+  --color-neutral-background: #f8fafc; /** Fond clair (slate-50) */
+  --color-neutral-slate-50: #f8fafc;
+  --color-neutral-slate-100: #f1f5f9;
+  --color-neutral-slate-200: #e2e8f0;
+  --color-neutral-slate-300: #cbd5e1;
+  --color-neutral-slate-400: #94a3b8;
+  --color-neutral-slate-500: #64748b;
+  --color-neutral-slate-600: #475569;
+  --color-neutral-slate-700: #334155;
+  --color-neutral-slate-800: #1e293b;
+  --color-neutral-slate-900: #0f172a; /** Slate 900 - Couleur texte principal */
+  --color-neutral-slate-950: #020617; /** Slate 950 - Fond dimmer splash */
+  --color-semantic-success: #10b981;
+  --color-semantic-warning: #f59e0b;
+  --color-semantic-error: #ef4444;
+  --color-semantic-info: #0891b2;
+  --color-project-gwido-wave1: #4f8499; /** Vague 1 projet Gwido */
+  --color-project-gwido-wave2: #4e889d; /** Vague 2 projet Gwido */
+  --color-project-gwido-bg: #1e1b4b; /** Fond sombre projet Gwido */
+  --color-project-eom-wave1: #fdcdb7; /** Vague 1 pastel projet EoM */
+  --color-project-eom-wave2: #af99c7; /** Vague 2 lavande projet EoM */
+  --color-project-eom-bg: #0f172a; /** Fond sombre projet EoM */
+  --color-tool-illustrator: #ff9a00;
+  --color-tool-photoshop: #31a8ff;
+  --color-tool-blender: #f5792a;
+  --color-tool-git: #f05032;
+  --color-tool-figma: #a855f7;
+  --font-family-sans: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  --font-size-5xl: 3rem;
+  --font-size-6xl: 3.75rem;
+  --font-size-label: 10px;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-black: 900;
+  --font-letter-spacing-tighter: -0.04em;
+  --font-letter-spacing-tightest: -0.05em;
+  --font-letter-spacing-normal: 0em;
+  --font-letter-spacing-wide: 0.05em;
+  --font-letter-spacing-wider: 0.12em;
+  --font-letter-spacing-widest: 0.15em;
+  --font-letter-spacing-widest-label: 0.2em;
+  --spacing-0: 0px;
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-5: 1.25rem;
+  --spacing-6: 1.5rem;
+  --spacing-8: 2rem;
+  --spacing-10: 2.5rem;
+  --spacing-12: 3rem;
+  --spacing-16: 4rem;
+  --spacing-24: 6rem;
+  --spacing-32: 8rem;
+  --spacing-48: 12rem;
+  --shadow-nav-pill: 0 8px 30px rgba(0,0,0,0.1);
+  --shadow-wave-drop: drop-shadow(-20px 0px 40px rgba(0,0,0,0.3));
+  --shadow-bubble-hero: 0 30px 80px rgba(99,102,241,0.28), 0 12px 40px rgba(0,0,0,0.18);
+  --shadow-card-sm: 0 20px 60px rgba(0,0,0,0.07);
+  --shadow-card-md: 0 20px 60px rgba(0,0,0,0.14);
+  --shadow-card-hover: 0 28px 80px rgba(0,0,0,0.2);
+  --shadow-role-card-hover: 0 24px 48px rgba(0,0,0,0.12);
+  --shadow-lightbox: 0 40px 120px rgba(0,0,0,0.8);
+  --shadow-gwido-bust: drop-shadow(6px 0 28px rgba(99,102,241,0.5));
+  --shadow-emerald-btn: 0 10px 30px rgba(16,185,129,0.3);
+  --border-radius-none: 0px;
+  --border-radius-sm: 0.375rem;
+  --border-radius-md: 0.875rem;
+  --border-radius-lg: 1rem;
+  --border-radius-xl: 1.125rem;
+  --border-radius-2xl: 1.25rem;
+  --border-radius-3xl: 1.5rem;
+  --border-radius-full: 9999px;
+  --border-radius-phone-mock: 3rem;
+  --z-index-base: 0;
+  --z-index-content: 10;
+  --z-index-overlay: 15;
+  --z-index-wave: 20;
+  --z-index-wave-bg1: 10;
+  --z-index-wave-bg2: 0;
+  --z-index-sticky-bust: 60;
+  --z-index-splash: 25;
+  --z-index-header: 40;
+  --z-index-floating-nav: 50;
+  --z-index-footer-link: 50;
+  --z-index-lightbox-backdrop: 9999;
+  --z-index-lightbox-close: 10000;
+  --z-index-lcp-html-splash: 9999;
+  --transition-fast: 200ms ease;
+  --transition-base: 300ms ease;
+  --transition-medium: 500ms ease;
+  --transition-slow: 700ms ease-out;
+  --transition-slower: 1000ms ease-in-out;
+  --transition-wave-transition: 600ms ease-out;
+  --transition-splash-text-out: 300ms cubic-bezier(0.16, 1, 0.32, 1);
+  --transition-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --transition-ease-in-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --pattern-dot-grid-size: 24px;
+  --pattern-dot-radius: 1.5px;
+  --pattern-dot-color: #e2e8f0;
+  --pattern-dot-bg: #ffffff;
+  --pattern-dot-tracker-color: #64748b;
+  --pattern-dot-tracker-radius: 80px;
+}
