@@ -5,6 +5,7 @@ import {
   ChevronLeft, ChevronRight, Play, Pause,
   X, Maximize2, FileText, Gamepad2, ExternalLink
 } from 'lucide-react';
+import MediaLoader from './ui/MediaLoader';
 
 // ─── CSS ──────────────────────────────────────────────────────────────────────
 const caseStudyStyles = `
@@ -180,47 +181,6 @@ const fixPath = (path) => {
   return path;
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
-// MEDIA LOADER — generic component for images and videos with a loading spinner
-// ─────────────────────────────────────────────────────────────────────────────
-const MediaLoader = ({ src, type = 'image', className = '', style = {}, imgProps = {}, videoProps = {} }) => {
-  const [loaded, setLoaded] = useState(false);
-  const combinedStyle = {
-    ...style,
-    opacity: loaded ? (style.opacity ?? 1) : 0,
-    transition: style.transition ? `${style.transition}, opacity 0.5s ease` : 'opacity 0.5s ease, transform 0.4s ease'
-  };
-  
-  return (
-    <>
-      {!loaded && (
-         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
-           <div className="w-8 h-8 border-4 border-indigo-200/30 border-t-indigo-500 rounded-full animate-spin"></div>
-         </div>
-      )}
-      {type === 'video' ? (
-        <video 
-          src={src} 
-          preload="none"
-          {...videoProps}
-          className={`${className} relative z-10`} 
-          style={combinedStyle}
-          onLoadedData={() => setLoaded(true)}
-        />
-      ) : (
-        <img 
-          src={src} 
-          loading="lazy"
-          decoding="async"
-          {...imgProps}
-          className={`${className} relative z-10`}
-          style={combinedStyle}
-          onLoad={() => setLoaded(true)}
-        />
-      )}
-    </>
-  );
-};
 
 // ─────────────────────────────────────────────────────────────────────────────
 // LIGHTBOX

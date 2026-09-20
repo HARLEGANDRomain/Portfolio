@@ -53,3 +53,30 @@ body {
   height: 100vh;
 }
 
+/* ── Dot Pattern Classes ───────────────────────────────────────────────────
+   Classes réutilisables basées sur les design tokens CSS :
+   --dot-bg, --dot-color, --dot-tracker-color, --dot-size, --dot-radius, --dot-tracker-radius
+   ─────────────────────────────────────────────────────────────────────────── */
+.bg-dots {
+  background-image: radial-gradient(var(--dot-color) var(--dot-radius), transparent var(--dot-radius));
+  background-size: var(--dot-size) var(--dot-size);
+  background-color: var(--dot-bg);
+}
+
+.bg-dots-tracker {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: radial-gradient(var(--dot-tracker-color) var(--dot-radius), transparent var(--dot-radius));
+  background-size: var(--dot-size) var(--dot-size);
+  mask-image: radial-gradient(circle var(--dot-tracker-radius) at var(--mouse-client-x, -200px) var(--mouse-client-y, -200px), black 0%, transparent 100%);
+  -webkit-mask-image: radial-gradient(circle var(--dot-tracker-radius) at var(--mouse-client-x, -200px) var(--mouse-client-y, -200px), black 0%, transparent 100%);
+}
+
+.bg-dots-dark {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.1) var(--dot-radius), transparent var(--dot-radius));
+  background-size: var(--dot-size) var(--dot-size);
+}
+
+

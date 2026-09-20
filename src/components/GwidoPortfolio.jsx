@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowUpRight, ArrowRight, Camera, Target, Calendar, User, Code2, Layout, Smartphone, Mail, Linkedin, Github } from 'lucide-react';
+import MediaLoader from './ui/MediaLoader';
 
 const CaseStudy = React.lazy(() => import('./CaseStudy'));
 const Identity = React.lazy(() => import('./Identity'));
@@ -76,27 +77,6 @@ const generateWavePath = (offset, time, type, isMobile) => {
   return d;
 };
 
-const ImageLoader = ({ src, alt, className = '', style = {}, eagerLoad = false }) => {
-  const [loaded, setLoaded] = useState(false);
-  return (
-    <div className={`relative ${className}`} style={style}>
-      {!loaded && (
-         <div className="absolute inset-0 flex items-center justify-center bg-slate-900/20 z-0">
-           <div className="w-6 h-6 border-2 border-indigo-200/30 border-t-indigo-500 rounded-full animate-spin"></div>
-         </div>
-      )}
-      <img 
-        src={src} 
-        alt={alt} 
-        loading={eagerLoad ? 'eager' : 'lazy'}
-        decoding={eagerLoad ? 'sync' : 'async'}
-        className={`w-full h-full object-cover transition-opacity duration-700 ease-in-out relative z-10 ${loaded ? 'opacity-100' : 'opacity-0'}`}
-        style={style}
-        onLoad={() => setLoaded(true)}
-      />
-    </div>
-  );
-};
 const GwidoPortfolio = () => {
   const { t, i18n } = useTranslation();
   const [activeSection, setActiveSection] = useState('intro');
@@ -404,9 +384,6 @@ const GwidoPortfolio = () => {
   ];
 
   const customStyles = [
-    ".bg-dots { background-image: radial-gradient(#e2e8f0 1.5px, transparent 1.5px); background-size: 24px 24px; background-color: #ffffff; }",
-    ".bg-dots-tracker { --dot-radius: 80px; position: absolute; inset: 0; pointer-events: none; z-index: 0; background-image: radial-gradient(#64748b 1.5px, transparent 1.5px); background-size: 24px 24px; mask-image: radial-gradient(circle var(--dot-radius) at var(--mouse-client-x, -200px) var(--mouse-client-y, -200px), black 0%, transparent 100%); -webkit-mask-image: radial-gradient(circle var(--dot-radius) at var(--mouse-client-x, -200px) var(--mouse-client-y, -200px), black 0%, transparent 100%); }",
-    ".bg-dots-dark { background-image: radial-gradient(rgba(255,255,255,0.1) 1.5px, transparent 1.5px); background-size: 24px 24px; }",
     ".vertical-text { writing-mode: vertical-rl; transform: rotate(180deg); }",
     "@keyframes pulse-glow { 0%, 100% { opacity: 0.4; transform: scale(1); } 50% { opacity: 0.7; transform: scale(1.05); } }",
     "@keyframes subtle-zoom { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }",
@@ -645,9 +622,9 @@ const GwidoPortfolio = () => {
                     <div key={ri} className="overflow-hidden flex-shrink-0">
                       <div className={row.cls}>
                         {[...row.images, ...row.images].map((src, i) => (
-                          <div key={i} className="flex-shrink-0 w-72 h-[160px] mx-2 rounded-xl overflow-hidden opacity-80">
+                          <div key={i} className="flex-shrink-0 w-72 h-[160px] mx-2 rounded-xl overflow-hidden opacity-80 relative">
                             {/* eager loading: images are ready before transition fires */}
-                            <ImageLoader src={fixPath(src)} alt="" className="w-full h-full" eagerLoad />
+                            <MediaLoader src={fixPath(src)} alt="" className="w-full h-full object-cover" eagerLoad />
                           </div>
                         ))}
                       </div>
@@ -690,10 +667,10 @@ const GwidoPortfolio = () => {
                       className="relative w-full h-full z-10 transition-transform duration-700 ease-out"
                       style={{ transform: `translate(${mousePos.x * -1}px, ${mousePos.y * -1}px) scale(1.05)` }}
                     >
-                      <ImageLoader 
+                      <MediaLoader 
                         src={fixPath(project.image)} 
                         alt={project.title} 
-                        className="w-full h-full mix-blend-lighten"
+                        className="w-full h-full mix-blend-lighten object-cover"
                         style={{ maskImage: "linear-gradient(to left, black 60%, transparent 100%)", WebkitMaskImage: "linear-gradient(to left, black 60%, transparent 100%)" }}
                       />
                     </div>
@@ -718,10 +695,10 @@ const GwidoPortfolio = () => {
                         perspective: '1000px'
                       }}
                     >
-                        <ImageLoader 
+                        <MediaLoader 
                           src={fixPath(project.image)} 
                           alt={project.title}
-                          className="w-full h-full transition-transform duration-700 group-hover:scale-105"
+                          className="w-full h-full transition-transform duration-700 group-hover:scale-105 object-cover"
                           style={{ opacity: 0.9 }}
                         />
                         

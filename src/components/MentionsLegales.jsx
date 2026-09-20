@@ -1,41 +1,9 @@
-import React, { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { ArrowLeft } from 'lucide-react';
-
-const customStyles = [
-    ".bg-dots { background-image: radial-gradient(#e2e8f0 1.5px, transparent 1.5px); background-size: 24px 24px; background-color: #ffffff; }",
-    ".bg-dots-tracker { --dot-radius: 80px; position: absolute; inset: 0; pointer-events: none; z-index: 0; background-image: radial-gradient(#64748b 1.5px, transparent 1.5px); background-size: 24px 24px; mask-image: radial-gradient(circle var(--dot-radius) at var(--mouse-client-x, -200px) var(--mouse-client-y, -200px), black 0%, transparent 100%); -webkit-mask-image: radial-gradient(circle var(--dot-radius) at var(--mouse-client-x, -200px) var(--mouse-client-y, -200px), black 0%, transparent 100%); }"
-].join("\n");
+import React from 'react';
+import OverlayPage from './ui/OverlayPage';
 
 const MentionsLegales = ({ onBack }) => {
-  const { t } = useTranslation();
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   return (
-    <div className="min-h-screen w-full bg-white text-slate-900 font-sans relative flex flex-col overflow-x-hidden pb-32">
-      <style dangerouslySetInnerHTML={{ __html: customStyles }} />
-      
-      {/* Fixed Background dots matching landing page DA */}
-      <div className="fixed inset-0 pointer-events-none z-[0]">
-         <div className="absolute inset-0 bg-dots">
-             <div className="bg-dots-tracker"></div>
-         </div>
-      </div>
-      
-      {/* Floating Back Button */}
-      <div className="fixed top-6 left-6 md:left-12 z-50">
-        <button 
-          onClick={onBack}
-          className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest bg-white/90 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.1)] px-6 py-3 rounded-full border border-slate-200 text-slate-600 hover:text-indigo-600 transition-colors group"
-        >
-          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-          {t('identityPage.back') || 'Retour'}
-        </button>
-      </div>
-
+    <OverlayPage onBack={onBack} className="pb-32">
       {/* Top Section */}
       <div className="w-full flex-shrink-0 relative z-10 pt-32 px-8 md:px-16 flex flex-col justify-center items-center">
         <div className="max-w-4xl w-full">
@@ -75,8 +43,9 @@ const MentionsLegales = ({ onBack }) => {
           </div>
         </div>
       </div>
-    </div>
+    </OverlayPage>
   );
 };
 
 export default MentionsLegales;
+
