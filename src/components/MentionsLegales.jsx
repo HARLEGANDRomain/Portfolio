@@ -36,9 +36,10 @@ const MentionsLegales = ({ onBack }) => {
             </section>
 
             <section>
-                <h2 className="text-2xl font-bold uppercase tracking-tighter text-slate-900 mb-4">4. Collecte de données et Cookies</h2>
-                <p>Ce site utilise <strong>Google Analytics</strong> pour suivre le trafic et analyser les pages visitées afin d'améliorer l'expérience utilisateur. Les données collectées sont anonymisées et ne permettent pas d'identifier personnellement les visiteurs.</p>
-                <p>En naviguant sur ce site, vous acceptez l'utilisation de ces cookies à des fins de mesure d'audience.</p>
+                <h2 className="text-2xl font-bold uppercase tracking-tighter text-slate-900 mb-4">4. Données personnelles et Cookies</h2>
+                <p className="mb-3">Ce site respecte votre vie privée et <strong>ne dépose aucun cookie</strong> publicitaire, de pistage ou de profilage sur votre appareil.</p>
+                <p className="mb-3">Pour mesurer l'audience et la consultation des projets (pages vues, pays, type d'appareil), ce site utilise <strong>Cloudflare Web Analytics</strong>.</p>
+                <p>Conformément aux directives de la CNIL et au RGPD, cette solution de mesure d'audience est strictement anonyme, fonctionne <strong>sans aucun cookie</strong> et ne collecte aucune donnée personnelle identifiable. Par conséquent, l'affichage d'un bandeau de consentement n'est pas nécessaire.</p>
             </section>
           </div>
         </div>

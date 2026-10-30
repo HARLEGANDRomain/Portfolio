@@ -1,34 +1,28 @@
-import ReactGA from "react-ga4";
-
-const MEASUREMENT_ID = "G-XS8TTJGWXQ";
-
 /**
- * Initializes Google Analytics 4
+ * Utilitaires Analytics - Adapté pour Cloudflare Web Analytics (sans cookies)
+ * Cloudflare Web Analytics mesure l'audience de façon anonyme et automatique via sa balise.
  */
+
 export const initGA = () => {
-  ReactGA.initialize(MEASUREMENT_ID);
-  console.log("GA4 Initialized");
+  // Inactif : Remplacé par Cloudflare Web Analytics
 };
 
 /**
- * Tracks a page view or a section change
- * @param {string} path - The path or section name (e.g., '/projects')
- * @param {string} title - The title of the page/section
+ * Met à jour le titre du document lors d'un changement de section / projet (pour l'historique et les analytics)
+ * @param {string} path - Le chemin ou nom de section
+ * @param {string} title - Le titre de la vue
  */
 export const trackPageView = (path, title) => {
-  ReactGA.send({ hitType: "pageview", page: path, title: title });
+  if (title && typeof document !== 'undefined') {
+    // Si souhaité, met à jour le titre de l'onglet
+    // document.title = title;
+  }
 };
 
 /**
- * Tracks a custom event
- * @param {string} category - Event category
- * @param {string} action - Event action
- * @param {string} label - Event label (optional)
+ * Fonction conservée pour éviter tout effet de bord sur le code existant
  */
 export const trackEvent = (category, action, label) => {
-  ReactGA.event({
-    category: category,
-    action: action,
-    label: label,
-  });
+  // Pas d'événement personnalisé requis avec Cloudflare Web Analytics standard
 };
+
