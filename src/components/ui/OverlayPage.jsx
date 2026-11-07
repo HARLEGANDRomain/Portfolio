@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import BackButton from './BackButton';
 
 /**
  * OverlayPage — Layout commun aux pages de type overlay (Identity, Mentions Légales, etc.)
  * Gère :
- * - Le reset automatique du scroll en haut de page à l'ouverture
  * - Le fond de points standardisé (bg-dots + bg-dots-tracker)
  * - Le bouton flottant "Retour" (BackButton) en position sticky/fixe
  * - La structure sémantique et responsive
@@ -17,10 +16,6 @@ export const OverlayPage = ({
   className = '',
   contentClassName = '',
 }) => {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   return (
     <div className={`min-h-screen w-full bg-white text-slate-900 font-sans relative flex flex-col overflow-x-hidden ${className}`}>
       {/* Fixed Background dots matching landing page DA */}

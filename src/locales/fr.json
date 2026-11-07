@@ -1,12 +1,31 @@
 {
+  "meta": {
+    "homeTitle": "Portfolio - HARLEGAND Romain | UX/UI Designer & Technical Game Designer",
+    "caseStudy": "Étude de cas"
+  },
+  "common": {
+    "roles": "UX/UI Designer · Technical Game Designer"
+  },
+  "splash": {
+    "explore": "Explorer"
+  },
   "identityPage": {
     "back": "Retour au portfolio",
     "whoAmI": "Qui suis-je",
     "whoAmIDesc": "Curieux de nature, j'ai commencé par étudier le vivant, un bac STL orienté microbiologie, parce que comprendre comment les systèmes fonctionnent m'a toujours fasciné. Mais une autre passion a pris le dessus : les jeux vidéo. Des grands classiques jusqu'à des titres qui étaient plus de niche comme Warframe, dont le game design m'a profondément marqué, j'ai fini par découvrir qu'on pouvait en faire un métier.\n\nEn me formant au game design, j'ai retrouvé quelque chose de familier : une grande partie du bon design repose sur la compréhension du comportement humain, ce qu'on appelle l'UX, qui ne va pas sans UI pour rendre une interface agréable et avoir envie d'y retourner. Ce n'est pas un hasard si je m'y intéresse de plus en plus. C'est un domaine qui dépasse le jeu vidéo et qui touche beaucoup plus de gens.\n\nJ'ai donc deux facettes complémentaires : d'un côté, l'envie de concevoir et prototyper des mécaniques de jeu directement dans les moteurs, tester une idée, la sentir fonctionner. De l'autre, l'attrait pour un champ plus large, où les mêmes principes de design s'appliquent à des expériences qui impactent encore plus d'utilisateurs.",
-    "diplomas": "Diplôme",
-    "diplomaSchool": "ICAN - Institut de Création et d'Animation Numérique",
-    "diplomaName": "Bachelor Game Design",
-    "diplomaSub": "Designer Numérique - Titre RNCP Niveau 6",
+    "education": "Formation",
+    "obtained": "Diplôme obtenu",
+    "inProgress": "En cours",
+    "mastere": {
+      "name": "Mastère UX/UI",
+      "school": "EEMI - École Européenne des Métiers de l'Internet",
+      "sub": "Depuis 2026"
+    },
+    "bachelor": {
+      "name": "Bachelor Game Design",
+      "school": "ICAN - Institut de Création et d'Animation Numérique",
+      "sub": "Designer Numérique - Titre RNCP Niveau 6"
+    },
     "techStack": "Outils techniques",
     "figma": "Figma",
     "figmaDesc": "Création d'écrans, de prototypes interactifs et Direction Artistique.",
@@ -24,10 +43,12 @@
   "nav": {
     "identity": "Identité",
     "works": "Projets",
-    "contact": "Contact"
+    "contact": "Contact",
+    "label": "Navigation principale",
+    "switchLanguage": "Changer de langue (français / anglais)"
   },
   "intro": {
-    "subtitle": "Technical Game Designer | UX/UI Designer",
+    "subtitle": "UX/UI Designer | Technical Game Designer",
     "headline": "Je conçois",
     "headlineAccent": "des mondes et des expériences qui captent, guident et marquent les esprits.",
     "description": "En tant que Technical Game Designer et UX/UI Designer, je fais le lien entre la vision créative et l'implémentation technique. J'aime créer tout ce qui peut marquer les esprits et laisser une empreinte durable.",
@@ -35,12 +56,8 @@
     "cta": "Explorer les projets"
   },
   "projects": {
-    "sidebar": "Projets sélectionnés • 2025-2026",
-    "comingSoon": "Bientôt",
-    "exploreCaseStudy": "Explorer l'étude de cas",
-    "nextProject": "Prochain Projet",
-    "nextProjectCategory": "Bientôt disponible",
-    "nextProjectDescription": "Un nouveau projet arrive bientôt."
+    "sidebar": "Projets sélectionnés • 2023-2025",
+    "exploreCaseStudy": "Explorer l'étude de cas"
   },
   "contact": {
     "label": "Connectons-nous",
@@ -58,7 +75,15 @@
     "systemsDeveloped": "Systèmes développés",
     "characteristics": "Caractéristiques",
     "problems": "Problèmes",
-    "solutions": "Solutions"
+    "solutions": "Solutions",
+    "close": "Fermer",
+    "enlarge": "Agrandir le média",
+    "mediaViewer": "Visionneuse de média",
+    "previous": "Image précédente",
+    "next": "Image suivante",
+    "play": "Relancer le défilement",
+    "pause": "Mettre le défilement en pause",
+    "slide": "Image {{n}}"
   },
   "gwido": {
     "category": "Jeux vidéo | Exploration - Aventure",
@@ -69,7 +94,6 @@
     "genre": "Exploration / Aventure",
     "timeline": "Sept 2024 – Mai 2025",
     "teamSize": "6 personnes",
-
     "carousel00_label": "00 — Aperçu du projet",
     "carousel00_title": "Gwido — Athara 3",
     "carousel00_cap1": "Écran titre",
@@ -77,7 +101,6 @@
     "carousel00_cap3": "Découverte du véhicule",
     "carousel00_cap4": "Première utilisation du véhicule",
     "carousel00_cap5": "Premier achat de mécanique — tutoriel",
-
     "card1_label": "Système développé",
     "card1_title": "La Caméra",
     "card1_char1": "Vue perspective 3/4",
@@ -87,7 +110,6 @@
     "card1_prob2": "Distance de vision trop courte vers le bas",
     "card1_sol1": "Compensation de distance selon l'angle de vue",
     "card1_sol2": "Anticipation par rapport au mouvement du joueur",
-
     "card2_label": "Système développé",
     "card2_title": "L'Ennemi",
     "card2_char1": "State machine complète (4 états)",
@@ -97,11 +119,9 @@
     "card2_prob2": "Patrouilles devant être variées et intéressantes",
     "card2_sol1": "Attaques similaires avec métriques différentes",
     "card2_sol2": "Tool de patrouille modulable dans l'inspecteur",
-
     "sec01_label": "Système développé",
     "sec01_title": "La Caméra",
     "sec01_desc": "Un système de caméra dynamique conçu pour offrir une visibilité optimale dans toutes les situations, de l'exploration ouverte à l'infiltration furtive.",
-
     "split01_label": "Constat & solution",
     "split01_title": "Un problème de visibilité",
     "split01_desc": "Dans Gwido, nous voulions une caméra fluide en vue 3/4 perspective. Mais ce choix réduisait fortement la visibilité du joueur, il ne voyait pas assez loin en bas de l'écran. J'ai donc combiné deux mécanismes pour redonner de la visibilité sans briser le feeling de la caméra :",
@@ -111,12 +131,10 @@
     "grid01_cap2": "Caméra en déplacement",
     "grid02_cap1": "Distance adaptative selon le mouvement",
     "grid02_cap2": "Compensation de l'angle de vue",
-
     "split02_label": "Mode combat",
     "split02_title": "Reprise du contrôle en situation de visée",
     "split02_desc": "Dans les phases d'infiltration, lorsque le joueur arme son arme, il reprend le contrôle directionnel de la caméra. Il peut alors regarder dans la direction de son choix sans se déplacer, une mécanique indispensable pour observer l'espace avant d'agir.",
     "grid03_cap1": "Comportement de la caméra en mode visée",
-
     "text01_label": "Mise en scène",
     "text01_title": "Trois types de caméras scriptées",
     "text01_text": "Pour enrichir la narration environnementale, j'ai designé trois types de caméras scriptées à placer directement dans les niveaux. Ces caméras permettent de créer des situations spécifiques lorsque le joueur entre dans certaines zones.",
@@ -133,11 +151,9 @@
     "carousel02_cap2": "Focus Target déclenché",
     "carousel02_cap3": "Rotation de caméra déclenchée",
     "carousel02_cap4": "Changement de distance déclenché",
-
     "sec02_label": "Système développé",
     "sec02_title": "L'Ennemi",
     "sec02_desc": "Un ennemi intelligent et agressif, pensé pour s'intégrer au gameplay d'infiltration et de combat tout en offrant de la variété malgré les contraintes de temps.",
-
     "split03_label": "Architecture comportementale",
     "split03_title": "Une FSM complète pour un ennemi vivant",
     "split03_desc": "J'ai réalisé une Finite State Machine (FSM) pour gérer tous les états de l'ennemi. La FSM structure son comportement en 4 états principaux articulés autour du système de vision dynamique.",
@@ -145,12 +161,10 @@
     "split03_item2": "Wander — déplacement dans sa zone de patrouille",
     "split03_item3": "Search — recherche active après perte du joueur",
     "split03_item4": "Chase — poursuite et attaque (2 modes différents)",
-
     "split04_label": "Vision dynamique",
     "split04_title": "Un système de rage adapté à l'infiltration",
     "split04_desc": "Pour que la FSM permette un gameplay d'infiltration crédible, j'ai développé un système de vision dynamique basé sur un mécanisme de \"rage\" progressif : plus le joueur est proche de l'ennemi, plus celui-ci est réactif. Cette progressivité crée une tension naturelle qui récompense la discrétion et punit l'imprudence.",
     "grid05_cap1": "Démonstration du système de vision progressif",
-
     "text02_label": "Système d'attaque",
     "text02_title": "Deux attaques modulaires et paramétrables",
     "text02_text": "Pour créer un ennemi varié avec le temps disponible, j'ai conçu un système d'attaque modulaire entièrement paramétrable dans l'inspecteur Unity. Plutôt que deux attaques radicalement différentes, j'ai opté pour une même base mécanique différenciée par ses métriques :",
@@ -160,7 +174,6 @@
     "grid06_cap2": "Attaque spéciale — grand dash",
     "grid07_cap1": "Attaque mêlée en jeu",
     "grid07_cap2": "Attaque dash en jeu",
-
     "split05_label": "Tool de patrouille",
     "split05_title": "Un outil modulaire pour le level designer",
     "split05_desc": "Pour que les ennemis s'intègrent naturellement dans le level design sans nécessiter de code supplémentaire, j'ai développé un outil de patrouille personnalisé directement dans l'inspecteur Unity. Il permet de composer des routes complexes et variées, adaptées à chaque zone du niveau.",
@@ -176,13 +189,11 @@
     "genre": "Sandbox Musical — 1ère personne",
     "timeline": "2023 – 2024",
     "teamSize": "3 personnes",
-
     "carousel00_label": "00 — Aperçu du projet",
     "carousel00_cap1": "Répulsion des amas de fragments",
     "carousel00_cap2": "Début de l'expérience",
     "carousel00_cap3": "Mode Time Stop — correction de position",
     "carousel00_cap4": "Menu principal",
-
     "card1_label": "Système développé",
     "card1_title": "La Mécanique Musicale",
     "card1_char1": "Composition musicale dynamique",
@@ -192,7 +203,6 @@
     "card1_prob2": "Garantir une harmonie sonore quelle que soit l'action",
     "card1_sol1": "Sons générés selon la vitesse et l'angle de projection",
     "card1_sol2": "Gamme musicale prédéfinie pour toujours sonner juste",
-
     "card2_label": "Système développé",
     "card2_title": "Le Trou Noir",
     "card2_char1": "Attraction & Répulsion",
@@ -202,22 +212,18 @@
     "card2_prob2": "Rendre le contrôle intuitif pour tous les joueurs",
     "card2_sol1": "Two-state simple : attraction / répulsion au clic",
     "card2_sol2": "Physique directe, sans tutoriel nécessaire",
-
     "sec01_label": "Concept central",
     "sec01_title": "Un bac à sable musical",
     "sec01_desc": "L'objectif du projet n'était pas de créer un jeu avec des règles, mais un jouet libre, un espace où chaque interaction devient une note et où le joueur compose sans le savoir.",
-
     "split01_label": "Design du jouet",
     "split01_title": "Composer sans composer",
     "split01_desc": "La contrainte du projet était forte : ne pas créer un jeu, mais un jouet libre pour le joueur. Nous avons donc conçu un bac à sable musical où chaque amas de fragments produit un son dynamique en fonction de la manière dont il est projeté, sa vitesse, son angle, son interaction avec d'autres amas.",
     "split01_item1": "Chaque fragment flottant est un instrument virtuel potentiel",
     "split01_item2": "Le son généré dépend de la physique de l'interaction",
     "split01_item3": "Pas d'objectif, pas de règles : juste l'exploration",
-
     "sec02_label": "Système développé",
     "sec02_title": "Time Stop & Rewind",
     "sec02_desc": "Pour donner au joueur le contrôle créatif total sur sa composition musicale, j'ai implémenté un système de Time Stop et Rewind permettant de corriger les positions des amas et de recréer la musique avec précision.",
-
     "split02_label": "Contrôle créatif",
     "split02_title": "Corriger, revenir, recréer",
     "split02_desc": "La mise en place du Time Stop et de Rewind permet de figer le temps pour corriger la position des amas, puis de rembobiner pour recréer la séquence musicale avec exactement le ton voulu.",
@@ -225,11 +231,9 @@
     "split02_item2": "Rewind : revient en arrière dans la séquence pour refaire un moment musical",
     "split02_item3": "Précision créative maximale sans complexité d'interface",
     "split02_note": "Ce système transforme une erreur en opportunité, le joueur peut toujours corriger et réinventer sa partition.",
-
     "sec03_label": "Mécanique principale",
     "sec03_title": "Le Trou Noir",
     "sec03_desc": "La seule mécanique de jeu : un trou noir personnel que le joueur peut activer pour attirer ou repousser les fragments flottants. Simple dans son principe, riche dans ses possibilités expressives.",
-
     "split03_label": "Attraction & Répulsion",
     "split03_title": "Deux états, une infinité de musiques",
     "split03_desc": "Le trou noir fonctionne selon deux états distincts : attraction et répulsion. En alternant entre les deux, le joueur orchestre le mouvement des fragments dans l'espace — chaque projection, chaque collision génère un son unique qui s'intègre dans la composition globale.",
@@ -238,11 +242,36 @@
     "split03_item3": "La combinaison des deux crée des patterns sonores uniques",
     "grid03_cap1": "Visualisation de la mécanique sonore",
     "grid03_cap2": "Répulsion des amas en jeu",
-
     "sec04_label": "Démonstration",
     "sec04_title": "Le jouet en action",
     "sec04_desc": "Une session de jeu complète illustrant l'exploration libre, la mécanique du trou noir et la génération musicale dynamique.",
     "grid04_cap1": "Gameplay complet — Echoes Of Memories",
     "itchio_btn": "Jouer sur Itch.io"
+  },
+  "footer": {
+    "legal": "Mentions légales"
+  },
+  "legal": {
+    "label": "Informations légales",
+    "title": "Mentions légales",
+    "publisherTitle": "1. Éditeur du site",
+    "publisher": "Créateur et éditeur : HARLEGAND Romain",
+    "contact": "Contact :",
+    "hostTitle": "2. Hébergement",
+    "hostLines": [
+      "Le site est hébergé par GitHub Pages.",
+      "GitHub Inc.",
+      "88 Colin P Kelly Jr St",
+      "San Francisco, CA 94107",
+      "États-Unis"
+    ],
+    "ipTitle": "3. Propriété intellectuelle",
+    "ip": "L'ensemble du contenu de ce site (textes, images, vidéos, animations, code source, etc.) est la propriété exclusive de HARLEGAND Romain, sauf mention contraire explicite. Toute reproduction, distribution, modification, adaptation, retransmission ou publication, même partielle, de ces différents éléments est strictement interdite sans l'accord exprès par écrit de HARLEGAND Romain.",
+    "privacyTitle": "4. Données personnelles et cookies",
+    "privacyParagraphs": [
+      "Ce site respecte votre vie privée et **ne dépose aucun cookie** publicitaire, de pistage ou de profilage sur votre appareil.",
+      "Pour mesurer l'audience et la consultation des projets (pages vues, pays, type d'appareil), ce site utilise **Cloudflare Web Analytics**.",
+      "Conformément aux directives de la CNIL et au RGPD, cette solution de mesure d'audience est strictement anonyme, fonctionne **sans aucun cookie** et ne collecte aucune donnée personnelle identifiable. Par conséquent, l'affichage d'un bandeau de consentement n'est pas nécessaire."
+    ]
   }
 }

@@ -7,7 +7,7 @@
 /* ── Design System : Variables CSS ──────────────────────────────────────────
    Source : src/design-system/build/css/tokens.css (Style Dictionary)
    Ces variables centralisent les valeurs utilisées dans les patterns CSS
-   (bg-dots, bg-dots-tracker) qui sont partagés entre GwidoPortfolio,
+   (bg-dots, bg-dots-tracker) partagés par l'accueil, les études de cas,
    Identity et MentionsLegales.
    ─────────────────────────────────────────────────────────────────────────── */
 :root {
@@ -80,3 +80,28 @@ body {
 }
 
 
+
+/* ── Accessibilité ─────────────────────────────────────────────────────────── */
+
+/* Focus clavier visible partout (la souris ne déclenche pas :focus-visible) */
+:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 3px;
+}
+
+/* Les pages overlay défilent dans leur propre conteneur : pas de défilement de l'accueil derrière */
+.overlay-scroll {
+  overscroll-behavior: contain;
+}
+
+/* Préférence système « réduire les animations » : on coupe toutes les animations CSS.
+   Les animations JS (vagues, carrousel, machine à écrire) lisent la même préférence. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+}

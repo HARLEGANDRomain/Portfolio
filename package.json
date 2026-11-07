@@ -1,7 +1,7 @@
 {
   "name": "portfolio-harlegand-romain",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,18 +10,12 @@
     "build:tokens": "node src/design-system/build-tokens.js"
   },
   "dependencies": {
-    "@react-spring/three": "9.7",
-    "@react-three/drei": "9.115",
-    "@react-three/fiber": "8.17",
-    "@react-three/postprocessing": "2.16",
     "i18next": "^26.0.6",
     "i18next-browser-languagedetector": "^8.2.1",
     "lucide-react": "^0.577.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-ga4": "^3.0.1",
-    "react-i18next": "^17.0.4",
-    "three": "^0.160.0"
+    "react-i18next": "^17.0.4"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",

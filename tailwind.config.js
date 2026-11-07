@@ -23,9 +23,10 @@ export default {
 
             // ── Typographie ───────────────────────────────────────────────
             fontSize: {
-                // Pattern label récurrent : text-[10px] tracking-widest font-bold uppercase
+                // Pattern label récurrent : `text-label uppercase tracking-widest`
+                // (lineHeight 1.5 = hauteur de ligne héritée, pour ne pas changer la mise en page)
                 'label': ['0.625rem', {
-                    lineHeight: '1',
+                    lineHeight: '1.5',
                     letterSpacing: '0.2em',
                     fontWeight: '700',
                 }],

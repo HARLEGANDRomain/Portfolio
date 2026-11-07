@@ -19,12 +19,20 @@ i18n
     // 'fr-FR' → 'fr', 'en-US' → 'en', etc.
     nonExplicitSupportedLngs: true,
     detection: {
-      order: ['navigator', 'htmlTag'],
+      // localStorage en premier : le choix fait avec le bouton FR/EN est conservé au rechargement
+      order: ['localStorage', 'navigator', 'htmlTag'],
       caches: ['localStorage'],
     },
     interpolation: {
       escapeValue: false, // React already escapes
     },
   });
+
+// Garde <html lang> synchronisé (lecteurs d'écran, traduction automatique, SEO)
+const syncHtmlLang = (lng) => {
+  if (typeof document !== 'undefined') document.documentElement.lang = lng?.startsWith('fr') ? 'fr' : 'en';
+};
+syncHtmlLang(i18n.language);
+i18n.on('languageChanged', syncHtmlLang);
 
 export default i18n;

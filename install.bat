@@ -2,7 +2,7 @@
 setlocal
 
 echo ==========================================
-echo Installation du Portfolio 3D Hexagonal
+echo Installation du Portfolio
 echo ==========================================
 echo.
 
@@ -27,6 +27,6 @@ echo Installation terminee avec succes!
 echo ==========================================
 echo.
 echo Pour lancer le projet, utilisez:
-echo   start-dev.bat
+echo   start.bat
 echo.
 pause

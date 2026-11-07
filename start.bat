@@ -1,6 +1,6 @@
 @echo off
 echo ==========================================
-echo Demarrage du Portfolio 3D Hexagonal
+echo  Portfolio - serveur de developpement
 echo ==========================================
 echo.
 
@@ -12,10 +12,7 @@ if not exist "node_modules" (
     exit /b 1
 )
 
-echo Demarrage du serveur de developpement...
-echo.
-echo Le portfolio sera accessible a: http://localhost:5173
-echo.
+echo Le portfolio sera accessible a: http://localhost:5173/Portfolio/
 echo Appuyez sur Ctrl+C pour arreter le serveur.
 echo.
 

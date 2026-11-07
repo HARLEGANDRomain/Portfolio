@@ -1,0 +1,45 @@
+/* ── Accueil : animations et motifs ─────────────────────────────────────────
+   Anciennement injecté via dangerouslySetInnerHTML dans GwidoPortfolio.jsx
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.vertical-text {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+/* Bandeaux d'images défilants */
+@keyframes marquee-ltr { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes marquee-rtl { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+.marquee-ltr, .marquee-rtl { display: flex; width: max-content; }
+.marquee-ltr { animation: marquee-ltr 80s linear infinite; }
+.marquee-rtl { animation: marquee-rtl 80s linear infinite; }
+
+/* Motif topographique */
+@keyframes topo-float {
+  0%, 100% { transform: scale(1) translate(0, 0); }
+  50%      { transform: scale(1.05) translate(-2%, 2%); }
+}
+.animate-topo { animation: topo-float 30s ease-in-out infinite; }
+
+/* Parallaxe souris — pilotée par les variables CSS posées dans App.jsx
+   (--mouse-nx / --mouse-ny ∈ [-10, 10]) : aucun re-render React au mouvement */
+.parallax-dots {
+  transform: translate(calc(var(--mouse-nx, 0) * 0.5px), calc(var(--mouse-ny, 0) * 0.5px));
+}
+.parallax-scene {
+  transform: translate(calc(var(--mouse-nx, 0) * -1px), calc(var(--mouse-ny, 0) * -1px)) scale(1.05);
+  transition: transform 700ms ease-out;
+}
+
+/* Splash React : réutilise les classes .lcp-* définies dans index.html */
+.splash-text {
+  transition: opacity 300ms cubic-bezier(0.16, 1, 0.32, 1);
+}
+.splash-text .lcp-btn {
+  transition: color 200ms, border-color 200ms;
+}
+.splash-text .lcp-btn:hover,
+.splash-text .lcp-btn:focus-visible {
+  color: #a5b4fc;
+  border-color: #a5b4fc;
+}

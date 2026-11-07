@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
     <!-- SEO Primary -->
-    <title>Portfolio - HARLEGAND Romain | Technical Game Designer & UX/UI Designer</title>
-    <meta name="description" content="Portfolio de Romain Harlegand - Technical Game Designer et UX/UI Designer. Découvrez mes projets de jeux vidéo, mes systèmes de gameplay et mes designs d'interface." />
-    <meta name="keywords" content="Portfolio, Game Design, Technical Game Designer, UX Designer, UI Designer, Unity, C#, Prototypage, Romain Harlegand" />
+    <title>Portfolio - HARLEGAND Romain | UX/UI Designer & Technical Game Designer</title>
+    <meta name="description" content="Portfolio de Romain Harlegand - UX/UI Designer et Technical Game Designer. Découvrez mes projets de jeux vidéo, mes systèmes de gameplay et mes designs d'interface." />
+    <meta name="keywords" content="Portfolio, UX Designer, UI Designer, Game Design, Technical Game Designer, Unity, C#, Prototypage, Romain Harlegand" />
     <link rel="canonical" href="https://harlegandromain.github.io/Portfolio/" />
 
     <!-- Google Fonts Preconnect and Load (Inter Font) -->
@@ -20,18 +20,31 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://harlegandromain.github.io/Portfolio/" />
-    <meta property="og:title" content="Portfolio - HARLEGAND Romain | Technical Game Designer & UX/UI Designer" />
+    <meta property="og:title" content="Portfolio - HARLEGAND Romain | UX/UI Designer & Technical Game Designer" />
     <meta property="og:description" content="Découvrez mes projets de jeux vidéo et mes travaux de design d'expérience et d'interface." />
     <meta property="og:image" content="https://harlegandromain.github.io/Portfolio/Image/og-image.png" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="https://harlegandromain.github.io/Portfolio/" />
-    <meta property="twitter:title" content="Portfolio - HARLEGAND Romain | Technical Game Designer & UX/UI Designer" />
+    <meta property="twitter:title" content="Portfolio - HARLEGAND Romain | UX/UI Designer & Technical Game Designer" />
     <meta property="twitter:description" content="Découvrez mes projets de jeux vidéo et mes travaux de design d'expérience et d'interface." />
     <meta property="twitter:image" content="https://harlegandromain.github.io/Portfolio/Image/og-image.png" />
 
+    <!-- Le splash n'est montré qu'une fois par session, et jamais sur une page interne (/projets/…, /identite/…) -->
+    <script>
+      try {
+        var base = '%BASE_URL%';
+        var path = location.pathname;
+        if ((path !== base && path + '/' !== base) || sessionStorage.getItem('portfolio:splashSeen') === '1') {
+          document.documentElement.classList.add('skip-splash');
+        }
+      } catch (e) {}
+    </script>
+
     <style>
+      .skip-splash .lcp-splash { display: none; }
+
       /* Static LCP Splash styles (removed automatically when React mounts) */
       .lcp-splash {
         position: fixed;
@@ -96,8 +109,9 @@
         border: none;
         border-bottom: 1.5px solid rgba(226,232,240,0.5);
         background: transparent;
-        padding-bottom: 4px;
+        padding: 0 0 4px 0;
         cursor: pointer;
+        font-family: inherit;
       }
       @keyframes lcp-blink {
         from, to { opacity: 1; }
@@ -112,8 +126,8 @@
         <div class="lcp-content">
           <h1 class="lcp-title">PORTFOLIO<span class="lcp-cursor">_</span></h1>
           <p class="lcp-name">HARLEGAND Romain</p>
-          <p class="lcp-desc">Technical Game Designer &nbsp;·&nbsp; UX/UI Designer</p>
-          <button class="lcp-btn">
+          <p class="lcp-desc">UX/UI Designer · Technical Game Designer</p>
+          <button class="lcp-btn" type="button">
             Explorer →
           </button>
         </div>
