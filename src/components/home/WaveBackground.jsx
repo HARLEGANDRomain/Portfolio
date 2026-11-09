@@ -1,23 +1,46 @@
-import React from 'react';
-import MediaLoader from '../ui/MediaLoader';
-import ImageMarquee from './ImageMarquee';
+import React, { useEffect, useState } from 'react';
+import ScatterField from './ScatterField';
 import TopoPattern from './TopoPattern';
-import { assetUrl } from '../../utils/assetUrl';
+import { useNavigation } from '../ui/RouteLink';
+import { useScatterLayout } from '../../hooks/useScatterLayout';
+import { projectKey } from '../../routes';
 
 const LAYER_FALLBACK = ['bg-slate-600/50', 'bg-slate-800/60'];
+const HOVER_INTENT_MS = 120; // délai avant de réagir au survol d'un projet (une souris qui traverse la liste ne déclenche rien)
 
 /**
  * Zone fixe de droite (en bas sur mobile) découpée par la vague.
- * 3 clipPath SVG animés par useWaveEngine : 2 couches de fond colorées + la couche principale sombre
- * qui affiche un visuel différent selon la section (intro, projet survolé, contact).
+ * 3 clipPath SVG animés par useWaveEngine : 2 couches de fond colorées + la couche principale sombre.
+ *
+ * Dans la couche principale :
+ *  - des scènes de fond (motif topographique ; le même en intro et en section projets, quel que soit le projet actif) ;
+ *  - un <ScatterField> permanent : images éparpillées et désaturées au repos (splash, intro, contact),
+ *    qui se rassemblent en amas au centre quand un projet est actif (les autres images s'éloignent).
+ *    Une image de l'amas renvoie vers l'étude de cas.
+ *
+ * Mobile : la vague au repos est hors écran, le champ n'y est visible que pendant le splash et les
+ * transitions : il reste donc au repos (pas d'amas), sans parallaxe ni respiration.
  *
  * Pas de backdrop-blur sur les couches : le clip-path change 60×/s et le flou n'est pas composité par le GPU.
  */
-const WaveBackground = ({ engine, splashPhase, activeSection, activeProject, projects }) => {
+const WaveBackground = ({ engine, splashPhase, activeSection, activeProject, projects, isMobile, reducedMotion, paused }) => {
+  const { navigate } = useNavigation();
   const animating = splashPhase !== 'done';
   const clipStyle = (id) => ({ clipPath: `url(#${id})`, willChange: animating ? 'clip-path' : 'auto' });
   const project = projects[activeProject];
   const layerColors = activeSection === 'projects' && project ? project.waveColors : LAYER_FALLBACK;
+
+  // Projet dont l'amas doit être formé (null = repos), confirmé après un court délai
+  const wantedSlug = !isMobile && activeSection === 'projects' ? project?.slug ?? null : null;
+  const [clusterSlug, setClusterSlug] = useState(wantedSlug);
+  useEffect(() => {
+    if (wantedSlug === clusterSlug) return undefined;
+    if (reducedMotion) { setClusterSlug(wantedSlug); return undefined; }
+    const id = setTimeout(() => setClusterSlug(wantedSlug), HOVER_INTENT_MS);
+    return () => clearTimeout(id);
+  }, [wantedSlug, clusterSlug, reducedMotion]);
+
+  const scatter = useScatterLayout(clusterSlug);
 
   return (
     <div
@@ -44,7 +67,7 @@ const WaveBackground = ({ engine, splashPhase, activeSection, activeProject, pro
         </defs>
       </svg>
 
-      {/* Couches de fond (couleur du projet survolé) */}
+      {/* Couches de fond (couleur du projet actif) */}
       <div className={`absolute inset-0 transition-colors duration-1000 ease-in-out z-0 ${layerColors[1]}`} style={clipStyle('wave-right-bg2')} />
       <div className={`absolute inset-0 transition-colors duration-1000 ease-in-out z-10 ${layerColors[0]}`} style={clipStyle('wave-right-bg1')} />
 
@@ -52,45 +75,39 @@ const WaveBackground = ({ engine, splashPhase, activeSection, activeProject, pro
       {/* pointer-events-auto : la zone sombre bloque les clics vers le contenu masqué dessous */}
       <div className="w-full h-full overflow-hidden relative bg-slate-950 z-20 pointer-events-auto" style={clipStyle('wave-right')}>
 
-        {/* Intro */}
-        <Scene visible={activeSection === 'intro'}>
+        {/* Scènes de fond : le fond ne change PAS quand un projet est actif (même motif qu'au repos) */}
+        <Scene visible={activeSection !== 'contact'}>
           <TopoPattern id="topo-intro" variant="lines" />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-transparent to-transparent pointer-events-none z-10" />
-          <ImageMarquee eager />
-          {/* Assombrit les images pendant le splash */}
-          <div
-            className="absolute inset-0 z-[15] pointer-events-none bg-slate-950/80"
-            style={{
-              opacity: splashPhase === 'active' ? 1 : 0,
-              transition: splashPhase === 'active' ? 'none' : 'opacity 1000ms cubic-bezier(0.16, 1, 0.32, 1)',
-            }}
-          />
         </Scene>
 
-        {/* Projets */}
-        {projects.map((p, index) => (
-          <Scene key={p.slug} visible={activeSection === 'projects' && activeProject === index} raised>
-            <div className={`absolute inset-0 ${p.sceneColor}`} />
-            <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
-              <div className="parallax-dots absolute inset-0 bg-dots opacity-20 mix-blend-overlay" />
-              <div className="parallax-scene relative w-full h-full z-10">
-                <MediaLoader
-                  src={assetUrl(p.image)}
-                  alt=""
-                  className="w-full h-full mix-blend-lighten object-cover"
-                  style={{ maskImage: 'linear-gradient(to left, black 60%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to left, black 60%, transparent 100%)' }}
-                />
-              </div>
-            </div>
-          </Scene>
-        ))}
-
-        {/* Contact */}
         <Scene visible={activeSection === 'contact'}>
           <TopoPattern id="topo-contact" variant="circles" />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-transparent to-transparent pointer-events-none z-10" />
-          <ImageMarquee />
         </Scene>
+
+        {/* Images éparpillées / amas du projet actif */}
+        <ScatterField
+          className="z-30"
+          items={scatter.items}
+          targets={scatter.targets}
+          layoutKey={scatter.layoutKey}
+          reducedMotion={reducedMotion}
+          parallax={isMobile ? 0 : 28}
+          breathing={!isMobile}
+          paused={paused}
+          onItemClick={() => { if (clusterSlug) navigate(projectKey(clusterSlug)); }}
+        />
+
+        {/* Adoucit le bord gauche (côté vague) */}
+        <div className="absolute inset-0 z-[35] pointer-events-none bg-gradient-to-r from-slate-950 via-transparent to-transparent" />
+
+        {/* Assombrit les images pendant le splash */}
+        <div
+          className="absolute inset-0 z-40 pointer-events-none bg-slate-950/80"
+          style={{
+            opacity: splashPhase === 'active' ? 1 : 0,
+            transition: splashPhase === 'active' ? 'none' : 'opacity 1000ms cubic-bezier(0.16, 1, 0.32, 1)',
+          }}
+        />
       </div>
     </div>
   );

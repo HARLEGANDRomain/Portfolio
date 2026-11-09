@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "build:tokens": "node src/design-system/build-tokens.js"
+    "build:tokens": "node src/design-system/build-tokens.js",
+    "build:scatter": "node scripts/build-scatter-thumbs.mjs"
   },
   "dependencies": {
     "i18next": "^26.0.6",
