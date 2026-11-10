@@ -18,9 +18,10 @@ const PAN = { x: 0, y: 0 }; // le plan n'est pas navigable : seule la parallaxe 
 /**
  * Prépare le champ d'images éparpillées pour <ScatterField>.
  * @param {string|null} clusterSlug slug du projet dont l'amas doit se former, null = repos
+ * @param {'in'|'out'|null} zoom transition vers l'étude de cas du projet (zoom sur l'image principale)
  * @returns {{ items, targets, layoutKey }}
  */
-export const useScatterLayout = (clusterSlug) => {
+export const useScatterLayout = (clusterSlug, zoom = null) => {
   const { w, h } = useViewportSize();
   const pool = useMemo(scatterPool, []);
 
@@ -32,7 +33,7 @@ export const useScatterLayout = (clusterSlug) => {
     const cellW = Math.min(Math.max(w * 0.151, 240), 400); // ≈ 290 px en 1920
     const tile = generateTile({
       zoneW: fieldZone.width, zoneH: fieldZone.height, pool, seed: SEED,
-      cellW, cellH: cellW * 0.79, gap: cellW * 0.11,
+      cellW, cellH: cellW * 0.66, gap: cellW * 0.09,
     });
     return { tile, zone, fieldZone };
   }, [w, h, pool]);
@@ -43,8 +44,9 @@ export const useScatterLayout = (clusterSlug) => {
     () => computeTargets({
       tile, zone, fieldZone, pan: PAN, seed: SEED, overlap: OVERLAP, push: PUSH * w,
       clusterSrcs: clusterSlug ? SCATTER_PROJECTS[clusterSlug]?.cluster ?? null : null,
+      slug: clusterSlug, zoom: clusterSlug ? zoom : null,
     }),
-    [tile, zone, fieldZone, clusterSlug, w]
+    [tile, zone, fieldZone, clusterSlug, zoom, w]
   );
 
   return { items, targets, layoutKey: `${w}x${h}:${SEED}` };

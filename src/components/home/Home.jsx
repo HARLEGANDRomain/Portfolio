@@ -140,7 +140,9 @@ const Home = () => {
             projects={projects}
             isMobile={isMobile}
             reducedMotion={reducedMotion}
-            paused={displayed !== null}
+            paused={displayed !== null && !router.busy}
+            zoomPhase={router.zoom}
+            zoomSlug={slugFromKey(displayed ?? router.routeKey)}
           />
 
           <main className="relative z-10 w-full md:w-[70%] bg-white/95 backdrop-blur-2xl pb-[45vh] md:pb-32 isolate">

@@ -28,19 +28,26 @@ const LOOK = {
   idle: { sat: 0.35, bri: 0.6, op: 1, sh: 0 },
   background: { sat: 0.2, bri: 0.25, op: 1, sh: 0 },
   cluster: { sat: 1, bri: 1, op: 1, sh: 1 },
+  // Transition vers une étude de cas : image principale zoomée (puis effacée), autres projets chassés
+  zoom: { sat: 1, bri: 1, op: 1, sh: 1 },
+  zoomOut: { sat: 1, bri: 1, op: 0, sh: 0 },
+  away: { sat: 0.2, bri: 0.15, op: 1, sh: 0 },
 };
 
 const PROPS = ['x', 'y', 'w', 'h', 'rot', 'sat', 'bri', 'op', 'sh', 'depth', 'br'];
 const EPS = { x: 0.05, y: 0.05, w: 0.05, h: 0.05, rot: 0.01, sat: 0.002, bri: 0.002, op: 0.002, sh: 0.002, depth: 0.002, br: 0.002 };
 
 // Ressorts : l'amas arrive plus vite qu'il ne se disperse (les images « s'éloignent » plus doucement)
-const STIFFNESS = { cluster: 110, background: 55, idle: 60 };
+const STIFFNESS = { cluster: 110, background: 55, idle: 60, zoom: 90, zoomOut: 150, away: 60 };
 const DAMPING_RATIO = 0.9;
 const STEP = 1 / 120;
 
 const BREATH_PX = 3.5;   // amplitude de la dérive de l'amas
 const BREATH_DEG = 0.5;
 const PARALLAX_FOLLOW = 7; // 1/s : la parallaxe rattrape la souris en ~150 ms
+
+// Contour blanc de 2 px (en style direct : ne dépend pas de la génération des classes Tailwind)
+const CARD_BORDER = { border: '2px solid #fff', boxSizing: 'border-box' };
 
 const zeroVel = () => Object.fromEntries(PROPS.map((p) => [p, 0]));
 const goalOf = (t, breathing) => ({
@@ -275,7 +282,8 @@ const ScatterField = ({
         <div
           key={id}
           ref={(el) => { if (el) els.current.set(id, el); else els.current.delete(id); }}
-          className="absolute left-0 top-0 rounded-lg overflow-hidden border-2 border-white"
+          className="absolute left-0 top-0 rounded-lg overflow-hidden"
+          style={CARD_BORDER}
           onClick={() => { if (engine.current.items.get(id)?.mode === 'cluster') onItemClick?.(id); }}
         >
           <img src={assetUrl(src)} alt="" draggable={false} decoding="async" className="w-full h-full object-cover" />

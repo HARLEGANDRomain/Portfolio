@@ -332,8 +332,13 @@ export const computeCluster = ({ srcs, zone, seed = 1, overlap = 0.16, maxCover 
   });
 
   // Plafond de recouvrement : une image trop cachée est écartée du centre, pas à pas
-  // z ≥ 200 : toujours au-dessus des images qui quittent un amas (cf. ScatterField)
-  items.forEach((it, i) => { it.z = it.hero ? 300 : 210 + i; });
+  // Calques fixés une fois pour toutes, avant tout mouvement : principale tout au-dessus, puis de la plus grande
+  // (devant) à la plus petite (derrière). z ≥ 200 : toujours au-dessus des images qui quittent un amas.
+  [...items]
+    .filter((it) => !it.hero)
+    .sort((a, b) => a.w * a.h - b.w * b.h || 0)
+    .forEach((it, rank) => { it.z = 210 + rank; });
+  items.forEach((it) => { if (it.hero) it.z = 300; });
   for (let step = 0; step < 300; step++) {
     let worst = null;
     let worstCover = maxCover;
@@ -413,10 +418,14 @@ export const maxClusterCoverage = (cluster) => {
  *                             car la vague recouvre presque tout l'écran pendant le splash)
  * @param {string[]|null} clusterSrcs images de l'amas (la 1re = principale), null au repos
  * @param {number} push écartement minimal des images hors amas (px)
+ * @param {string|null} [slug] projet de l'amas (sert à reconnaître ses autres images dans le plan)
+ * @param {'in'|'out'|null} [zoom] transition vers une étude de cas : l'image principale zoome (mode 'zoom' ;
+ *        'out' = zoomée mais effacée), les images des AUTRES projets s'éloignent (mode 'away'), l'amas et les
+ *        autres images du projet restent en place.
  */
-export const computeTargets = ({ tile, zone, fieldZone = zone, pan, clusterSrcs, seed, overlap, push }) => {
+export const computeTargets = ({ tile, zone, fieldZone = zone, pan, clusterSrcs, seed, overlap, push, slug = null, zoom = null }) => {
   const targets = new Map();
-  const homes = tile.slots.map((s) => ({ id: s.id, ...tileToScreen(s, tile, fieldZone, pan), w: s.w, h: s.h, depth: s.depth }));
+  const homes = tile.slots.map((s) => ({ id: s.id, slug: s.slug, ...tileToScreen(s, tile, fieldZone, pan), w: s.w, h: s.h, depth: s.depth }));
   const fromCenter = (p) => Math.min(Math.hypot(p.x - zone.center.x, p.y - zone.center.y) / zone.vw, 1);
 
   if (!clusterSrcs?.length) {
@@ -449,10 +458,29 @@ export const computeTargets = ({ tile, zone, fieldZone = zone, pan, clusterSrcs,
       const c = cluster.get(src);
       const i = order.get(src);
       // Amas : profondeurs proches (il se déplace presque d'un bloc), l'image principale un peu plus « proche »
-      targets.set(h.id, { ...c, depth: i === 0 ? 1 : 0.75, mode: 'cluster', delay: arrival.get(src) * 60 });
+      if (zoom && i === 0) {
+        // Zoom complet : l'image principale recouvre tout l'écran (« cover », 2 % de marge), centrée sur l'écran
+        const aspect = c.h / c.w;
+        const w = Math.max(zone.vw, zone.vh / aspect) * 1.02;
+        targets.set(h.id, {
+          x: zone.vw / 2, y: zone.vh / 2, w, h: w * aspect, rot: 0, z: c.z, depth: 0,
+          mode: zoom === 'out' ? 'zoomOut' : 'zoom', delay: 0,
+        });
+      } else {
+        targets.set(h.id, { ...c, depth: i === 0 ? 1 : 0.75, mode: 'cluster', delay: arrival.get(src) * 60 });
+      }
     } else {
       const r = repelled.get(h.id);
-      targets.set(h.id, { x: r.x, y: r.y, w: h.w, h: h.h, rot: 0, z: 1, depth: h.depth, mode: 'background', delay: fromCenter(h) * 180 });
+      if (zoom && h.slug !== slug) {
+        // Image d'un autre projet : on la chasse hors de l'écran (dilatation autour du centre : pas de chevauchement)
+        const K = 3;
+        targets.set(h.id, {
+          x: zone.center.x + (r.x - zone.center.x) * K, y: zone.center.y + (r.y - zone.center.y) * K,
+          w: h.w, h: h.h, rot: 0, z: 1, depth: h.depth, mode: 'away', delay: fromCenter(h) * 100,
+        });
+      } else {
+        targets.set(h.id, { x: r.x, y: r.y, w: h.w, h: h.h, rot: 0, z: 1, depth: h.depth, mode: 'background', delay: fromCenter(h) * 180 });
+      }
     }
   }
   return { targets, cluster };

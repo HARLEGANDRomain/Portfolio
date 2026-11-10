@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { keyFromPath, pathFromKey, isKnownPath } from '../routes';
+import { keyFromPath, pathFromKey, isKnownPath, slugFromKey } from '../routes';
 import { WAVE } from './useWaveEngine';
 
 const BASE = import.meta.env.BASE_URL;
@@ -37,6 +37,9 @@ export const useOverlayRouter = ({ initialKey, engine, enabled }) => {
   const [displayed, setDisplayed] = useState(initialKey); // ce qui est monté à l'écran
   const [busy, setBusy] = useState(false);
   const phase = useRef(initialKey ? 'active' : 'none');   // 'none' | 'entering' | 'active' | 'exiting'
+  // Zoom sur l'image principale du projet pendant la transition (projets uniquement) :
+  // null = pas de zoom, 'in' = zoomée et visible, 'out' = zoomée et effacée (page projet affichée)
+  const [zoom, setZoom] = useState(slugFromKey(initialKey) ? 'out' : null);
   const timers = useRef([]);
 
   const later = (fn, ms) => { timers.current.push(setTimeout(fn, ms)); };
@@ -71,15 +74,19 @@ export const useOverlayRouter = ({ initialKey, engine, enabled }) => {
       // Accueil → page : la vague recouvre, on monte la page, la vague sort à droite
       phase.current = 'entering';
       engine.moveTo(WAVE.COVER);
-      later(() => { setDisplayed(routeKey); engine.moveTo(WAVE.EXIT); }, T.COVER);
+      setZoom(slugFromKey(routeKey) ? 'in' : null);
+      later(() => { setDisplayed(routeKey); engine.moveTo(WAVE.EXIT); if (slugFromKey(routeKey)) setZoom('out'); }, T.COVER);
       later(() => { engine.snap(WAVE.EXIT); phase.current = 'active'; engine.setFast(false); setBusy(false); }, T.REVEAL);
     } else {
       // Page → accueil (ou page → autre page) : la vague revient de la droite et recouvre
       phase.current = 'exiting';
       engine.snap(WAVE.EXIT);
       requestAnimationFrame(() => engine.moveTo(WAVE.COVER));
+      // La vague revient avec l'image principale zoomée ; elle se dézoome quand la vague regagne sa place
+      setZoom(slugFromKey(displayed) && routeKey === null ? 'in' : null);
       later(() => {
         setDisplayed(routeKey);
+        if (routeKey === null) setZoom(null);
         engine.moveTo(routeKey === null ? WAVE.REST : WAVE.EXIT);
       }, T.UNCOVER);
       later(() => {
@@ -93,7 +100,7 @@ export const useOverlayRouter = ({ initialKey, engine, enabled }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enabled, busy, routeKey, displayed]);
 
-  return { routeKey, displayed, busy, navigate, goHome, phase };
+  return { routeKey, displayed, busy, zoom, navigate, goHome, phase };
 };
 
 export default useOverlayRouter;

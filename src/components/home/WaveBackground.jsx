@@ -23,12 +23,16 @@ const HOVER_INTENT_MS = 120; // délai avant de réagir au survol d'un projet (u
  *
  * Pas de backdrop-blur sur les couches : le clip-path change 60×/s et le flou n'est pas composité par le GPU.
  */
-const WaveBackground = ({ engine, splashPhase, activeSection, activeProject, projects, isMobile, reducedMotion, paused }) => {
+const WaveBackground = ({ engine, splashPhase, activeSection, activeProject, projects, isMobile, reducedMotion, paused, zoomPhase = null, zoomSlug = null }) => {
   const { navigate } = useNavigation();
   const animating = splashPhase !== 'done';
   const clipStyle = (id) => ({ clipPath: `url(#${id})`, willChange: animating ? 'clip-path' : 'auto' });
   const project = projects[activeProject];
-  const layerColors = activeSection === 'projects' && project ? project.waveColors : LAYER_FALLBACK;
+  // 1re vague (bg1, devant) : toujours la même couleur ; 2e vague (bg2) : couleur du projet actif
+  const layerColors = [
+    LAYER_FALLBACK[0],
+    activeSection === 'projects' && project ? project.waveColors[1] : LAYER_FALLBACK[1],
+  ];
 
   // Projet dont l'amas doit être formé (null = repos), confirmé après un court délai
   const wantedSlug = !isMobile && activeSection === 'projects' ? project?.slug ?? null : null;
@@ -40,7 +44,10 @@ const WaveBackground = ({ engine, splashPhase, activeSection, activeProject, pro
     return () => clearTimeout(id);
   }, [wantedSlug, clusterSlug, reducedMotion]);
 
-  const scatter = useScatterLayout(clusterSlug);
+  // Transition vers / depuis une étude de cas : l'amas du projet est forcé et son image principale zoomée
+  // (desktop uniquement ; pas de zoom si animations réduites)
+  const zoomActive = !isMobile && !reducedMotion && !!zoomPhase && !!zoomSlug;
+  const scatter = useScatterLayout(zoomActive ? zoomSlug : clusterSlug, zoomActive ? zoomPhase : null);
 
   return (
     <div
