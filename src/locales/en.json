@@ -38,10 +38,14 @@
     "blender": "Blender",
     "blenderDesc": "Modeling simple assets and 3D prototyping.",
     "git": "Git",
-    "gitDesc": "Understanding how it works, using it effectively, and setting it up easily."
+    "gitDesc": "Understanding how it works, using it effectively, and setting it up easily.",
+    "cvOpen": "View my résumé",
+    "cvDownload": "Download",
+    "cvOpenLabel": "View my résumé (PDF, new tab)",
+    "cvDownloadLabel": "Download my résumé (PDF)"
   },
   "nav": {
-    "identity": "Identity",
+    "identity": "About",
     "works": "Works",
     "contact": "Contact",
     "label": "Main navigation",
@@ -49,20 +53,30 @@
   },
   "intro": {
     "subtitle": "UX/UI Designer | Technical Game Designer",
-    "headline": "I design",
-    "headlineAccent": "worlds and experiences that engage, guide, and leave a lasting impression.",
-    "description": "As a Technical Game Designer and UX/UI Designer, I bridge the gap between creative vision and robust implementation. I love creating anything that can be remembered by people and leave a mark on their minds.",
-    "description2": "From intricate gameplay systems to seamless user interfaces, I craft experiences that feel alive, intuitive, and engaging. I believe the best design is the one you feel, not just the one you see.",
-    "cta": "Explore Works"
+    "headline": "Game or interface, one question:",
+    "headlineAccent": "What does the user see?\nWhen?\nWhat story is being told?",
+    "description": "UX/UI designer with a game design background: I test my ideas by building them, from the Figma mockup to the website or game engine.",
+    "cta": "Explore Works",
+    "status": [
+      "UX/UI apprentice · BPCE",
+      "UX/UI Master's · EEMI"
+    ],
+    "statusLabel": "Current status",
+    "inProgress": "Ongoing"
   },
   "projects": {
-    "sidebar": "Selected Works • 2023-2025",
-    "exploreCaseStudy": "Explore Case Study"
+    "sidebar": "Selected Works • 2023-2026",
+    "exploreCaseStudy": "Explore Case Study",
+    "mission": "Mission",
+    "problem": "Problem",
+    "solution": "Solution",
+    "rolesLabel": "My roles",
+    "studentProject": "Student project"
   },
   "contact": {
     "label": "Let's connect",
-    "text": "I am currently looking for new opportunities. Whether you have a question or just want to say hi, I'll try my best to get back to you!",
-    "cta": "Say Hello"
+    "text": "I'd be happy to hear from you, whether to talk about projects or anything else related to UX/UI and video games.",
+    "emailLabel": "Email rharlegand@gmail.com"
   },
   "caseStudy": {
     "backToWorks": "Back to Works",
@@ -179,7 +193,13 @@
     "split05_desc": "For enemies to integrate naturally into level design without requiring additional code, I developed a custom patrol tool directly in the Unity inspector. It allows composing complex and varied routes, adapted to each zone of the level.",
     "split05_note": "Waypoints, speed, wait time at each waypoint and special behaviors are all configurable in a few clicks.",
     "grid08_cap1": "Enemy on patrol — player detection during passage",
-    "documentation_btn": "View Game Doc (PDF)"
+    "documentation_btn": "View Game Doc (PDF)",
+    "home": {
+      "type": "Video game · Exploration / Adventure",
+      "mission": "Design and code the camera and the enemy of an exploration and stealth game in Unity.",
+      "problem": "The smooth 3/4 camera hid what was coming at the bottom of the screen: players were moving blind.",
+      "solution": "A camera that anticipates movement and compensates for the viewing angle, plus tools (scripted cameras, patrols) the level designer tunes without code."
+    }
   },
   "eom": {
     "category": "Video Games | Musical Sandbox",
@@ -246,7 +266,13 @@
     "sec04_title": "The Toy in Action",
     "sec04_desc": "A complete gameplay session illustrating free exploration, the black hole mechanic and dynamic music generation.",
     "grid04_cap1": "Full gameplay — Echoes Of Memories",
-    "itchio_btn": "Play on Itch.io"
+    "itchio_btn": "Play on Itch.io",
+    "home": {
+      "type": "Video game · Musical sandbox",
+      "mission": "Build a musical toy rather than a game: no rules, no goal.",
+      "problem": "Let someone with no musical background compose, without it ever sounding off.",
+      "solution": "A single mechanic (a black hole that pulls and pushes), sounds locked to a fixed scale based on speed and angle, and a Time Stop / Rewind to fix mistakes."
+    }
   },
   "footer": {
     "legal": "Legal notice"

@@ -19,7 +19,11 @@ export const readInitialKey = () => {
     window.history.replaceState(null, '', BASE);
     return null;
   }
-  return keyFromPath(window.location.pathname, BASE);
+  const key = keyFromPath(window.location.pathname, BASE);
+  // Ancienne URL (ex. /identite/) → on affiche l'adresse actuelle de la page
+  const canonical = pathFromKey(key, BASE);
+  if (key !== null && window.location.pathname !== canonical) window.history.replaceState(null, '', canonical);
+  return key;
 };
 
 /**

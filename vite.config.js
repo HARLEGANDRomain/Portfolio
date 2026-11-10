@@ -39,6 +39,12 @@ const staticRoutePages = () => ({
       const dir = path.join(dist, route.path)
       fs.mkdirSync(dir, { recursive: true })
       fs.writeFileSync(path.join(dir, 'index.html'), withMeta(route))
+      // Anciennes URLs (ex. /identite/) : même page, canonical vers la nouvelle adresse (l'app corrige l'URL)
+      for (const alias of route.aliases ?? []) {
+        const aliasDir = path.join(dist, alias)
+        fs.mkdirSync(aliasDir, { recursive: true })
+        fs.writeFileSync(path.join(aliasDir, 'index.html'), withMeta(route))
+      }
     }
     fs.writeFileSync(path.join(dist, '404.html'), html)
   },

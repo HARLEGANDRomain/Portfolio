@@ -15,8 +15,9 @@ const ContactSection = () => {
         <p className="text-slate-600 text-lg mb-12">{t('contact.text')}</p>
 
         <div className="flex flex-col sm:flex-row gap-6">
-          <a href="mailto:rharlegand@gmail.com" className="flex justify-center items-center gap-3 bg-indigo-600 text-white px-8 py-4 text-xs font-bold uppercase tracking-widest hover:bg-indigo-700 transition-colors w-full sm:w-auto">
-            <Mail className="w-4 h-4" aria-hidden="true" /> {t('contact.cta')}
+          {/* L'adresse est écrite dans le bouton : lisible et copiable même sans client mail configuré */}
+          <a href="mailto:rharlegand@gmail.com" aria-label={t('contact.emailLabel')} className="flex justify-center items-center gap-3 bg-indigo-600 text-white px-8 py-4 text-sm font-bold tracking-wide hover:bg-indigo-700 transition-colors w-full sm:w-auto select-all">
+            <Mail className="w-4 h-4 shrink-0" aria-hidden="true" /> rharlegand@gmail.com
           </a>
           <div className="flex gap-4 w-full sm:w-auto justify-center">
             <a href="https://www.linkedin.com/in/romain-harlegand/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="flex justify-center items-center bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:border-slate-400 px-6 py-4 transition-colors">

@@ -18,7 +18,7 @@ const NavLinks = ({ activeSection, underline }) => {
 
   return (
     <>
-      <RouteLink to="identity" onMouseEnter={prefetchIdentity} onFocus={prefetchIdentity} className={`${idleCls} normal-case hover:text-indigo-600 transition-colors`}>
+      <RouteLink to="identity" onMouseEnter={prefetchIdentity} onFocus={prefetchIdentity} className={`${idleCls} normal-case whitespace-nowrap hover:text-indigo-600 transition-colors`}>
         {t('nav.identity')}
       </RouteLink>
       <button type="button" onClick={() => scrollToId('projects')} className={sectionCls('projects')}>{t('nav.works')}</button>
@@ -73,6 +73,22 @@ export const SiteHeader = ({ activeSection }) => {
           <p className="font-semibold text-slate-500 uppercase tracking-[0.2em] text-[10px]">
             {t('intro.subtitle')}
           </p>
+          {/* Situation actuelle (alternance + formation). Sur desktop la rangée a une largeur nulle et déborde à droite
+              pour tenir sur une ligne sans élargir la colonne du nom, donc sans pousser le menu */}
+          <ul aria-label={t('intro.statusLabel')} className="mt-4 flex flex-wrap items-center gap-2 sm:w-0 sm:flex-nowrap sm:whitespace-nowrap [&>li]:shrink-0">
+            <li className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-emerald-700 pr-1">
+              <span className="relative flex h-2 w-2" aria-hidden="true">
+                <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-60 motion-safe:animate-ping" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+              </span>
+              {t('intro.inProgress')}
+            </li>
+            {t('intro.status', { returnObjects: true }).map((item) => (
+              <li key={item} className="text-[11px] font-semibold text-slate-700 bg-white border border-slate-200 rounded-full px-3 py-1 whitespace-nowrap">
+                {item}
+              </li>
+            ))}
+          </ul>
         </div>
         <nav aria-label={t('nav.label')} className="mt-8 sm:mt-0 flex items-baseline gap-6 md:gap-8 text-label md:text-xs uppercase tracking-widest">
           <NavLinks activeSection={activeSection} underline />

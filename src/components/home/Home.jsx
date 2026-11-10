@@ -178,7 +178,7 @@ const Home = () => {
             zoomSlug={slugFromKey(displayed ?? router.routeKey)}
           />
 
-          <main className="relative z-10 w-full md:w-[70%] bg-white/95 backdrop-blur-2xl pb-[45vh] md:pb-0 isolate">
+          <main className="relative z-10 w-full md:w-[70%] bg-white/95 backdrop-blur-2xl isolate">
             {/* Fond à points (fixe dans la colonne de gauche) */}
             <div className="absolute inset-0 pointer-events-none z-[-1]" aria-hidden="true">
               <div className="sticky top-0 w-full h-screen bg-dots">
@@ -188,8 +188,8 @@ const Home = () => {
 
             <SiteHeader activeSection={activeSection} />
 
-            {/* Sur mobile le header est empilé (nom, sous-titre, nav) : plus d'espace avant le contenu */}
-            <div className="relative z-10 pt-52 sm:pt-32">
+            {/* Sur mobile le header est empilé (nom, sous-titre, pastilles, nav) : plus d'espace avant le contenu */}
+            <div className="relative z-10 pt-[19rem] sm:pt-32">
               <IntroSection />
               <ProjectsSection
                 projects={projects}

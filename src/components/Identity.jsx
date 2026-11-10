@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FileText, Download } from 'lucide-react';
 import OverlayPage from './ui/OverlayPage';
 import { assetUrl } from '../utils/assetUrl';
 import { useReducedMotion } from '../hooks/useReducedMotion';
@@ -16,6 +17,9 @@ const TOOLS = [
   { id: 'blender',     hover: 'hover:border-tool-blender/50',     accent: 'group-hover:border-tool-blender/50' },
   { id: 'git',         hover: 'hover:border-tool-git/50',         accent: 'group-hover:border-tool-git/50' },
 ];
+
+/** CV (public/cv/) : à remplacer en gardant le même nom de fichier. */
+const CV_URL = assetUrl('/cv/HARLEGAND_Romain_CV.pdf');
 
 /** Formations, de la plus récente à la plus ancienne. */
 const EDUCATION = [
@@ -57,7 +61,9 @@ const Identity = ({ onBack }) => {
   return (
     <OverlayPage onBack={onBack}>
       {/* Présentation + formation */}
-      <div className="w-full flex-shrink-0 relative z-10 pt-32 pb-40 md:pb-52 px-8 md:px-16 flex flex-col justify-center items-center min-h-[75vh]">
+      {/* Le bloc « Outils » remonte de 15vh (mobile) / 25vh (desktop) + 24 px sur cette section : l'espace du bas suit donc la hauteur
+          d'écran (vh) et pas une valeur fixe, sinon la vague recouvre les boutons CV sur les grands écrans */}
+      <div className="w-full flex-shrink-0 relative z-10 pt-32 pb-[calc(15vh+7rem)] md:pb-[calc(25vh+8rem)] px-8 md:px-16 flex flex-col justify-center items-center min-h-[75vh]">
         <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-3 gap-12 mt-12">
 
           <div className="col-span-1 md:col-span-2">
@@ -68,6 +74,25 @@ const Identity = ({ onBack }) => {
             <p className="text-lg text-slate-600 mb-10 leading-relaxed max-w-3xl font-medium whitespace-pre-line">
               {t('identityPage.whoAmIDesc')}
             </p>
+            <div className="flex flex-wrap gap-4">
+              <a
+                href={CV_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={t('identityPage.cvOpenLabel')}
+                className="inline-flex items-center gap-3 bg-indigo-600 text-white px-8 py-4 text-xs font-bold uppercase tracking-widest hover:bg-indigo-700 transition-colors"
+              >
+                <FileText className="w-4 h-4" aria-hidden="true" /> {t('identityPage.cvOpen')}
+              </a>
+              <a
+                href={CV_URL}
+                download="HARLEGAND_Romain_CV.pdf"
+                aria-label={t('identityPage.cvDownloadLabel')}
+                className="inline-flex items-center gap-3 bg-white border border-slate-200 text-slate-700 px-6 py-4 text-xs font-bold uppercase tracking-widest hover:text-slate-900 hover:border-slate-400 transition-colors"
+              >
+                <Download className="w-4 h-4" aria-hidden="true" /> {t('identityPage.cvDownload')}
+              </a>
+            </div>
           </div>
 
           <div className="col-span-1 md:border-l-2 md:border-slate-200 md:pl-8 flex flex-col justify-start">
@@ -94,7 +119,7 @@ const Identity = ({ onBack }) => {
       </div>
 
       {/* Outils — bloc sombre sous une vague, remonté sur la section du dessus */}
-      <div className="w-full flex-grow relative z-20 bg-transparent mt-[-15vh] md:mt-[-25vh] min-h-[60vh] flex flex-col" style={{ filter: 'drop-shadow(0px -10px 40px rgba(0,0,0,0.3))' }}>
+      <div className="w-full flex-grow relative z-20 bg-transparent pointer-events-none mt-[calc(-15vh-24px)] md:mt-[calc(-25vh-24px)] min-h-[60vh] flex flex-col" style={{ filter: 'drop-shadow(0px -10px 40px rgba(0,0,0,0.3))' }}>
         <svg className="absolute w-0 h-0" aria-hidden="true">
           <defs>
             <clipPath id="wave-top" clipPathUnits="objectBoundingBox">
@@ -103,7 +128,7 @@ const Identity = ({ onBack }) => {
           </defs>
         </svg>
 
-        <div className="w-full flex-grow relative bg-slate-950 pt-32 pb-32 px-8 md:px-16" style={{ clipPath: 'url(#wave-top)' }}>
+        <div className="w-full flex-grow relative bg-slate-950 pt-32 pb-32 px-8 md:px-16 pointer-events-auto" style={{ clipPath: 'url(#wave-top)' }}>
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 to-indigo-950/20 pointer-events-none z-0" />
 
           <div className="relative z-10 max-w-6xl mx-auto">

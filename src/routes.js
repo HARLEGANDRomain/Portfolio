@@ -9,7 +9,7 @@
  * Une "overlay key" décrit la page affichée par-dessus l'accueil :
  *   null                 → accueil
  *   'project:<slug>'     → étude de cas
- *   'identity'           → page Identité
+ *   'identity'           → page À propos (anciennement « Identité »)
  *   'legal'              → mentions légales
  */
 
@@ -19,9 +19,12 @@ export const ROUTES = [
   { key: null, path: '/', title: 'Portfolio - HARLEGAND Romain | UX/UI Designer & Technical Game Designer' },
   { key: 'project:gwido', path: '/projets/gwido/', title: 'Gwido — Étude de cas | HARLEGAND Romain' },
   { key: 'project:echoes-of-memories', path: '/projets/echoes-of-memories/', title: 'Echoes Of Memories — Étude de cas | HARLEGAND Romain' },
-  { key: 'identity', path: '/identite/', title: 'Identité | HARLEGAND Romain' },
+  // `aliases` : anciennes URLs encore reconnues (la page « Identité » est devenue « À propos »)
+  { key: 'identity', path: '/a-propos/', aliases: ['/identite/'], title: 'À propos | HARLEGAND Romain' },
   { key: 'legal', path: '/mentions-legales/', title: 'Mentions légales | HARLEGAND Romain' },
 ];
+
+const matches = (route, path) => route.path === path || (route.aliases ?? []).includes(path);
 
 const normalize = (p) => {
   const trimmed = p.replace(/\/+$/, '');
@@ -34,11 +37,11 @@ export const keyFromPath = (pathname, base = '/') => {
   const baseNoSlash = base.replace(/\/$/, '');
   if (baseNoSlash && rel.startsWith(baseNoSlash)) rel = rel.slice(baseNoSlash.length);
   const path = normalize(rel || '/');
-  const route = ROUTES.find((r) => r.path === path);
+  const route = ROUTES.find((r) => matches(r, path));
   return route ? route.key : null;
 };
 
-/** Overlay key → chemin complet avec le base (ex. '/Portfolio/identite/'). */
+/** Overlay key → chemin complet avec le base (ex. '/Portfolio/a-propos/'). */
 export const pathFromKey = (key, base = '/') => {
   const route = ROUTES.find((r) => r.key === key) ?? ROUTES[0];
   return `${base.replace(/\/$/, '')}${route.path}`;
@@ -48,7 +51,7 @@ export const isKnownPath = (pathname, base = '/') => {
   let rel = pathname;
   const baseNoSlash = base.replace(/\/$/, '');
   if (baseNoSlash && rel.startsWith(baseNoSlash)) rel = rel.slice(baseNoSlash.length);
-  return ROUTES.some((r) => r.path === normalize(rel || '/'));
+  return ROUTES.some((r) => matches(r, normalize(rel || '/')));
 };
 
 export const projectKey = (slug) => `project:${slug}`;

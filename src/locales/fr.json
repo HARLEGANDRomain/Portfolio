@@ -38,10 +38,14 @@
     "blender": "Blender",
     "blenderDesc": "Modélisation de petits assets et prototypage 3D.",
     "git": "Git",
-    "gitDesc": "Compréhension de l'outil, utilisation efficace et configuration rapide."
+    "gitDesc": "Compréhension de l'outil, utilisation efficace et configuration rapide.",
+    "cvOpen": "Voir mon CV",
+    "cvDownload": "Télécharger",
+    "cvOpenLabel": "Voir mon CV (PDF, nouvel onglet)",
+    "cvDownloadLabel": "Télécharger mon CV (PDF)"
   },
   "nav": {
-    "identity": "Identité",
+    "identity": "À propos",
     "works": "Projets",
     "contact": "Contact",
     "label": "Navigation principale",
@@ -49,20 +53,30 @@
   },
   "intro": {
     "subtitle": "UX/UI Designer | Technical Game Designer",
-    "headline": "Je conçois",
-    "headlineAccent": "des mondes et des expériences qui captent, guident et marquent les esprits.",
-    "description": "En tant que Technical Game Designer et UX/UI Designer, je fais le lien entre la vision créative et l'implémentation technique. J'aime créer tout ce qui peut marquer les esprits et laisser une empreinte durable.",
-    "description2": "Des systèmes de gameplay complexes aux interfaces utilisateur fluides, je conçois des expériences qui semblent vivantes, intuitives et engageantes. Je crois que le meilleur design est celui que l'on ressent, pas seulement celui que l'on voit.",
-    "cta": "Explorer les projets"
+    "headline": "Jeu ou interface, une même question :",
+    "headlineAccent": "Qu'est‑ce que l'utilisateur voit ?\nQuand ?\nQu'est‑ce qui est raconté ?",
+    "description": "Designer UX/UI venu du game design : je teste mes idées en les construisant, de la maquette Figma au site web ou au moteur de jeu.",
+    "cta": "Explorer les projets",
+    "status": [
+      "Alternance UX/UI · Groupe BPCE",
+      "Mastère UX/UI · EEMI"
+    ],
+    "statusLabel": "Situation actuelle",
+    "inProgress": "En cours"
   },
   "projects": {
-    "sidebar": "Projets sélectionnés • 2023-2025",
-    "exploreCaseStudy": "Explorer l'étude de cas"
+    "sidebar": "Projets sélectionnés • 2023-2026",
+    "exploreCaseStudy": "Explorer l'étude de cas",
+    "mission": "Mission",
+    "problem": "Problème",
+    "solution": "Solution",
+    "rolesLabel": "Mes rôles",
+    "studentProject": "Projet étudiant"
   },
   "contact": {
     "label": "Connectons-nous",
-    "text": "Je recherche actuellement de nouvelles opportunités. Que vous ayez une question ou que vous souhaitiez simplement dire bonjour, je ferai de mon mieux pour vous répondre !",
-    "cta": "Dire bonjour"
+    "text": "Je serais heureux d'être contacté pour discuter de projets, ou de tout autre sujet lié à l'UX/UI et au jeu vidéo.",
+    "emailLabel": "Écrire à rharlegand@gmail.com"
   },
   "caseStudy": {
     "backToWorks": "Retour aux projets",
@@ -179,7 +193,13 @@
     "split05_desc": "Pour que les ennemis s'intègrent naturellement dans le level design sans nécessiter de code supplémentaire, j'ai développé un outil de patrouille personnalisé directement dans l'inspecteur Unity. Il permet de composer des routes complexes et variées, adaptées à chaque zone du niveau.",
     "split05_note": "Points de passage, vitesse, temps d'attente à chaque waypoint et comportements spéciaux sont tous configurables en quelques clics.",
     "grid08_cap1": "L'ennemi en patrouille — détection du joueur lors du passage",
-    "documentation_btn": "Voir le Game Doc (PDF)"
+    "documentation_btn": "Voir le Game Doc (PDF)",
+    "home": {
+      "type": "Jeu vidéo · Exploration / Aventure",
+      "mission": "Concevoir et coder la caméra et l'ennemi d'un jeu d'exploration et d'infiltration sous Unity.",
+      "problem": "La caméra 3/4, voulue fluide, cachait ce qui arrivait en bas de l'écran : le joueur avançait à l'aveugle.",
+      "solution": "Une caméra qui anticipe le déplacement et compense selon l'angle, et des outils (caméras scriptées, patrouilles) que le level designer règle sans code."
+    }
   },
   "eom": {
     "category": "Jeux vidéo | Sandbox Musical",
@@ -246,7 +266,13 @@
     "sec04_title": "Le jouet en action",
     "sec04_desc": "Une session de jeu complète illustrant l'exploration libre, la mécanique du trou noir et la génération musicale dynamique.",
     "grid04_cap1": "Gameplay complet — Echoes Of Memories",
-    "itchio_btn": "Jouer sur Itch.io"
+    "itchio_btn": "Jouer sur Itch.io",
+    "home": {
+      "type": "Jeu vidéo · Sandbox musical",
+      "mission": "Créer un jouet musical plutôt qu'un jeu : pas de règles, pas d'objectif.",
+      "problem": "Laisser composer quelqu'un qui n'a aucune notion de musique, sans que le résultat sonne faux.",
+      "solution": "Une seule mécanique (un trou noir qui attire et repousse), des sons calés sur une gamme fixe selon la vitesse et l'angle, et un Time Stop / Rewind pour corriger."
+    }
   },
   "footer": {
     "legal": "Mentions légales"

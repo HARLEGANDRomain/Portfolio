@@ -9,8 +9,10 @@ const prefetchCaseStudy = () => import('../CaseStudy');
 
 /**
  * Liste des projets.
+ *  - Toujours visibles : type, titre, contexte (équipe, période), rôles → lisibles d'un coup d'œil, sans survol.
  *  - Desktop : le survol (ou le focus clavier) active un projet → la vague prend ses couleurs,
- *    la description se déplie. Un clic n'importe où sur la ligne ouvre l'étude de cas.
+ *    la mission / le problème / la solution se déplient. Un clic n'importe où sur la ligne ouvre l'étude de cas.
+ *  - Les projets non actifs restent lisibles (pas d'opacité réduite) : seul le projet actif est mis en avant.
  *  - Mobile : le projet au centre de l'écran est actif ; un tap ouvre directement l'étude de cas.
  */
 const ProjectsSection = ({ projects, activeProject, onActivate, isMobile }) => {
@@ -85,14 +87,14 @@ const ProjectsSection = ({ projects, activeProject, onActivate, isMobile }) => {
                 onFocus={() => { onActivate(index); prefetchCaseStudy(); }}
                 onClick={(e) => { if (!e.target.closest('a')) open(); }}
                 className={`group relative cursor-pointer transform transition-all duration-700 ease-out ${
-                  inView ? 'translate-y-0' : 'translate-y-12 opacity-0'
-                } ${inView ? (active ? 'opacity-100 scale-100' : 'opacity-30 scale-95 hover:opacity-70') : ''}`}
+                  inView ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'
+                }`}
               >
                 {/* Buste de Gwido (easter egg, desktop) */}
                 {index === 0 && !isMobile && (
                   <div
                     aria-hidden="true"
-                    className="absolute z-[60] pointer-events-none overflow-hidden pr-6 py-6 top-1/2 left-[-80px] lg:left-[-128px]"
+                    className="absolute z-[60] pointer-events-none overflow-hidden pr-6 py-6 top-[3.25rem] left-[-80px] lg:left-[-128px]"
                     style={{
                       transform: bustShown ? 'translateY(-80%) translateX(-32%)' : 'translateY(-50%) translateX(-50%)',
                       opacity: bustShown ? 1 : 0,
@@ -115,15 +117,38 @@ const ProjectsSection = ({ projects, activeProject, onActivate, isMobile }) => {
                   className={`absolute -left-8 top-1 w-1 bg-slate-900 transition-all duration-700 ease-out origin-top ${active ? 'h-full opacity-100' : 'h-0 opacity-0'}`}
                 />
 
-                <p className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-3 flex items-center gap-3">
-                  0{index + 1} <span aria-hidden="true">—</span> {project.category.split('|')[0].trim()}
+                <p className={`text-xs font-bold uppercase tracking-widest mb-3 flex items-center gap-3 transition-colors duration-500 ${active ? 'text-indigo-600' : 'text-slate-500'}`}>
+                  0{index + 1} <span aria-hidden="true">—</span> {project.type}
                 </p>
-                <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-4 text-slate-900 transition-transform duration-500 group-hover:translate-x-3">
+                <h3 className={`text-4xl md:text-5xl font-black uppercase tracking-tighter mb-3 transition-all duration-500 group-hover:translate-x-3 ${active ? 'text-slate-900' : 'text-slate-500'}`}>
                   <RouteLink to={key} onClick={() => setBustShown(false)}>{project.title}</RouteLink>
                 </h3>
 
-                <div className={`overflow-hidden transition-all duration-700 ease-in-out ${active ? 'max-h-40 opacity-100 translate-y-0' : 'max-h-0 opacity-0 translate-y-4'}`}>
-                  <p className="text-slate-600 mb-5 text-sm leading-relaxed border-l-2 border-slate-200 pl-4">{project.description}</p>
+                <p className="text-xs font-medium text-slate-500 mb-3">
+                  {[project.studentProject && t('projects.studentProject'), project.teamSize, project.timeline].filter(Boolean).join(' · ')}
+                </p>
+                <ul aria-label={t('projects.rolesLabel')} className="flex flex-wrap gap-2 mb-1">
+                  {project.rolesList.map((role) => (
+                    <li
+                      key={role}
+                      className={`text-[11px] font-semibold rounded-full px-3 py-1 border transition-colors duration-500 ${
+                        active ? 'bg-slate-900 border-slate-900 text-white' : 'bg-white border-slate-200 text-slate-600'
+                      }`}
+                    >
+                      {role}
+                    </li>
+                  ))}
+                </ul>
+
+                <div className={`overflow-hidden transition-all duration-700 ease-in-out ${active ? 'max-h-[30rem] opacity-100 translate-y-0' : 'max-h-0 opacity-0 translate-y-4'}`}>
+                  <dl className="mt-5 mb-5 space-y-3 border-l-2 border-slate-200 pl-4">
+                    {['mission', 'problem', 'solution'].map((field) => (
+                      <div key={field}>
+                        <dt className="text-label uppercase tracking-widest text-indigo-600 mb-0.5">{t(`projects.${field}`)}</dt>
+                        <dd className="text-sm text-slate-600 leading-relaxed">{project[field]}</dd>
+                      </div>
+                    ))}
+                  </dl>
                   <RouteLink
                     to={key}
                     tabIndex={-1}
