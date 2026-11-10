@@ -125,6 +125,29 @@ const Home = () => {
     }
   }, [displayed]);
 
+  // Page overlay affichée : la fenêtre ne défile plus (l'accueil est inerte dessous). Sans ça, la barre de défilement de
+  // l'accueil restait visible à droite et la page projet avait SA barre à côté : deux barres, dont une qui ne sert à rien.
+  // La position de défilement de l'accueil est conservée (on masque seulement la barre).
+  useEffect(() => {
+    if (displayed === null) return undefined;
+    const root = document.documentElement;
+    const prev = root.style.overflow;
+    root.style.overflow = 'hidden';
+    return () => { root.style.overflow = prev; };
+  }, [displayed]);
+
+  // Largeur de la barre de défilement de la page overlay, exposée en variable CSS (--sbw) pour que les éléments
+  // `fixed` pleine largeur (barre du haut d'une étude de cas) ne la recouvrent pas
+  useEffect(() => {
+    const el = overlayRef.current;
+    if (!el) return undefined;
+    const measure = () => el.style.setProperty('--sbw', `${el.offsetWidth - el.clientWidth}px`);
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [displayed]);
+
   const navigation = useMemo(() => ({
     navigate: (key) => {
       if (splashPhase !== 'done' || router.busy) return;

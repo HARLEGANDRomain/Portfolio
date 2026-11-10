@@ -524,7 +524,7 @@ const CaseStudy = ({ project, onBack }) => {
       {lightboxItem && <Lightbox item={lightboxItem} onClose={closeLightbox} />}
 
       {/* ── Fixed nav ────────────────────────────────── */}
-      <nav className="fixed top-0 left-0 w-full z-50 flex items-center px-6 md:px-12 py-4 bg-white/80 backdrop-blur-xl border-b border-slate-100 shadow-sm">
+      <nav style={{ width: 'calc(100% - var(--sbw, 0px))' }} className="fixed top-0 left-0 z-50 flex items-center px-6 md:px-12 py-4 bg-white/80 backdrop-blur-xl border-b border-slate-100 shadow-sm">
         <button type="button" onClick={onBack}
           className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-indigo-600 transition-colors group">
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" aria-hidden="true" />
