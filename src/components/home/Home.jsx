@@ -55,6 +55,16 @@ const Home = () => {
   const router = useOverlayRouter({ initialKey, engine, enabled: splashPhase === 'done' });
 
   // ── Splash ──
+  // Défilement bloqué tant que le splash est ouvert (la jauge de défilement reste réservée : pas de décalage de mise en page)
+  useEffect(() => {
+    if (splashPhase !== 'active') return undefined;
+    const root = document.documentElement;
+    const prev = { overflow: root.style.overflow, gutter: root.style.scrollbarGutter };
+    root.style.overflow = 'hidden';
+    root.style.scrollbarGutter = 'stable';
+    return () => { root.style.overflow = prev.overflow; root.style.scrollbarGutter = prev.gutter; };
+  }, [splashPhase]);
+
   const handleExplore = useCallback(() => {
     setSplashPhase((phase) => (phase === 'active' ? 'transitioning' : phase));
   }, []);
@@ -145,7 +155,7 @@ const Home = () => {
             zoomSlug={slugFromKey(displayed ?? router.routeKey)}
           />
 
-          <main className="relative z-10 w-full md:w-[70%] bg-white/95 backdrop-blur-2xl pb-[45vh] md:pb-32 isolate">
+          <main className="relative z-10 w-full md:w-[70%] bg-white/95 backdrop-blur-2xl pb-[45vh] md:pb-0 isolate">
             {/* Fond à points (fixe dans la colonne de gauche) */}
             <div className="absolute inset-0 pointer-events-none z-[-1]" aria-hidden="true">
               <div className="sticky top-0 w-full h-screen bg-dots">

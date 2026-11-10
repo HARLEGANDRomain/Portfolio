@@ -10,8 +10,10 @@ const scrollToId = (id) => document.getElementById(id)?.scrollIntoView({ behavio
 const NavLinks = ({ activeSection, underline }) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language?.startsWith('fr') ? 'fr' : 'en';
+  // Variante header : tous les éléments ont une bordure basse de 2 px (transparente si inactifs), sinon l'élément
+  // actif serait 2 px plus haut que les autres et sa ligne de base serait décalée
   const activeCls = underline ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-indigo-600';
-  const idleCls = underline ? 'text-slate-600' : 'text-slate-500';
+  const idleCls = underline ? 'text-slate-600 border-b-2 border-transparent' : 'text-slate-500';
   const sectionCls = (id) => `hover:text-indigo-600 transition-colors ${activeSection === id ? activeCls : idleCls}`;
 
   return (
@@ -25,7 +27,7 @@ const NavLinks = ({ activeSection, underline }) => {
       <button
         type="button"
         onClick={() => i18n.changeLanguage(lang === 'fr' ? 'en' : 'fr')}
-        className="flex items-center gap-1.5 text-slate-500 hover:text-indigo-600 transition-colors"
+        className={`flex items-center gap-1.5 text-slate-500 hover:text-indigo-600 transition-colors ${underline ? 'border-b-2 border-transparent' : ''}`}
         aria-label={t('nav.switchLanguage')}
       >
         <span className={lang === 'fr' ? 'text-indigo-600' : ''}>FR</span>
@@ -61,7 +63,7 @@ export const SiteHeader = ({ activeSection }) => {
   const { t } = useTranslation();
 
   return (
-      <header className="absolute top-0 left-0 w-full md:w-[70%] px-8 md:px-16 py-8 md:py-16 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8 z-header">
+      <header className="absolute top-0 left-0 w-full md:w-[70%] px-8 md:px-16 py-8 md:py-16 flex flex-col sm:flex-row items-start sm:items-baseline justify-between gap-8 z-header">
         <div>
           <h1 className="text-3xl md:text-4xl font-black text-slate-900 uppercase tracking-tighter whitespace-nowrap leading-none mb-4">
             <a href={import.meta.env.BASE_URL} onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
@@ -72,7 +74,7 @@ export const SiteHeader = ({ activeSection }) => {
             {t('intro.subtitle')}
           </p>
         </div>
-        <nav aria-label={t('nav.label')} className="mt-8 sm:mt-0 flex items-center gap-6 text-label uppercase tracking-widest">
+        <nav aria-label={t('nav.label')} className="mt-8 sm:mt-0 flex items-baseline gap-6 md:gap-8 text-label md:text-xs uppercase tracking-widest">
           <NavLinks activeSection={activeSection} underline />
         </nav>
       </header>
