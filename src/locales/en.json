@@ -67,11 +67,9 @@
   "projects": {
     "sidebar": "Selected Works • 2023-2026",
     "exploreCaseStudy": "Explore Case Study",
-    "mission": "Mission",
-    "problem": "Problem",
-    "solution": "Solution",
     "rolesLabel": "My roles",
-    "studentProject": "Student project"
+    "studentProject": "Student project",
+    "didLabel": "What I did"
   },
   "contact": {
     "label": "Let's connect",
@@ -196,9 +194,7 @@
     "documentation_btn": "View Game Doc (PDF)",
     "home": {
       "type": "Video game · Exploration / Adventure",
-      "mission": "Design and code the camera and the enemy of an exploration and stealth game in Unity.",
-      "problem": "The smooth 3/4 camera hid what was coming at the bottom of the screen: players were moving blind.",
-      "solution": "A camera that anticipates movement and compensates for the viewing angle, plus tools (scripted cameras, patrols) the level designer tunes without code."
+      "did": "3/4 camera that anticipates movement, state-based enemy (FSM) with dynamic vision, patrol tool for the level designer."
     }
   },
   "eom": {
@@ -269,9 +265,7 @@
     "itchio_btn": "Play on Itch.io",
     "home": {
       "type": "Video game · Musical sandbox",
-      "mission": "Build a musical toy rather than a game: no rules, no goal.",
-      "problem": "Let someone with no musical background compose, without it ever sounding off.",
-      "solution": "A single mechanic (a black hole that pulls and pushes), sounds locked to a fixed scale based on speed and angle, and a Time Stop / Rewind to fix mistakes."
+      "did": "Black hole and sound mechanics, Time Stop / Rewind system."
     }
   },
   "footer": {

@@ -11,7 +11,7 @@ const prefetchCaseStudy = () => import('../CaseStudy');
  * Liste des projets.
  *  - Toujours visibles : type, titre, contexte (équipe, période), rôles → lisibles d'un coup d'œil, sans survol.
  *  - Desktop : le survol (ou le focus clavier) active un projet → la vague prend ses couleurs,
- *    la mission / le problème / la solution se déplient. Un clic n'importe où sur la ligne ouvre l'étude de cas.
+ *    une ligne « ce que j'ai fait » se déplie. Un clic n'importe où sur la ligne ouvre l'étude de cas.
  *  - Les projets non actifs restent lisibles (pas d'opacité réduite) : seul le projet actif est mis en avant.
  *  - Mobile : le projet au centre de l'écran est actif ; un tap ouvre directement l'étude de cas.
  */
@@ -132,7 +132,7 @@ const ProjectsSection = ({ projects, activeProject, onActivate, isMobile }) => {
                     <li
                       key={role}
                       className={`text-[11px] font-semibold rounded-full px-3 py-1 border transition-colors duration-500 ${
-                        active ? 'bg-slate-900 border-slate-900 text-white' : 'bg-white border-slate-200 text-slate-600'
+                        active ? 'bg-indigo-50 border-indigo-200 text-indigo-700' : 'bg-transparent border-slate-200 text-slate-500'
                       }`}
                     >
                       {role}
@@ -140,15 +140,10 @@ const ProjectsSection = ({ projects, activeProject, onActivate, isMobile }) => {
                   ))}
                 </ul>
 
-                <div className={`overflow-hidden transition-all duration-700 ease-in-out ${active ? 'max-h-[30rem] opacity-100 translate-y-0' : 'max-h-0 opacity-0 translate-y-4'}`}>
-                  <dl className="mt-5 mb-5 space-y-3 border-l-2 border-slate-200 pl-4">
-                    {['mission', 'problem', 'solution'].map((field) => (
-                      <div key={field}>
-                        <dt className="text-label uppercase tracking-widest text-indigo-600 mb-0.5">{t(`projects.${field}`)}</dt>
-                        <dd className="text-sm text-slate-600 leading-relaxed">{project[field]}</dd>
-                      </div>
-                    ))}
-                  </dl>
+                <div className={`overflow-hidden transition-all duration-700 ease-in-out ${active ? 'max-h-48 opacity-100 translate-y-0' : 'max-h-0 opacity-0 translate-y-4'}`}>
+                  <p className="mt-4 mb-4 text-sm text-slate-600 leading-relaxed border-l-2 border-slate-200 pl-4">
+                    <span className="sr-only">{t('projects.didLabel')} : </span>{project.did}
+                  </p>
                   <RouteLink
                     to={key}
                     tabIndex={-1}

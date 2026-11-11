@@ -67,11 +67,9 @@
   "projects": {
     "sidebar": "Projets sélectionnés • 2023-2026",
     "exploreCaseStudy": "Explorer l'étude de cas",
-    "mission": "Mission",
-    "problem": "Problème",
-    "solution": "Solution",
     "rolesLabel": "Mes rôles",
-    "studentProject": "Projet étudiant"
+    "studentProject": "Projet étudiant",
+    "didLabel": "Ce que j'ai fait"
   },
   "contact": {
     "label": "Connectons-nous",
@@ -196,9 +194,7 @@
     "documentation_btn": "Voir le Game Doc (PDF)",
     "home": {
       "type": "Jeu vidéo · Exploration / Aventure",
-      "mission": "Concevoir et coder la caméra et l'ennemi d'un jeu d'exploration et d'infiltration sous Unity.",
-      "problem": "La caméra 3/4, voulue fluide, cachait ce qui arrivait en bas de l'écran : le joueur avançait à l'aveugle.",
-      "solution": "Une caméra qui anticipe le déplacement et compense selon l'angle, et des outils (caméras scriptées, patrouilles) que le level designer règle sans code."
+      "did": "Caméra 3/4 qui anticipe le mouvement, ennemi à états (FSM) avec vision dynamique, outil de patrouilles pour le level designer."
     }
   },
   "eom": {
@@ -269,9 +265,7 @@
     "itchio_btn": "Jouer sur Itch.io",
     "home": {
       "type": "Jeu vidéo · Sandbox musical",
-      "mission": "Créer un jouet musical plutôt qu'un jeu : pas de règles, pas d'objectif.",
-      "problem": "Laisser composer quelqu'un qui n'a aucune notion de musique, sans que le résultat sonne faux.",
-      "solution": "Une seule mécanique (un trou noir qui attire et repousse), des sons calés sur une gamme fixe selon la vitesse et l'angle, et un Time Stop / Rewind pour corriger."
+      "did": "Mécaniques du trou noir et du son, système Time Stop / Rewind."
     }
   },
   "footer": {

@@ -19,11 +19,9 @@ export const getProjects = (t) => [
     title: 'Gwido',
     category: t('gwido.category'),
     description: t('gwido.description'),
-    // Résumé de l'accueil (type, mission, problème, solution)
+    // Résumé de l'accueil (type, ce que j'ai fait)
     type: t('gwido.home.type'),
-    mission: t('gwido.home.mission'),
-    problem: t('gwido.home.problem'),
-    solution: t('gwido.home.solution'),
+    did: t('gwido.home.did'),
     studentProject: true,
     context: t('gwido.context'),
     date: '2024 - 2025',
@@ -43,11 +41,9 @@ export const getProjects = (t) => [
     title: 'Echoes Of Memories',
     category: t('eom.category'),
     description: t('eom.description'),
-    // Résumé de l'accueil (type, mission, problème, solution)
+    // Résumé de l'accueil (type, ce que j'ai fait)
     type: t('eom.home.type'),
-    mission: t('eom.home.mission'),
-    problem: t('eom.home.problem'),
-    solution: t('eom.home.solution'),
+    did: t('eom.home.did'),
     studentProject: true,
     context: t('eom.context'),
     date: '2023 - 2024',
