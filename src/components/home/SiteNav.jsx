@@ -63,7 +63,7 @@ export const SiteHeader = ({ activeSection }) => {
   const { t } = useTranslation();
 
   return (
-      <header className="absolute top-0 left-0 w-full md:w-[70%] px-8 md:px-16 py-8 md:py-16 flex flex-col sm:flex-row items-start sm:items-baseline justify-between gap-8 z-header">
+      <header className="absolute top-0 left-0 w-full md:w-[70%] px-8 md:px-16 py-8 md:py-16 flex flex-col sm:flex-row items-start sm:items-baseline justify-between gap-5 sm:gap-8 z-header">
         <div>
           <h1 className="text-3xl md:text-4xl font-black text-slate-900 uppercase tracking-tighter whitespace-nowrap leading-none mb-4">
             <a href={import.meta.env.BASE_URL} onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
@@ -90,7 +90,7 @@ export const SiteHeader = ({ activeSection }) => {
             ))}
           </ul>
         </div>
-        <nav aria-label={t('nav.label')} className="mt-8 sm:mt-0 flex items-baseline gap-6 md:gap-8 text-label md:text-xs uppercase tracking-widest">
+        <nav aria-label={t('nav.label')} className="mt-2 sm:mt-0 flex items-baseline gap-6 md:gap-8 text-label md:text-xs uppercase tracking-widest">
           <NavLinks activeSection={activeSection} underline />
         </nav>
       </header>

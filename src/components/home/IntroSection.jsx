@@ -6,7 +6,7 @@ const IntroSection = () => {
   const { t } = useTranslation();
 
   return (
-    <section id="intro" className="min-h-screen flex flex-col justify-center px-8 md:px-16 pb-24">
+    <section id="intro" className="sm:min-h-screen flex flex-col justify-start sm:justify-center px-8 md:px-16 pb-24">
       <div className="max-w-xl">
         <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-slate-900 mb-8 leading-tight whitespace-pre-line">
           {t('intro.headline')}

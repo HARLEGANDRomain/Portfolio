@@ -189,7 +189,7 @@ const Home = () => {
             <SiteHeader activeSection={activeSection} />
 
             {/* Sur mobile le header est empilé (nom, sous-titre, pastilles, nav) : plus d'espace avant le contenu */}
-            <div className="relative z-10 pt-[19rem] sm:pt-32">
+            <div className="relative z-10 pt-[16.5rem] sm:pt-32">
               <IntroSection />
               <ProjectsSection
                 projects={projects}
