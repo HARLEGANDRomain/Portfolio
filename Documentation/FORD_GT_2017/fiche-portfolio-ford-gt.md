@@ -51,7 +51,6 @@ Trois contraintes que je me suis données :
 ## Résultats
 - Site fonctionnel sur mobile, laptop et desktop, avec animations fluides et récit validé qui raconte l'histoire de la FORD GT et de sont ancetre la GT40.
 
-
 ## Ce que j'ai appris
 - Écrire une spec précise avant de coder évite des allers-retours : chaque écran avait un objectif clair.
 - Un design system léger (tokens couleurs et typographie) rend l'intégration plus fidèle.
