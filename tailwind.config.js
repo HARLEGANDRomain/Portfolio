@@ -13,6 +13,8 @@ export default {
                 'gwido-wave-2': '#4e889d',
                 'eom-wave-1':   '#fdcdb7',
                 'eom-wave-2':   '#af99c7',
+                'fordgt-wave-1': '#3366b4',
+                'fordgt-wave-2': '#1f4a8f',
                 // Couleurs brand des outils (page Identity)
                 'tool-illustrator': '#FF9A00',
                 'tool-photoshop':   '#31A8FF',

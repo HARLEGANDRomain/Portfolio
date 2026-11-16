@@ -19,6 +19,7 @@ export const ROUTES = [
   { key: null, path: '/', title: 'Portfolio - HARLEGAND Romain | UX/UI Designer & Technical Game Designer' },
   { key: 'project:gwido', path: '/projets/gwido/', title: 'Gwido — Étude de cas | HARLEGAND Romain' },
   { key: 'project:echoes-of-memories', path: '/projets/echoes-of-memories/', title: 'Echoes Of Memories — Étude de cas | HARLEGAND Romain' },
+  { key: 'project:ford-gt-2017', path: '/projets/ford-gt-2017/', title: 'Ford GT 2017 — Étude de cas | HARLEGAND Romain' },
   // `aliases` : anciennes URLs encore reconnues (la page « Identité » est devenue « À propos »)
   { key: 'identity', path: '/a-propos/', aliases: ['/identite/'], title: 'À propos | HARLEGAND Romain' },
   { key: 'legal', path: '/mentions-legales/', title: 'Mentions légales | HARLEGAND Romain' },

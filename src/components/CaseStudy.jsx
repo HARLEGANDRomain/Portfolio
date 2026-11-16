@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import {
   ArrowLeft, Calendar, Users,
   ChevronLeft, ChevronRight, Play, Pause,
-  X, Maximize2, FileText, Gamepad2, ExternalLink
+  X, Maximize2, FileText, Gamepad2, ExternalLink, Globe, Code2, Monitor, Smartphone
 } from 'lucide-react';
 import MediaLoader from './ui/MediaLoader';
 import { assetUrl as fixPath } from '../utils/assetUrl';
@@ -181,7 +181,7 @@ const MediaGrid = ({ block, onExpand }) => {
       ) : (
         <div className={`grid ${colClass} gap-3`}>
           {items.map((item, i) => (
-            <ExpandableMedia key={i} item={item} onExpand={onExpand} />
+            <ExpandableMedia key={i} item={item} onExpand={onExpand} aspectClass={item.aspect} />
           ))}
         </div>
       )}
@@ -202,7 +202,7 @@ const TextBlock = ({ block }) => (
         {block.title}
       </h3>
     )}
-    <p className="text-slate-500 leading-relaxed text-[15px]">{block.text}</p>
+    {block.text && <p className="text-slate-500 leading-relaxed text-[15px]">{block.text}</p>}
     {block.items && block.items.length > 0 && (
       <ul className="mt-4 space-y-2">
         {block.items.map((item, i) => (
@@ -430,6 +430,107 @@ const CarouselBlock = ({ block, onExpand }) => {
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
+// KEY FACTS BLOCK — résumé en tête d'étude de cas (public, problème, rôle, livrables…)
+// ─────────────────────────────────────────────────────────────────────────────
+const KeyFactsBlock = ({ block }) => (
+  <div className="py-10 px-8 md:px-16 max-w-7xl mx-auto">
+    {block.label && <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-slate-500 mb-4">{block.label}</p>}
+    <dl className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {(block.items ?? []).map((item, i) => (
+        <div key={i} className="bg-white/80 rounded-2xl p-5 border border-slate-100 shadow-sm">
+          <dt className="text-[10px] font-bold uppercase tracking-widest text-indigo-500 mb-2">{item.label}</dt>
+          <dd className="text-[14px] text-slate-700 leading-relaxed">{item.value}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// EMBED BLOCK — démo interactive d'un site dans un cadre (iframe), chargée au clic
+// ─────────────────────────────────────────────────────────────────────────────
+const EmbedBlock = ({ block }) => {
+  const [started, setStarted] = useState(false);
+  const [device, setDevice] = useState('desktop');
+  const mobile = device === 'mobile';
+
+  const tab = (id, Icon, label) => (
+    <button
+      type="button"
+      onClick={() => setDevice(id)}
+      aria-pressed={device === id}
+      className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest transition-colors ${
+        device === id ? 'bg-slate-900 text-white' : 'text-slate-500 hover:text-slate-900'
+      }`}
+    >
+      <Icon className="w-4 h-4" aria-hidden="true" />
+      {label}
+    </button>
+  );
+
+  return (
+    <div className="py-16 px-8 md:px-16 max-w-7xl mx-auto">
+      <div className="mb-8">
+        {block.label && <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-slate-500 mb-3">{block.label}</p>}
+        {block.title && (
+          <h3 className="text-3xl md:text-4xl font-black uppercase tracking-tighter text-slate-900 mb-4 leading-tight">{block.title}</h3>
+        )}
+        {block.description && <p className="text-slate-500 leading-relaxed text-[15px] max-w-2xl">{block.description}</p>}
+      </div>
+
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+        <div role="group" aria-label={block.switchLabel} className="inline-flex items-center gap-1 p-1 rounded-full bg-white/80 border border-slate-200 shadow-sm">
+          {tab('desktop', Monitor, block.desktopLabel)}
+          {tab('mobile', Smartphone, block.mobileLabel)}
+        </div>
+        <a
+          href={block.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-indigo-600 transition-colors"
+        >
+          {block.openLabel}
+          <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
+        </a>
+      </div>
+
+      <div className={`mx-auto w-full ${mobile ? 'max-w-[390px]' : ''}`}>
+        <div className={`relative overflow-hidden rounded-2xl shadow-xl bg-slate-950 border border-slate-200 ${mobile ? 'aspect-[390/780]' : 'aspect-[16/10]'}`}>
+          {started ? (
+            <iframe
+              src={block.url}
+              title={block.frameTitle}
+              className="absolute inset-0 w-full h-full border-0 bg-slate-950"
+              allow="fullscreen; accelerometer; gyroscope"
+              allowFullScreen
+            />
+          ) : (
+            <button
+              type="button"
+              onClick={() => setStarted(true)}
+              className="group absolute inset-0 w-full h-full cursor-pointer"
+              aria-label={block.launchLabel}
+            >
+              {block.poster && (
+                <img src={fixPath(block.poster)} alt="" className="absolute inset-0 w-full h-full object-cover" loading="lazy" decoding="async" />
+              )}
+              <span className="absolute inset-0 bg-slate-950/45 group-hover:bg-slate-950/30 transition-colors" aria-hidden="true" />
+              <span className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-white">
+                <span className="w-16 h-16 rounded-full bg-white/20 backdrop-blur border border-white/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Play className="w-7 h-7 ml-0.5" aria-hidden="true" />
+                </span>
+                <span className="text-xs font-bold uppercase tracking-widest">{block.launchLabel}</span>
+              </span>
+            </button>
+          )}
+        </div>
+      </div>
+      {block.hint && <p className="mt-4 text-center text-[13px] italic text-slate-500">{block.hint}</p>}
+    </div>
+  );
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
 // CONTENT BLOCK DISPATCHER
 // ─────────────────────────────────────────────────────────────────────────────
 const ContentBlock = ({ block, index, onExpand }) => {
@@ -452,6 +553,8 @@ const ContentBlock = ({ block, index, onExpand }) => {
   switch (block.type) {
     case 'split':             content = <SplitBlock block={block} index={index} onExpand={onExpand} />; break;
     case 'carousel':          content = <CarouselBlock block={block} onExpand={onExpand} />; break;
+    case 'embed':             content = <EmbedBlock block={block} />; break;
+    case 'key-facts':         content = <KeyFactsBlock block={block} />; break;
     case 'media-grid':        content = <MediaGrid block={block} onExpand={onExpand} />; break;
     case 'text-block':        content = <TextBlock block={block} />; break;
     case 'section-divider':   content = <SectionDivider block={block} />; break;
@@ -596,7 +699,10 @@ const CaseStudy = ({ project, onBack }) => {
                       rel="noopener noreferrer"
                       className="group/link flex items-center gap-3 bg-slate-900 text-white px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-indigo-600 transition-all duration-300 shadow-lg shadow-slate-900/10 hover:shadow-indigo-500/20 hover:-translate-y-1"
                     >
-                      {link.type === 'pdf' ? <FileText className="w-4 h-4" /> : <Gamepad2 className="w-4 h-4" />}
+                      {link.type === 'pdf' ? <FileText className="w-4 h-4" />
+                        : link.type === 'site' ? <Globe className="w-4 h-4" />
+                        : link.type === 'github' ? <Code2 className="w-4 h-4" />
+                        : <Gamepad2 className="w-4 h-4" />}
                       {t(link.labelKey)}
                       <ExternalLink className="w-3.5 h-3.5 opacity-0 -translate-y-1 translate-x-1 group-hover/link:opacity-100 group-hover/link:translate-y-0 group-hover/link:translate-x-0 transition-all duration-300" />
                     </a>

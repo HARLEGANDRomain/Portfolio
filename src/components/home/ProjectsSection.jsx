@@ -81,9 +81,9 @@ const ProjectsSection = ({ projects, activeProject, onActivate, isMobile }) => {
                   if (isMobile) return;
                   onActivate(index);
                   prefetchCaseStudy();
-                  if (index === 0) setBustShown(true);
+                  if (project.slug === 'gwido') setBustShown(true);
                 }}
-                onMouseLeave={() => { if (index === 0) setBustShown(false); }}
+                onMouseLeave={() => { if (project.slug === 'gwido') setBustShown(false); }}
                 onFocus={() => { onActivate(index); prefetchCaseStudy(); }}
                 onClick={(e) => { if (!e.target.closest('a')) open(); }}
                 className={`group relative cursor-pointer transform transition-all duration-700 ease-out ${
@@ -91,7 +91,7 @@ const ProjectsSection = ({ projects, activeProject, onActivate, isMobile }) => {
                 }`}
               >
                 {/* Buste de Gwido (easter egg, desktop) */}
-                {index === 0 && !isMobile && (
+                {project.slug === 'gwido' && !isMobile && (
                   <div
                     aria-hidden="true"
                     className="absolute z-[60] pointer-events-none overflow-hidden pr-6 py-6 top-[3.25rem] left-[-80px] lg:left-[-128px]"
@@ -125,7 +125,7 @@ const ProjectsSection = ({ projects, activeProject, onActivate, isMobile }) => {
                 </h3>
 
                 <p className="text-xs font-medium text-slate-500 mb-3">
-                  {[project.studentProject && t('projects.studentProject'), project.teamSize, project.timeline].filter(Boolean).join(' · ')}
+                  {[project.studentProject ? t('projects.studentProject') : project.personalProject && t('projects.personalProject'), project.teamSize, project.timeline].filter(Boolean).join(' · ')}
                 </p>
                 <ul aria-label={t('projects.rolesLabel')} className="flex flex-wrap gap-2 mb-1">
                   {project.rolesList.map((role) => (

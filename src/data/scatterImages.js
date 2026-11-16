@@ -52,11 +52,36 @@ const RAW = {
       '/eom/images/Start.png',
     ],
   },
+  'ford-gt-2017': {
+    pool: [
+      '/fordgt/images/final/02-modele.webp',
+      '/fordgt/images/final/03-presentation.webp',
+      '/fordgt/images/final/04-histoire.webp',
+      '/fordgt/images/final/05-nouvelle-ere.webp',
+      '/fordgt/images/final/06-fabrication.webp',
+      '/fordgt/images/final/07-performances.webp',
+      '/fordgt/images/final/08-le-mans.webp',
+      '/fordgt/images/final/09-derniere-edition.webp',
+      '/fordgt/images/final/10-galerie-avant.webp',
+      '/fordgt/images/final/11-galerie-profil.webp',
+      '/fordgt/images/final/12-galerie-arriere.webp',
+      '/fordgt/images/final/13-galerie-detail-roue.webp',
+    ],
+    cluster: [
+      '/fordgt/images/final/02-modele.webp',
+      '/fordgt/images/final/05-nouvelle-ere.webp',
+      '/fordgt/images/final/04-histoire.webp',
+      '/fordgt/images/final/07-performances.webp',
+      '/fordgt/images/final/08-le-mans.webp',
+      '/fordgt/images/final/10-galerie-avant.webp',
+      '/fordgt/images/final/09-derniere-edition.webp',
+    ],
+  },
 };
 
 /** '/gwido/images/Gwido001.webp' → '/scatter/gwido/Gwido001.webp' (toujours en .webp) */
 export const thumbOf = (src) =>
-  '/scatter' + src.replace(/^\/(gwido|eom)\/images\//, '/$1/').replace(/\.(png|jpe?g|webp)$/i, '.webp');
+  '/scatter' + src.replace(/^\/(gwido|eom|fordgt)\/images\//, '/$1/').replace(/\.(png|jpe?g|webp)$/i, '.webp');
 
 const mapThumbs = (list) => list.map(thumbOf);
 

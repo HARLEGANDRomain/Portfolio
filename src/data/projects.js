@@ -1,5 +1,6 @@
 import { getGwidoContentBlocks } from './gwidoData';
 import { getEomContentBlocks } from './eomData';
+import { getFordGtContentBlocks } from './fordgtData';
 
 /**
  * Liste des projets affichés sur l'accueil et dans les études de cas.
@@ -13,7 +14,32 @@ import { getEomContentBlocks } from './eomData';
  *
  * Les classes de couleur des vagues doivent être écrites en entier (Tailwind les détecte statiquement).
  */
+// Ordre d'affichage : du projet le plus récent au plus ancien (01 = dernier sorti).
 export const getProjects = (t) => [
+  {
+    slug: 'ford-gt-2017',
+    title: 'Ford GT 2017',
+    category: t('fordgt.category'),
+    description: t('fordgt.description'),
+    // Résumé de l'accueil (type, ce que j'ai fait)
+    type: t('fordgt.home.type'),
+    did: t('fordgt.home.did'),
+    personalProject: true,
+    context: t('fordgt.context'),
+    date: '2026',
+    timeline: t('fordgt.timeline'),
+    teamSize: t('fordgt.teamSize'),
+    // Aucun rôle de développeur : le code a été écrit et intégré par Claude
+    rolesList: ['UX/UI Designer', 'Direction artistique', 'Spécification & design tokens'],
+    image: '/fordgt/images/final/02-modele.webp',
+    sceneColor: 'bg-slate-900',
+    waveColors: ['bg-fordgt-wave-1/60', 'bg-fordgt-wave-2/80'],
+    links: [
+      { type: 'site', url: 'https://harlegandromain.github.io/FORD_GT_2017/', labelKey: 'fordgt.site_btn' },
+      { type: 'github', url: 'https://github.com/HARLEGANDRomain/FORD_GT_2017', labelKey: 'fordgt.github_btn' },
+    ],
+    contentBlocks: getFordGtContentBlocks(t),
+  },
   {
     slug: 'gwido',
     title: 'Gwido',
