@@ -249,7 +249,8 @@ export const repelBackground = (items, cluster, center, { push, gap = 24, step =
  * @param {object} opts
  * @param {string[]} opts.srcs  images de l'amas (la 1re est l'image principale)
  * @param {object}   opts.zone  résultat de zoneGeometry()
- * @param {number}   [opts.seed]
+ * @param {number}   [opts.seed] graine PROPRE AU PROJET : change la forme du nuage (rotation de la spirale, sens
+ *                  d'enroulement, tailles, jitter). Graine 1 = disposition historique de Gwido (inchangée).
  * @param {number}   [opts.overlap] part de chaque demi-taille qui peut chevaucher (0 = aucun contact)
  * @param {number}   [opts.maxCover] part maximale d'une image cachée par celles posées au-dessus
  * @param {number}   [opts.padding] marge avec le bord de la vague et de l'écran
@@ -261,9 +262,14 @@ export const computeCluster = ({ srcs, zone, seed = 1, overlap = 0.16, maxCover 
   const few = srcs.length <= 5;
   const heroW = Math.min(Math.max(inner * (few ? 0.56 : 0.5), 260), 560);
 
+  // La graine décide aussi de l'orientation du nuage : phase de départ de la spirale et sens d'enroulement
+  // (graine paire = inversé). Graine 1 → phase 0, sens normal : disposition d'origine, strictement inchangée.
+  const phase = (seed - 1) * 1.9;
+  const winding = seed % 2 === 0 ? -1 : 1;
+
   const items = srcs.map((src, i) => {
     const w = i === 0 ? heroW : inner * between(rng, few ? 0.3 : 0.24, few ? 0.38 : 0.32);
-    const angle = i * 2.39996 + between(rng, -0.3, 0.3); // angle d'or → répartition autour du centre
+    const angle = phase + winding * i * 2.39996 + between(rng, -0.3, 0.3); // angle d'or → répartition autour du centre
     const radius = i === 0 ? 0 : heroW * 0.55 + w * 0.4;
     return {
       src,

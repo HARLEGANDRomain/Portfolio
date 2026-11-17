@@ -4,6 +4,10 @@
  *  - pool    : toutes les images qui peuplent le plan (désaturées au repos).
  *  - cluster : le sous-ensemble qui se rassemble quand le projet est sélectionné.
  *              La 1re image est l'image principale (au centre, plus grande).
+ *  - seed    : graine PROPRE AU PROJET qui décide de la forme de son nuage (orientation, sens d'enroulement,
+ *              tailles). Deux projets avec la même graine et le même nombre d'images auraient le même nuage :
+ *              donner une graine différente à chacun. Gwido = 1 (disposition d'origine, ne pas changer).
+ *              Pour en choisir une : essayer 2, 3, 4… et regarder l'accueil, ou le labo (lab.html).
  *
  * Les listes ci-dessous nomment les images ORIGINALES (celles des études de cas). Le site charge des
  * MINIATURES WebP générées dans public/scatter/ par `npm run build:scatter` (scripts/build-scatter-thumbs.mjs)
@@ -14,6 +18,7 @@
  */
 const RAW = {
   gwido: {
+    seed: 1,
     pool: [
       '/gwido/images/Image_Menu_Sans_Logo.webp',
       '/gwido/images/Gwido001.webp',
@@ -37,6 +42,7 @@ const RAW = {
     ],
   },
   'echoes-of-memories': {
+    seed: 6,
     pool: [
       '/eom/images/Menu.png',
       '/eom/images/Screen_cube_Time_Stop.png',
@@ -53,6 +59,7 @@ const RAW = {
     ],
   },
   'ford-gt-2017': {
+    seed: 9,
     pool: [
       '/fordgt/images/final/02-modele.webp',
       '/fordgt/images/final/03-presentation.webp',
@@ -86,7 +93,7 @@ export const thumbOf = (src) =>
 const mapThumbs = (list) => list.map(thumbOf);
 
 export const SCATTER_PROJECTS = Object.fromEntries(
-  Object.entries(RAW).map(([slug, p]) => [slug, { pool: mapThumbs(p.pool), cluster: mapThumbs(p.cluster) }])
+  Object.entries(RAW).map(([slug, p]) => [slug, { pool: mapThumbs(p.pool), cluster: mapThumbs(p.cluster), seed: p.seed ?? 1 }])
 );
 
 /** Toutes les images du plan, avec le projet auquel elles appartiennent. */

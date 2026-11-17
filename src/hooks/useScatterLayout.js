@@ -5,7 +5,8 @@ import { useViewportSize } from './useViewportSize';
 
 /**
  * Réglages validés dans le labo (src/lab/ScatterLab.jsx, http://localhost:5173/Portfolio/lab.html).
- *  SEED    : graine de la disposition (change l'éparpillement ; essayer 1, 2, 3… dans le labo)
+ *  SEED    : graine du PLAN de fond (change l'éparpillement ; essayer 1, 2, 3… dans le labo).
+ *            Chaque projet a sa propre graine d'amas dans data/scatterImages.js.
  *  OVERLAP : chevauchement maximal dans l'amas
  *  PUSH    : écartement minimal des images hors amas, en part de la largeur d'écran (0,1 = elles s'écartent
  *            un peu ; 0,5 = elles quittent l'écran)
@@ -42,7 +43,9 @@ export const useScatterLayout = (clusterSlug, zoom = null) => {
 
   const { targets } = useMemo(
     () => computeTargets({
-      tile, zone, fieldZone, pan: PAN, seed: SEED, overlap: OVERLAP, push: PUSH * w,
+      tile, zone, fieldZone, pan: PAN, overlap: OVERLAP, push: PUSH * w,
+      // graine de l'AMAS : propre à chaque projet (data/scatterImages.js), le plan de fond garde SEED
+      seed: clusterSlug ? SCATTER_PROJECTS[clusterSlug]?.seed ?? SEED : SEED,
       clusterSrcs: clusterSlug ? SCATTER_PROJECTS[clusterSlug]?.cluster ?? null : null,
       slug: clusterSlug, zoom: clusterSlug ? zoom : null,
     }),
